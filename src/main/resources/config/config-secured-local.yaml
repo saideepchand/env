@@ -1,0 +1,9 @@
+keystore:
+  keypass: "REPLACE_BY_USER"
+  password: "REPLACE_BY_USER"
+  
+  
+client_secret: "![zzhYBVj6XPN8Sr1Ur7ll+d0jUslVQx4PlRrLVDHQ6pV2SxWHoXpcTw==]"
+
+bearer:
+  password: "![M4XQ38wPK8ItM0rHcLG+U0cI9XV0nBjeEg9yqYqUMOJbHweIqa1DZwAhjuGb52l/1kj22KiRnPE=]"

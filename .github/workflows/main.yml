@@ -1,0 +1,42 @@
+name: Cloudhub deployment with Maven
+on:
+  # Triggers the workflow on push or pull request events
+  push:
+    branches:
+      - 'main'
+  pull_request:
+    branches:
+      - 'uat'
+    types:
+      - closed
+
+      
+jobs:
+  Sandbox-Development:
+    if: ${{ github.ref == 'refs/heads/main'}}
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository  
+      uses: actions/checkout@v2
+    - name: checking
+      run : echo $TARGET_SANDBOX
+    - name: Publish to Exchange
+      run: mvn -s settings.xml clean deploy package -Denv=Sandbox -DappName=hls-fhir-to-x12-sys-api-dev -Dreplicas=1 -DvCores=0.1 -DbusinessGroupId=${{ secrets.BUSINESSGROUPID }} -Danypoint_platform_client_id=${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID }} -Danypoint_platform_client_secret=${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET }} -DconnectedAppClientId=${{ secrets.CONNECTEDAPPCLIENTID }} -DconnectedAppClientSecret=${{ secrets.CONNECTEDAPPCLIENTSECRET }} -Dtarget=${{ secrets.TARGET_SANDBOX}}
+    - name: Deploying to Sandbox
+      run: mvn -s settings.xml clean deploy package -Denv=Sandbox -DmuleDeploy -DappName=hls-fhir-to-x12-sys-api-dev -Dreplicas=1 -DvCores=0.1 -DbusinessGroupId=${{ secrets.BUSINESSGROUPID }} -Danypoint_platform_client_id=${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID }} -Danypoint_platform_client_secret=${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET }} -DconnectedAppClientId=${{ secrets.CONNECTEDAPPCLIENTID }} -DconnectedAppClientSecret=${{ secrets.CONNECTEDAPPCLIENTSECRET }} -Dtarget=${{ secrets.TARGET_SANDBOX}}
+ 
+  Uat-Testing:
+    if: ${{ github.ref == 'refs/heads/uat'}}
+    runs-on: ubuntu-latest
+    steps: 
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    # Add your build, test, or other steps here
+    # For example:
+    - name: Run after merge steps
+      run: |
+        if [ "${{ github.event_name }}" == "pull_request" ] && [ "${{ github.event.action }}" == "closed" ] && [ "${{ github.event.pull_request.merged }}" == "true" ]; then
+          mvn -s settings.xml clean deploy package -Denv=UAT -DappName=hls-fhir-to-x12-sys-api-qa -Dreplicas=1 -DvCores=0.1
+          mvn -s settings.xml clean deploy package -Denv=UAT -DmuleDeploy -DappName=hls-fhir-to-x12-sys-api-qa -Dreplicas=1 -DvCores=0.1
+
+        fi

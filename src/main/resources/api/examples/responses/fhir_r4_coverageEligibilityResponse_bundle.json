@@ -1,0 +1,1193 @@
+{
+    "resourceType": "Bundle",
+    "identifier": 
+        {
+            "system": "urn:ietf:rfc:3986",
+            "value": "2ea7368a-1dfc-455f-b962-3c24064fb437"
+        }
+    ,
+    "type" : "transaction-response",
+    "entry": [
+        {
+            "resource": {
+                "resourceType": "Coverage",
+                "id": "cov-677f4534-20f0-4909-85b4-046d5bf8c726",
+                "status": "active",
+                "subscriberId": "123456789",
+                "beneficiary": {
+                    "reference": "Patient/sub-0e68d409-2d7e-4669-8310-6e93f83cf17c"
+                },
+                "relationship": {
+                    "coding": [
+                        {
+                            "code": "self",
+                            "system": "https://valueset.x12.org/x217/005010/request/2000D/INS/1/02/00/1069"
+                        }
+                    ]
+                },
+                "payor": {
+                    "reference": "Organization/org-21ee0730-0de2-449e-8262-74c6d0a2e467"
+                }
+            }
+        },
+        {
+            "resource": {
+                "resourceType": "Patient",
+                "id": "sub-0e68d409-2d7e-4669-8310-6e93f83cf17c",
+                "identifier": [
+                    {
+                        "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+                        "code": "MB",
+                        "value": "123456789"
+                    }
+                ],
+                "name": [
+                    {
+                        "use": "official",
+                        "family": "SMITH",
+                        "given": [
+                            "JOHN"
+                        ],
+                        "prefix": [],
+                        "suffix": []
+                    }
+                ],
+                "address": [
+                    {
+                        "use": "home",
+                        "line": [
+                            "15197 BROADWAY AVENUE",
+                            "APT 215"
+                        ],
+                        "city": "KANSAS CITY",
+                        "state": "MO",
+                        "postalCode": "64108"
+                    }
+                ],
+                "birthDate": "19630519",
+                "gender": "male"
+            }
+        },
+        {
+            "resource": {
+                "resourceType": "Organization",
+                "id": "org-21ee0730-0de2-449e-8262-74c6d0a2e467",
+                "identifier": [
+                    {
+                        "system": "http://hl7.org/fhir/sid/us-npi",
+                        "value": "842610001"
+                    }
+                ],
+                "active": true,
+                "name": "ABC COMPANY",
+                "type": [
+                    {
+                        "coding": [
+                            {
+                                "code": "PI",
+                                "system": "https://valueset.x12.org/x217/005010/request/2010A/NM1/1/01/00/98"
+                            }
+                        ]
+                    }
+                ],
+                "address": [],
+                "telecom": [
+                    {
+                        "system": "phone",
+                        "value": "1112223344"
+                    },
+                    {
+                        "system": "email",
+                        "value": "test@payer.com"
+                    },
+                    {
+                        "system": "fax",
+                        "value": "1234567890"
+                    }
+                ]
+            }
+        },
+        {
+            "resource": {
+                "resourceType": "Organization",
+                "id": "org-0e05f8b7-a593-411b-a4ec-b289dddc65f6",
+                "identifier": [
+                    {
+                        "system": "http://hl7.org/fhir/sid/us-npi",
+                        "value": "2000035"
+                    }
+                ],
+                "active": true,
+                "name": "BONE AND JOINT CLINIC",
+                "type": [
+                    {
+                        "coding": [
+                            {
+                                "code": "SV",
+                                "system": "https://valueset.x12.org/x217/005010/request/2010A/NM1/1/01/00/98"
+                            }
+                        ]
+                    }
+                ],
+                "address": [
+                    {
+                        "use": "official",
+                        "line": [
+                            "1200 TEST LANE"
+                        ],
+                        "city": "PLEASENTON",
+                        "state": "CA",
+                        "postalCode": "94568"
+                    }
+                ]
+            }
+        },
+        {
+            "resource": {
+                "resourceType": "CoverageEligibilityResponse",
+                "identifier": [
+                    {
+                        "system": "http://benefitsinc.com/certificate",
+                        "value": [
+                            "10001234"
+                        ]
+                    }
+                ],
+                "status": "active",
+                "purpose": "auth-requirements",
+                "patient": "sub-0e68d409-2d7e-4669-8310-6e93f83cf17c",
+                "serviced": "",
+                "created": [
+                    "2006-05-01T00:00:00-05:00"
+                ],
+                "requestor": "org-0e05f8b7-a593-411b-a4ec-b289dddc65f6",
+                "request": [
+                    "10001234"
+                ],
+                "outcome": "complete",
+                "insurer": "org-21ee0730-0de2-449e-8262-74c6d0a2e467",
+                "inforce": false,
+                "insurance": [
+                    {
+                        "coverage": "cov-677f4534-20f0-4909-85b4-046d5bf8c726",
+                        "benefitPeriod": {},
+                        "item": [
+                            {
+                                "category": {
+                                    "coding": [
+                                        {
+                                            "code": "30"
+                                        },
+                                        {
+                                            "system": "http://terminology.hl7.org/CodeSystem/ex-benefitcategory"
+                                        }
+                                    ]
+                                },
+                                "unit": {
+                                    "coding": [
+                                        {
+                                            "code": "individual"
+                                        }
+                                    ]
+                                },
+                                "term": "",
+                                "network": "",
+                                "benefit": [
+                                    {
+                                        "type": {
+                                            "coding": [
+                                                {
+                                                    "code": ""
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "category": {
+                                    "coding": [
+                                        {
+                                            "code": "1"
+                                        },
+                                        {
+                                            "system": "http://terminology.hl7.org/CodeSystem/ex-benefitcategory"
+                                        }
+                                    ]
+                                },
+                                "unit": {
+                                    "coding": [
+                                        {
+                                            "code": "family"
+                                        }
+                                    ]
+                                },
+                                "term": "",
+                                "network": "",
+                                "benefit": [
+                                    {
+                                        "type": {
+                                            "coding": [
+                                                {
+                                                    "code": ""
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "category": {
+                                    "coding": [
+                                        {
+                                            "code": "33"
+                                        },
+                                        {
+                                            "system": "http://terminology.hl7.org/CodeSystem/ex-benefitcategory"
+                                        }
+                                    ]
+                                },
+                                "unit": {
+                                    "coding": [
+                                        {
+                                            "code": "family"
+                                        }
+                                    ]
+                                },
+                                "term": "",
+                                "network": "",
+                                "benefit": [
+                                    {
+                                        "type": {
+                                            "coding": [
+                                                {
+                                                    "code": ""
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "category": {
+                                    "coding": [
+                                        {
+                                            "code": "35"
+                                        },
+                                        {
+                                            "system": "http://terminology.hl7.org/CodeSystem/ex-benefitcategory"
+                                        }
+                                    ]
+                                },
+                                "unit": {
+                                    "coding": [
+                                        {
+                                            "code": "family"
+                                        }
+                                    ]
+                                },
+                                "term": "",
+                                "network": "",
+                                "benefit": [
+                                    {
+                                        "type": {
+                                            "coding": [
+                                                {
+                                                    "code": ""
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "category": {
+                                    "coding": [
+                                        {
+                                            "code": "47"
+                                        },
+                                        {
+                                            "system": "http://terminology.hl7.org/CodeSystem/ex-benefitcategory"
+                                        }
+                                    ]
+                                },
+                                "unit": {
+                                    "coding": [
+                                        {
+                                            "code": "family"
+                                        }
+                                    ]
+                                },
+                                "term": "",
+                                "network": "",
+                                "benefit": [
+                                    {
+                                        "type": {
+                                            "coding": [
+                                                {
+                                                    "code": ""
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "category": {
+                                    "coding": [
+                                        {
+                                            "code": "86"
+                                        },
+                                        {
+                                            "system": "http://terminology.hl7.org/CodeSystem/ex-benefitcategory"
+                                        }
+                                    ]
+                                },
+                                "unit": {
+                                    "coding": [
+                                        {
+                                            "code": "family"
+                                        }
+                                    ]
+                                },
+                                "term": "",
+                                "network": "",
+                                "benefit": [
+                                    {
+                                        "type": {
+                                            "coding": [
+                                                {
+                                                    "code": ""
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "category": {
+                                    "coding": [
+                                        {
+                                            "code": "88"
+                                        },
+                                        {
+                                            "system": "http://terminology.hl7.org/CodeSystem/ex-benefitcategory"
+                                        }
+                                    ]
+                                },
+                                "unit": {
+                                    "coding": [
+                                        {
+                                            "code": "family"
+                                        }
+                                    ]
+                                },
+                                "term": "",
+                                "network": "",
+                                "benefit": [
+                                    {
+                                        "type": {
+                                            "coding": [
+                                                {
+                                                    "code": ""
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "category": {
+                                    "coding": [
+                                        {
+                                            "code": "98"
+                                        },
+                                        {
+                                            "system": "http://terminology.hl7.org/CodeSystem/ex-benefitcategory"
+                                        }
+                                    ]
+                                },
+                                "unit": {
+                                    "coding": [
+                                        {
+                                            "code": "family"
+                                        }
+                                    ]
+                                },
+                                "term": "",
+                                "network": "",
+                                "benefit": [
+                                    {
+                                        "type": {
+                                            "coding": [
+                                                {
+                                                    "code": ""
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "category": {
+                                    "coding": [
+                                        {
+                                            "code": "AL"
+                                        },
+                                        {
+                                            "system": "http://terminology.hl7.org/CodeSystem/ex-benefitcategory"
+                                        }
+                                    ]
+                                },
+                                "unit": {
+                                    "coding": [
+                                        {
+                                            "code": "family"
+                                        }
+                                    ]
+                                },
+                                "term": "",
+                                "network": "",
+                                "benefit": [
+                                    {
+                                        "type": {
+                                            "coding": [
+                                                {
+                                                    "code": ""
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "category": {
+                                    "coding": [
+                                        {
+                                            "code": "MH"
+                                        },
+                                        {
+                                            "system": "http://terminology.hl7.org/CodeSystem/ex-benefitcategory"
+                                        }
+                                    ]
+                                },
+                                "unit": {
+                                    "coding": [
+                                        {
+                                            "code": "family"
+                                        }
+                                    ]
+                                },
+                                "term": "",
+                                "network": "",
+                                "benefit": [
+                                    {
+                                        "type": {
+                                            "coding": [
+                                                {
+                                                    "code": ""
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "category": {
+                                    "coding": [
+                                        {
+                                            "code": "UC"
+                                        },
+                                        {
+                                            "system": "http://terminology.hl7.org/CodeSystem/ex-benefitcategory"
+                                        }
+                                    ]
+                                },
+                                "unit": {
+                                    "coding": [
+                                        {
+                                            "code": "family"
+                                        }
+                                    ]
+                                },
+                                "term": "",
+                                "network": "",
+                                "benefit": [
+                                    {
+                                        "type": {
+                                            "coding": [
+                                                {
+                                                    "code": ""
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "category": {
+                                    "coding": [
+                                        {
+                                            "code": "1"
+                                        },
+                                        {
+                                            "system": "http://terminology.hl7.org/CodeSystem/ex-benefitcategory"
+                                        }
+                                    ]
+                                },
+                                "unit": {
+                                    "coding": [
+                                        {
+                                            "code": ""
+                                        }
+                                    ]
+                                },
+                                "term": "day",
+                                "network": "in",
+                                "benefit": [
+                                    {
+                                        "type": {
+                                            "coding": [
+                                                {
+                                                    "code": "copay"
+                                                }
+                                            ]
+                                        },
+                                        "allowedUnsignedInt": 10
+                                    }
+                                ]
+                            },
+                            {
+                                "category": {
+                                    "coding": [
+                                        {
+                                            "code": "33"
+                                        },
+                                        {
+                                            "system": "http://terminology.hl7.org/CodeSystem/ex-benefitcategory"
+                                        }
+                                    ]
+                                },
+                                "unit": {
+                                    "coding": [
+                                        {
+                                            "code": ""
+                                        }
+                                    ]
+                                },
+                                "term": "day",
+                                "network": "in",
+                                "benefit": [
+                                    {
+                                        "type": {
+                                            "coding": [
+                                                {
+                                                    "code": "copay"
+                                                }
+                                            ]
+                                        },
+                                        "allowedUnsignedInt": 10
+                                    }
+                                ]
+                            },
+                            {
+                                "category": {
+                                    "coding": [
+                                        {
+                                            "code": "35"
+                                        },
+                                        {
+                                            "system": "http://terminology.hl7.org/CodeSystem/ex-benefitcategory"
+                                        }
+                                    ]
+                                },
+                                "unit": {
+                                    "coding": [
+                                        {
+                                            "code": ""
+                                        }
+                                    ]
+                                },
+                                "term": "day",
+                                "network": "in",
+                                "benefit": [
+                                    {
+                                        "type": {
+                                            "coding": [
+                                                {
+                                                    "code": "copay"
+                                                }
+                                            ]
+                                        },
+                                        "allowedUnsignedInt": 10
+                                    }
+                                ]
+                            },
+                            {
+                                "category": {
+                                    "coding": [
+                                        {
+                                            "code": "47"
+                                        },
+                                        {
+                                            "system": "http://terminology.hl7.org/CodeSystem/ex-benefitcategory"
+                                        }
+                                    ]
+                                },
+                                "unit": {
+                                    "coding": [
+                                        {
+                                            "code": ""
+                                        }
+                                    ]
+                                },
+                                "term": "day",
+                                "network": "in",
+                                "benefit": [
+                                    {
+                                        "type": {
+                                            "coding": [
+                                                {
+                                                    "code": "copay"
+                                                }
+                                            ]
+                                        },
+                                        "allowedUnsignedInt": 10
+                                    }
+                                ]
+                            },
+                            {
+                                "category": {
+                                    "coding": [
+                                        {
+                                            "code": "86"
+                                        },
+                                        {
+                                            "system": "http://terminology.hl7.org/CodeSystem/ex-benefitcategory"
+                                        }
+                                    ]
+                                },
+                                "unit": {
+                                    "coding": [
+                                        {
+                                            "code": ""
+                                        }
+                                    ]
+                                },
+                                "term": "day",
+                                "network": "in",
+                                "benefit": [
+                                    {
+                                        "type": {
+                                            "coding": [
+                                                {
+                                                    "code": "copay"
+                                                }
+                                            ]
+                                        },
+                                        "allowedUnsignedInt": 10
+                                    }
+                                ]
+                            },
+                            {
+                                "category": {
+                                    "coding": [
+                                        {
+                                            "code": "88"
+                                        },
+                                        {
+                                            "system": "http://terminology.hl7.org/CodeSystem/ex-benefitcategory"
+                                        }
+                                    ]
+                                },
+                                "unit": {
+                                    "coding": [
+                                        {
+                                            "code": ""
+                                        }
+                                    ]
+                                },
+                                "term": "day",
+                                "network": "in",
+                                "benefit": [
+                                    {
+                                        "type": {
+                                            "coding": [
+                                                {
+                                                    "code": "copay"
+                                                }
+                                            ]
+                                        },
+                                        "allowedUnsignedInt": 10
+                                    }
+                                ]
+                            },
+                            {
+                                "category": {
+                                    "coding": [
+                                        {
+                                            "code": "98"
+                                        },
+                                        {
+                                            "system": "http://terminology.hl7.org/CodeSystem/ex-benefitcategory"
+                                        }
+                                    ]
+                                },
+                                "unit": {
+                                    "coding": [
+                                        {
+                                            "code": ""
+                                        }
+                                    ]
+                                },
+                                "term": "day",
+                                "network": "in",
+                                "benefit": [
+                                    {
+                                        "type": {
+                                            "coding": [
+                                                {
+                                                    "code": "copay"
+                                                }
+                                            ]
+                                        },
+                                        "allowedUnsignedInt": 10
+                                    }
+                                ]
+                            },
+                            {
+                                "category": {
+                                    "coding": [
+                                        {
+                                            "code": "AL"
+                                        },
+                                        {
+                                            "system": "http://terminology.hl7.org/CodeSystem/ex-benefitcategory"
+                                        }
+                                    ]
+                                },
+                                "unit": {
+                                    "coding": [
+                                        {
+                                            "code": ""
+                                        }
+                                    ]
+                                },
+                                "term": "day",
+                                "network": "in",
+                                "benefit": [
+                                    {
+                                        "type": {
+                                            "coding": [
+                                                {
+                                                    "code": "copay"
+                                                }
+                                            ]
+                                        },
+                                        "allowedUnsignedInt": 10
+                                    }
+                                ]
+                            },
+                            {
+                                "category": {
+                                    "coding": [
+                                        {
+                                            "code": "MH"
+                                        },
+                                        {
+                                            "system": "http://terminology.hl7.org/CodeSystem/ex-benefitcategory"
+                                        }
+                                    ]
+                                },
+                                "unit": {
+                                    "coding": [
+                                        {
+                                            "code": ""
+                                        }
+                                    ]
+                                },
+                                "term": "day",
+                                "network": "in",
+                                "benefit": [
+                                    {
+                                        "type": {
+                                            "coding": [
+                                                {
+                                                    "code": "copay"
+                                                }
+                                            ]
+                                        },
+                                        "allowedUnsignedInt": 10
+                                    }
+                                ]
+                            },
+                            {
+                                "category": {
+                                    "coding": [
+                                        {
+                                            "code": "UC"
+                                        },
+                                        {
+                                            "system": "http://terminology.hl7.org/CodeSystem/ex-benefitcategory"
+                                        }
+                                    ]
+                                },
+                                "unit": {
+                                    "coding": [
+                                        {
+                                            "code": ""
+                                        }
+                                    ]
+                                },
+                                "term": "day",
+                                "network": "in",
+                                "benefit": [
+                                    {
+                                        "type": {
+                                            "coding": [
+                                                {
+                                                    "code": "copay"
+                                                }
+                                            ]
+                                        },
+                                        "allowedUnsignedInt": 10
+                                    }
+                                ]
+                            },
+                            {
+                                "category": {
+                                    "coding": [
+                                        {
+                                            "code": "1"
+                                        },
+                                        {
+                                            "system": "http://terminology.hl7.org/CodeSystem/ex-benefitcategory"
+                                        }
+                                    ]
+                                },
+                                "unit": {
+                                    "coding": [
+                                        {
+                                            "code": ""
+                                        }
+                                    ]
+                                },
+                                "term": "day",
+                                "network": "out",
+                                "benefit": [
+                                    {
+                                        "type": {
+                                            "coding": [
+                                                {
+                                                    "code": "copay"
+                                                }
+                                            ]
+                                        },
+                                        "allowedUnsignedInt": 30
+                                    }
+                                ]
+                            },
+                            {
+                                "category": {
+                                    "coding": [
+                                        {
+                                            "code": "33"
+                                        },
+                                        {
+                                            "system": "http://terminology.hl7.org/CodeSystem/ex-benefitcategory"
+                                        }
+                                    ]
+                                },
+                                "unit": {
+                                    "coding": [
+                                        {
+                                            "code": ""
+                                        }
+                                    ]
+                                },
+                                "term": "day",
+                                "network": "out",
+                                "benefit": [
+                                    {
+                                        "type": {
+                                            "coding": [
+                                                {
+                                                    "code": "copay"
+                                                }
+                                            ]
+                                        },
+                                        "allowedUnsignedInt": 30
+                                    }
+                                ]
+                            },
+                            {
+                                "category": {
+                                    "coding": [
+                                        {
+                                            "code": "35"
+                                        },
+                                        {
+                                            "system": "http://terminology.hl7.org/CodeSystem/ex-benefitcategory"
+                                        }
+                                    ]
+                                },
+                                "unit": {
+                                    "coding": [
+                                        {
+                                            "code": ""
+                                        }
+                                    ]
+                                },
+                                "term": "day",
+                                "network": "out",
+                                "benefit": [
+                                    {
+                                        "type": {
+                                            "coding": [
+                                                {
+                                                    "code": "copay"
+                                                }
+                                            ]
+                                        },
+                                        "allowedUnsignedInt": 30
+                                    }
+                                ]
+                            },
+                            {
+                                "category": {
+                                    "coding": [
+                                        {
+                                            "code": "47"
+                                        },
+                                        {
+                                            "system": "http://terminology.hl7.org/CodeSystem/ex-benefitcategory"
+                                        }
+                                    ]
+                                },
+                                "unit": {
+                                    "coding": [
+                                        {
+                                            "code": ""
+                                        }
+                                    ]
+                                },
+                                "term": "day",
+                                "network": "out",
+                                "benefit": [
+                                    {
+                                        "type": {
+                                            "coding": [
+                                                {
+                                                    "code": "copay"
+                                                }
+                                            ]
+                                        },
+                                        "allowedUnsignedInt": 30
+                                    }
+                                ]
+                            },
+                            {
+                                "category": {
+                                    "coding": [
+                                        {
+                                            "code": "86"
+                                        },
+                                        {
+                                            "system": "http://terminology.hl7.org/CodeSystem/ex-benefitcategory"
+                                        }
+                                    ]
+                                },
+                                "unit": {
+                                    "coding": [
+                                        {
+                                            "code": ""
+                                        }
+                                    ]
+                                },
+                                "term": "day",
+                                "network": "out",
+                                "benefit": [
+                                    {
+                                        "type": {
+                                            "coding": [
+                                                {
+                                                    "code": "copay"
+                                                }
+                                            ]
+                                        },
+                                        "allowedUnsignedInt": 30
+                                    }
+                                ]
+                            },
+                            {
+                                "category": {
+                                    "coding": [
+                                        {
+                                            "code": "88"
+                                        },
+                                        {
+                                            "system": "http://terminology.hl7.org/CodeSystem/ex-benefitcategory"
+                                        }
+                                    ]
+                                },
+                                "unit": {
+                                    "coding": [
+                                        {
+                                            "code": ""
+                                        }
+                                    ]
+                                },
+                                "term": "day",
+                                "network": "out",
+                                "benefit": [
+                                    {
+                                        "type": {
+                                            "coding": [
+                                                {
+                                                    "code": "copay"
+                                                }
+                                            ]
+                                        },
+                                        "allowedUnsignedInt": 30
+                                    }
+                                ]
+                            },
+                            {
+                                "category": {
+                                    "coding": [
+                                        {
+                                            "code": "98"
+                                        },
+                                        {
+                                            "system": "http://terminology.hl7.org/CodeSystem/ex-benefitcategory"
+                                        }
+                                    ]
+                                },
+                                "unit": {
+                                    "coding": [
+                                        {
+                                            "code": ""
+                                        }
+                                    ]
+                                },
+                                "term": "day",
+                                "network": "out",
+                                "benefit": [
+                                    {
+                                        "type": {
+                                            "coding": [
+                                                {
+                                                    "code": "copay"
+                                                }
+                                            ]
+                                        },
+                                        "allowedUnsignedInt": 30
+                                    }
+                                ]
+                            },
+                            {
+                                "category": {
+                                    "coding": [
+                                        {
+                                            "code": "AL"
+                                        },
+                                        {
+                                            "system": "http://terminology.hl7.org/CodeSystem/ex-benefitcategory"
+                                        }
+                                    ]
+                                },
+                                "unit": {
+                                    "coding": [
+                                        {
+                                            "code": ""
+                                        }
+                                    ]
+                                },
+                                "term": "day",
+                                "network": "out",
+                                "benefit": [
+                                    {
+                                        "type": {
+                                            "coding": [
+                                                {
+                                                    "code": "copay"
+                                                }
+                                            ]
+                                        },
+                                        "allowedUnsignedInt": 30
+                                    }
+                                ]
+                            },
+                            {
+                                "category": {
+                                    "coding": [
+                                        {
+                                            "code": "MH"
+                                        },
+                                        {
+                                            "system": "http://terminology.hl7.org/CodeSystem/ex-benefitcategory"
+                                        }
+                                    ]
+                                },
+                                "unit": {
+                                    "coding": [
+                                        {
+                                            "code": ""
+                                        }
+                                    ]
+                                },
+                                "term": "day",
+                                "network": "out",
+                                "benefit": [
+                                    {
+                                        "type": {
+                                            "coding": [
+                                                {
+                                                    "code": "copay"
+                                                }
+                                            ]
+                                        },
+                                        "allowedUnsignedInt": 30
+                                    }
+                                ]
+                            },
+                            {
+                                "category": {
+                                    "coding": [
+                                        {
+                                            "code": "UC"
+                                        },
+                                        {
+                                            "system": "http://terminology.hl7.org/CodeSystem/ex-benefitcategory"
+                                        }
+                                    ]
+                                },
+                                "unit": {
+                                    "coding": [
+                                        {
+                                            "code": ""
+                                        }
+                                    ]
+                                },
+                                "term": "day",
+                                "network": "out",
+                                "benefit": [
+                                    {
+                                        "type": {
+                                            "coding": [
+                                                {
+                                                    "code": "copay"
+                                                }
+                                            ]
+                                        },
+                                        "allowedUnsignedInt": 30
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    ]
+}

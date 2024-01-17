@@ -1,0 +1,60 @@
+#%RAML 1.0 Library
+uses:
+  FHIR_commons: /exchange_modules/org.mule.examples/fhir-r4-commons-library/3.0.1/fhir-r4-commons-library.raml
+
+types:
+  Bundle:
+    type: FHIR_commons.Bundle
+    description: |
+      Contains a collection of resources
+      + Rule: total only when a search or history
+      + Rule: entry.search only when a search
+      + Rule: entry.request mandatory for batch/transaction/history, otherwise prohibited
+      + Rule: entry.response mandatory for batch-response/transaction-response/history, otherwise prohibited
+      + Rule: FullUrl must be unique in a bundle, or else entries with the same fullUrl must have different meta.versionId (except in history bundles)
+      + Rule: A document must have an identifier with a system and a value
+      + Rule: A document must have a date
+      + Rule: A document must have a Composition as the first resource
+      + Rule: A message must have a MessageHeader as the first resource
+      Elements defined in Ancestors: id, meta, implicitRules, language
+    properties:
+      identifier?:
+        type: FHIR_commons.Identifier
+        description: 	Persistent identifier for the bundle
+      type:
+        type: FHIR_commons.code
+        description: 	document | message | transaction | transaction-response | batch | batch-response | history | searchset | collection
+        enum: [document, message, transaction,  transaction-response, batch, batch-response,  history, searchset, collection]
+      timestamp?:
+        type: FHIR_commons.instant
+        description: When the bundle was assembled
+      total?:
+        type: FHIR_commons.unsignedInt
+        description: If search, the total number of matches
+      link?:
+        description: Links related to this Bundle
+        type: array
+        items:
+          type: FHIR_commons.BackboneElement
+          properties:
+            relation:
+              type: string
+              description: See http://www.iana.org/assignments/link-relations/link-relations.xhtml#link-relations-1
+            url:
+              type: FHIR_commons.uri
+              description: Reference details for the link
+      entry?: 
+        type: array
+        description: |
+          Entry in the bundle - will have a resource or information
+          + Rule: must be a resource unless there's a request or response
+          + Rule: fullUrl cannot be a version specific reference
+          This repeating element order: For bundles of type 'document' and 'message', the first resource is special (must be Composition or MessageHeader respectively). For all bundles, the meaning of the order of entries depends on the bundle type
+        items:
+          type: FHIR_commons.Entry
+
+      signature?:
+        type: FHIR_commons.Signature
+        description: Digital Signature
+
+  

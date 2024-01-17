@@ -1,0 +1,41 @@
+#%RAML 1.0
+title: hls-fhir-r4-to-x12-sys-api-spec
+version: v1
+description: FHIR R4 To X12 Convert API
+
+mediaType:
+  - application/fhir+json
+  - application/json
+protocols:
+  - http
+  - https
+
+uses:
+  GlobalResources: exchange_modules/org.mule.examples/accelerator-global-resources/2.2.0/accelerator-global-resources.raml
+  bundleType: /exchange_modules/org.mule.examples/fhir-r4-bundle-types-library/1.0.0/fhir-r4-bundle-types-library.raml
+  bundleTypeResource: /resources-library.raml
+  
+  
+securedBy: [ GlobalResources.BasicAuth ]
+
+/convertToX12:
+  type:
+      bundleTypeResource.fhirResourceType:
+        postExample: !include /examples/requests/fhir_r4_claim_bundle.json
+        postReturnExample: !include /examples/responses/837Professional.txt
+        resourceName: bundleType.Bundle
+
+/convertToFhir:
+  post:
+    description: |
+      Converts HIPAA EDI X12 format to FHIR R4 message 
+    is: [bundleTypeResource.errorResponses]
+    body:
+      application/json:
+        example: !include /examples/requests/271InquiryResponse.json        
+    responses:
+      200:
+        body:
+          application/fhir+json:
+            type: bundleType.Bundle
+            example: !include /examples/responses/fhir_r4_coverageEligibilityResponse_bundle.json

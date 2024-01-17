@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+		<sub-flow name="common_generate-error-payload" doc:id="b54f6ddb-5a2c-43b3-adf2-24f4ee642c35" >
+		<logger level="INFO" doc:name="log-request-failure" doc:id="207bf5d9-9736-4584-849e-309cccfd6132" message="#['API Request failed']"/>
+		<set-variable value="#[vars.httpStatus default error.errorMessage.attributes.statusCode]" doc:name="set-httpStatus-code" doc:id="9d65873c-b5e3-405b-9663-9f327838a5bc" variableName="httpStatus" />
+		<ee:transform doc:name="set-operation-outcome" doc:id="90afa09a-c11c-4590-92c0-883fa301190d">
+						<ee:message>
+							<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+if(isEmpty(vars.errorPayload)) error.detailedDescription else vars.errorPayload]]></ee:set-payload>
+						</ee:message>
+					</ee:transform>
+	</sub-flow>
+	<sub-flow name="common_set-variables" doc:id="2fa6899f-a05e-4910-97ac-6b1f7d0f3b22">
+	<logger level="INFO" doc:name="Start set-variables" doc:id="d083c138-cedd-469f-97fe-2e9dcba50f24" message="Start set-variables" />
+		<set-variable value="#[payload]" doc:name="set-originalPayload" doc:id="b80dcdf0-4b7b-48e5-b06f-bbbb4322bc5b" variableName="originalPayload"/>
+		<set-variable value="#[{
+&#10;	'Accept' : message.attributes.headers.'Accept' default &quot;application/fhir+json&quot;
+&#10;}]" doc:name="set-accept-header" doc:id="ccb44741-56a3-4120-838c-e9daeae019a4" variableName="accept" />
+		<set-variable value='#[message.attributes.queryParams]' doc:name="set-query-params" doc:id="fd65b9df-b955-4e72-b7ff-a91c952421db" variableName="queryParams" />
+		<set-variable value="#[message.attributes.uriParams]" doc:name="set-uri-params" doc:id="7c4e84e8-ee47-4f55-9864-a24287212752" variableName="uriParams" />
+		<set-variable value='#[message.attributes.maskedRequestPath default ""]' doc:name="set-maskedRequestPath" doc:id="985375a5-a6e9-4bd8-9c82-3789080c16af" variableName="maskedRequestPath" />
+		<logger level="INFO" doc:name="End set-variables" doc:id="67457e11-d9de-4cb1-94f4-01203fe7d069" message="End set-variables" />
+	</sub-flow>
+	<sub-flow name="common_createVariables" doc:id="5a588eb5-e361-42f0-910a-35b0e0984fd8" >
+		<logger level="INFO" doc:name="Start createVariables" doc:id="cf82ca15-0627-4fb2-8495-b4edade4440a" message="Start createVariables" />
+		<set-variable value='#[(payload.entry filter($.resource.resourceType == "Claim"))[0].resource]' doc:name="set-claimResource" doc:id="a604054a-7814-4a58-968a-ae00adf4c9b9" variableName="claimResource"/>
+		<ee:transform doc:name="set-insurerOrg" doc:id="1927dd17-33fe-4ee5-9677-c498ff7c6466" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="insurerOrganization" ><![CDATA[%dw 2.0
+output application/json
+import substringAfter from dw::core::Strings
+import getFHIRResource from dwl::x12Util::x12SegmentTools
+/*
+ * Claim.insurer => Organization
+ * The Claim.insurer will point to a Organization in the Bundle. 
+ * Locate the Organization pointed at in the Claim and use that Organization for all of the fields in the 2010A Loop
+ */
+var insurer=substringAfter(vars.claimResource.insurer.reference,"/")
+
+---
+getFHIRResource(payload,insurer).resource]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<ee:transform doc:name="set-requesterOrg" doc:id="b593355b-1ceb-4cc9-ab05-e09c2378bcfe" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="requesterOrganization" ><![CDATA[%dw 2.0
+output application/json
+import substringAfter from dw::core::Strings
+import getFHIRResource from dwl::x12Util::x12SegmentTools
+var provider=substringAfter(vars.claimResource.provider.reference,"/")
+---
+getFHIRResource(payload,provider).resource]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<set-variable value='#[(payload.entry filter($.resource.resourceType == "Coverage"))[0].resource]' doc:name="set-coverage" doc:id="5cf3f4f8-aac5-4701-ae04-b713bbec205f" variableName="coverage"/>
+		<set-variable value='#[output application/java import substringAfter from dw::core::Strings --- if(! isEmpty(vars.coverage.susbcriber))&#10;							substringAfter(vars.coverage.subscriber.reference,"/")&#10;						else&#10;							substringAfter(vars.coverage.beneficiary.reference,"/")]' doc:name="set-subscriberPatientId" doc:id="25b8139f-5e18-4275-97bb-4611f3be2aa6" variableName="subscriberPatientId"/>
+		<ee:transform doc:name="set-subscriberPatient" doc:id="22ad6f0a-3e93-41b0-9f03-f88a1292283c" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="subscriberPatient" ><![CDATA[%dw 2.0
+output application/json
+import substringAfter from dw::core::Strings
+import getFHIRResource from dwl::x12Util::x12SegmentTools
+---
+getFHIRResource(payload,vars.subscriberPatientId).resource]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<set-variable value='#[output application/java&#10;import substringAfter from dw::core::Strings &#10;---&#10;substringAfter(vars.coverage.beneficiary.reference,"/")]' doc:name="set-beneficiaryPatientId" doc:id="b4e9e755-9549-44ea-9985-084f38c11d43" variableName="beneficiaryPatientId"/>
+		<ee:transform doc:name="set-beneficiaryPatient" doc:id="e4a65d4e-d053-454b-a968-1e0d20100231" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+import substringAfter from dw::core::Strings
+import getFHIRResource from dwl::x12Util::x12SegmentTools
+
+/*
+ * If Subscriber reference is not present, assume Subscriber is the Beneficary (true in case of Medicare)
+ * If Subscriber and Beneficiary are both present, use Subscriber for mapping Loop 2000C (Subscriber Information) 
+ * and use Beneficiary for mapping Loop 2000D (Dependent Information)
+ */
+/*
+ * When subscriber is the beneficiary, no need to map the beneficiary patient in Loop2010D
+ */
+---
+if ( vars.subscriberPatientId != vars.beneficiaryPatientId ) getFHIRResource(payload,vars.beneficiaryPatientId).resource
+else 
+{
+}
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="End createVariables" doc:id="080b33cb-ae8d-4ff2-ac21-317b9d060103" message="End createVariables" />
+	</sub-flow>
+		
+	
+	
+	</mule>

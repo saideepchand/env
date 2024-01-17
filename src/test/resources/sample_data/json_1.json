@@ -1,0 +1,36 @@
+{
+  "resourceType": "enim",
+  "id": "d68240c2f712485a9f2",
+  "meta": {
+    "profile": [
+      "consequat.",
+      "voluptatem"
+    ]
+  },
+  "identifier": {
+    "system": "in",
+    "value": "52.38"
+  },
+  "type": "quae",
+  "timestamp": "ut",
+  "entry": [
+    {
+      "fullUrl": "http://acme.com/7865295",
+      "resource": {
+        
+      },
+      "search": {
+        
+      }
+    },
+    {
+      "fullUrl": "http://acme.com/3436812",
+      "resource": {
+        
+      },
+      "search": {
+        
+      }
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+#%RAML 1.0 Library
+usage:
+
+uses:
+  FHIR_commons: /exchange_modules/org.mule.examples/fhir-r4-commons-library/3.0.1/fhir-r4-commons-library.raml
+
+types:
+  
+resourceTypes:
+  fhirResourceType:
+    post:
+      description: |
+        The convert interaction converts a FHIR bundle to EDI X12 
+      is: [errorResponses]
+      headers:
+        Accept:
+          type: string
+          required: false
+          enum: [ "*/*", "application/fhir+xml", "application/fhir+json", "application/json"]
+        Content-Type:
+          type: string
+          required: false
+          enum: [ "application/fhir+xml", "application/fhir+json","application/json"]
+        x-transaction-set:
+          type: string
+          required: false
+          description: HIPAA X12 version and transactionset being sent in the request
+          examples:
+             EDI 837 Claim: "005010X222A1-837"
+             EDI 270 Coverage Eligibility Request: "005010X279A1-270"
+             EDI 275 Additional Information for HealthCare Services Review: "005010X210-275"
+             EDI 278 Prior Auth Request: "005010X217-278RQ"
+          
+      body:
+        application/fhir+json:
+          type: <<resourceName>>
+          example: <<postExample>>
+        application/fhir+xml:
+          type: <<resourceName>>
+          example: <<postExample>>
+        application/json:
+          type: <<resourceName>>
+          example: <<postExample>>
+      responses:
+        200:
+          description: FHIR R4 converted to EDI X12
+          body:
+            text/plain:
+              example: <<postReturnExample>>
+        412:
+          description: Precondition Failed error indicating the client's criteria were not selective enough.
+
+traits:
+  errorResponses:
+    
+    responses:
+      400: 
+        body:
+          application/fhir+json:
+            type: FHIR_commons.OperationOutcome
+          application/fhir+xml:
+            type: FHIR_commons.OperationOutcome
+          
+      404:
+        body:
+          application/fhir+json:
+            type: FHIR_commons.OperationOutcome
+          application/fhir+xml:
+            type: FHIR_commons.OperationOutcome
+      
+      405: 
+        body:
+          application/fhir+json:
+            type: FHIR_commons.OperationOutcome
+          application/fhir+xml:
+            type: FHIR_commons.OperationOutcome
+          
+      422:
+        body:
+          application/fhir+json:
+            type: FHIR_commons.OperationOutcome
+          application/fhir+xml:
+            type: FHIR_commons.OperationOutcome  

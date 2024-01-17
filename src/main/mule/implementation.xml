@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting"
+	xmlns:java="http://www.mulesoft.org/schema/mule/java" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:x12="http://www.mulesoft.org/schema/mule/x12"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/x12 http://www.mulesoft.org/schema/mule/x12/current/mule-x12.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd">
+
+	<flow name="implementation_fhir-to-x12-request" doc:id="1700c487-da27-405c-9c96-6e2995096773" >
+		<logger level="INFO" doc:name="Logger" doc:id="23a87285-af6e-4e2f-b457-b3ae47bb0d75" message='#["Started setting the transactionSetValue"]'/>
+		<choice doc:name="x-transaction-set set?" doc:id="991d7396-9fc7-49d4-be51-94ed520c14e8" >
+			<when expression="#[!isEmpty(attributes.headers.'x-transaction-set')]">
+				<set-variable value="#[attributes.headers.'x-transaction-set' default &quot;005010X215-278RS&quot;]" doc:name="Set xTransactionSetValue" doc:id="7616991c-56a6-4c26-b22b-bd798d039540" variableName="xTransactionSetValue"/>
+				<flow-ref doc:name="implementation_fhir-to-x12-transform" doc:id="548d7679-ed18-4dda-9f1d-fbb3dbb8fe49" name="implementation_fhir-to-x12-transform" />
+			</when>
+			<otherwise >
+				<raise-error doc:name="x-transaction-set not set" doc:id="cc63a830-6115-4dac-a578-465468eb8d06" type="PRECONDITIONS:X_TRANSACTION_SET_REQUIRED" description="For FHIR to X12 conversion x-transaction-set header must be set."/>
+			</otherwise>
+		</choice>
+	</flow>
+	<flow name="implementation_x12-to-fhir-request" doc:id="306ca5ff-9fe1-4d37-8365-018bb76a4130" >
+		<set-variable value="#[payload.sender ++ payload.senderReferenceNumber]" doc:name="Set Variable" doc:id="4be4def2-0b1b-4432-94e9-caa4196b0f3e" variableName="epicVendorIdentifier"/>
+		<set-payload value='#[%dw 2.0&#10;output text/plain&#10;---&#10;payload.payload]' doc:name="Set Payload" doc:id="b7d759e0-a989-4fce-b415-3e467fe0a1a9" />
+		<set-payload value='#[payload replace /~(?!\r\n)/ with "~\r\n"]' doc:name="Fix Epic Lines" doc:id="c8f2683f-9d8c-485f-b771-52ff47f48679" />
+		<set-variable value="#[payload]" doc:name="Set Variable" doc:id="13c7aaa2-fe7f-4ece-a86e-bfbf1b10b5ab" variableName="originalX12Bundle" />
+		<set-payload value='#[%dw 2.0&#10;import rightPad from dw::core::Strings&#10;&#10;import dw::core::Strings&#10;output text/plain&#10;&#10;var payloadSegments = splitBy(payload, "~\r\n")&#10;&#10;fun replaceInSegment(segment) =&#10;  if (segment startsWith "ISA") &#10;    // Split segment by "*" and pad specific elements with spaces&#10;    (segment splitBy "*") &#10;      map ((val, index) -&gt;&#10;        if ((index + 1) == 3 or (index + 1) == 5 or (index + 1) == 7 or (index + 1) == 9) &#10;          // Pad third and fifth elements with spaces to length 10, seventh and ninth to 15&#10;          if (index + 1 == 3 or index + 1 == 5) &#10;            rightPad(val,10)&#10;          else &#10;            rightPad(val,15)&#10;        else &#10;          val&#10;      ) joinBy "*"&#10;  else if (segment startsWith "BHT")&#10;    if (segment contains "*RD")&#10;      segment replace "*13*" with "*49*"&#10;    else&#10;      segment replace "*13*" with "*49*" ++ "*RD"&#10;  else&#10;    segment replace "005010X217" with "005010X215"&#10;&#10;---&#10;(payloadSegments map replaceInSegment($)) joinBy "~\r\n"]' doc:name="Fix Epic Segments" doc:id="071cee47-6bbd-4fd2-97e3-d75fbb081034" mimeType="text/plain" />
+		<logger level="INFO" doc:name="Log payload" doc:id="f7c88155-c479-4c24-87f5-caaa7004c1ed" message="#[payload]" />
+		<logger level="INFO" doc:name="Logger" doc:id="6f41ec3a-e36c-4d72-b5c6-05e0627b2e31" message='#["Get the transaction value for the processing"]'/>
+		<ee:transform doc:name="Get x-transaction-set value" doc:id="27953009-c297-4fe6-b294-22c191617efa">
+			<ee:message>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable resource="dwl/get-x-transaction-set-value.dwl" variableName="xTransactionSetValue" />
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="implementation_fhir-to-x12-transform" doc:id="8b677f3d-ed2a-4e63-8d6d-b1444cf88df1" name="implementation_fhir-to-x12-transform" />
+	
+</flow>
+	<sub-flow name="implementation_fhir-to-x12-transform" doc:id="95b523fb-856a-4e5e-9f4a-5ea474197e4e">
+		<logger level="INFO" doc:name="start-fhir-x12-converter-implementation" doc:id="75d84a67-d6fa-43cf-b81e-107b1fa234f8" message="Start FHIR R4 to X12 Conversion" />
+		<logger level="DEBUG" doc:name="log-incoming-request" doc:id="7a30b134-4df4-4dfb-8ee1-4113b09b9d57" message="#[payload]" category="${hc.logger.package}" />
+		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="e71807cb-910d-422a-bb63-1352d5b5c067" mimeType="application/json"/>
+		<flow-ref doc:name="common_set-variables" doc:id="d651191d-d5d6-4c11-b3f0-fa0da6928648" name="common_set-variables" />
+		<set-variable value="#['implementation_fhir-r4-to-x12-' ++  vars.xTransactionSetValue]" doc:name="subFlowPath" doc:id="2139c435-c0b2-4f5d-886d-f1dfc558aa1b" variableName="subFlowPath"/>
+		<logger level="INFO" doc:name="Logger" doc:id="a4f2f76f-c582-4bd1-859b-8446a8424f18" message='#["Sub flow for the processing of the request is " ++  vars.subFlowPath]'/>
+		<flow-ref doc:name="subFlow Implementation" doc:id="02a82bf0-9dfb-49c1-b4b5-86af155afd90" name="#[vars.subFlowPath]" />
+
+		<logger level="DEBUG" doc:name="log-outgoing-success-response" doc:id="62e71bb6-6699-4760-9c34-1943d4c580c7" message="#[payload]" category="${hc.logger.package}" />
+		<logger level="INFO" doc:name="end-fhir-x12-converter-implementation" doc:id="69accc18-5dd1-4a06-b4d0-af477cc3aac3" message="Completed FHIR to X12 Conversion" />
+	</sub-flow>
+	<sub-flow name="implementation_fhir-r4-to-x12-005010X279A1-270" doc:id="ee3db1d6-fad8-465d-b170-652d0ed2dc88" >
+		<logger level="INFO" doc:name="begin-fhir-r4-to-x12-transform" doc:id="38145e01-8227-4acf-8290-339e2a5b872f" message="Start FHIR R4 to X12 Conversion for EDI X12 270"/>
+		<try doc:name="Try" doc:id="20904b16-5884-4990-b51a-bcb107d74575" >
+			<ee:transform doc:name="transform-to-x12-270" doc:id="dd0ed383-9152-4090-b86b-6090207cd794">
+			<ee:message>
+				<ee:set-payload resource="dwl/fhirTo270Inquiry.dwl" />
+			</ee:message>
+		</ee:transform>
+			<x12:write doc:name="Write" doc:id="bca1f037-6216-42e8-ad63-828fac0c9058" outputEdiMimeType="APPLICATION_EDIX12" interchangeNumberKey="123" groupNumberKey="123" transactionNumberKey="123" config-ref="X12_EDI_Config" />
+			<error-handler>
+				<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="1a289ba6-a96f-4fd9-8c66-0e798809443b" >
+					<ee:transform doc:name="set-error" doc:id="b778ed1b-21e1-41ca-9428-dc6a9182c4bc" >
+						<ee:message >
+						</ee:message>
+						<ee:variables >
+							<ee:set-variable variableName="errorPayload" ><![CDATA[%dw 2.0
+output application/java
+---
+{
+	resourceType: "OperationOutcome",
+ 	issue: [{
+		severity: "error",
+		code: "processing",
+		details: {
+			text: error.detailedDescription
+		}
+	}]
+}]]></ee:set-variable>
+						</ee:variables>
+					</ee:transform>
+					<flow-ref doc:name="common_generate-error-payload" doc:id="3a637808-0c13-4187-befc-f3cb836b54e0" name="common_generate-error-payload"/>
+				</on-error-propagate>
+			</error-handler>
+		</try>
+		<logger level="INFO" doc:name="end-fhir-r4-to-x12-transform" doc:id="b0b2b990-4565-4836-9512-6c812b50acb5" message="Completed FHIR R4 to X12 Conversion"/>
+	</sub-flow>
+	<sub-flow name="implementation_fhir-r4-to-x12-005010X222A1-837" doc:id="1399a222-7c02-432a-9737-65ef243cccdc">
+	<logger level="INFO" doc:name="begin-claim-professional-operation" doc:id="70298379-8dd5-413b-a74e-9c692a4422de" message="Start FHIR R4 to X12 Conversion for EDI 837" />
+		<set-variable value="#[payload]" doc:name="set-bundleResources" doc:id="edacfe6b-12f1-4519-8c16-62ea9cf243ba" variableName="bundleResources" />
+		<try doc:name="Try" doc:id="1c60375f-4489-49fc-b6a2-9e3bc3ed8b80">
+			<ee:transform doc:name="transform-to-x12" doc:id="1cfbcba3-da14-4d5f-a88b-b0c151995b2c">
+			<ee:message>
+				<ee:set-payload resource="dwl/fhirTo837Claim.dwl" />
+			</ee:message>
+		</ee:transform>
+			<x12:write doc:name="Write" doc:id="2ea6377b-e165-4192-8e66-20d137d88577" config-ref="X12_EDI_Config" outputEdiMimeType="APPLICATION_EDIX12" interchangeNumberKey="123" groupNumberKey="123" transactionNumberKey="123" />
+			<error-handler>
+				<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="876b4e44-db2d-4cc9-962c-b62f7907946c">
+					<ee:transform doc:name="set-error" doc:id="dbaf13dc-6c91-4262-bba0-c4a49001b5c4">
+						<ee:message />
+						<ee:variables>
+							<ee:set-variable variableName="errorPayload"><![CDATA[%dw 2.0
+output application/java
+---
+{
+	resourceType: "OperationOutcome",
+ 	issue: [{
+		severity: "error",
+		code: "processing",
+		details: {
+			text: error.detailedDescription
+		}
+	}]
+}]]></ee:set-variable>
+						</ee:variables>
+					</ee:transform>
+					<flow-ref doc:name="common_generate-error-payload" doc:id="9549dc45-1fed-40bd-ad34-d0427865e0ec" name="common_generate-error-payload" />
+				</on-error-propagate>
+			</error-handler>
+		</try>
+		<logger level="INFO" doc:name="end claim professional operation" doc:id="065d933b-16c9-4045-a3b8-2e4503d279e3" message="Completed FHIR R4 to X12 Conversion" /> 
+	</sub-flow>
+	<sub-flow name="implementation_fhir-r4-to-x12-005010X215-278RQ" doc:id="b59eaa4b-117b-4253-b2fa-e5a8de7b83bc">
+		<logger level="INFO" doc:name="begin-claim-professional-operation" doc:id="3b5435e8-fdf4-4fe1-841e-9543dd41a5dd" message="Claim Professional Started for EDI 278RQ" />
+		<set-variable value="#[payload.id]" doc:name="store-id" doc:id="9fdf38a6-bd3b-4d9c-b6f0-ae2310e53dc5" variableName="fhirId" />
+		<flow-ref doc:name="common_createVariables" doc:id="dee08a76-d268-4e62-99af-43238cb38b66" name="common_createVariables" />
+		<try doc:name="Try" doc:id="f16881c7-c463-44b3-a6c8-b03cfac81d02">
+			<ee:transform doc:name="transform-to-x12" doc:id="2ac5b212-9a22-47dd-9d1d-6fe02bbc6340">
+				<ee:message>
+					<ee:set-payload resource="dwl/Inquiry/fhirTo278Inquiry.dwl" />
+				</ee:message>
+			</ee:transform>
+			<logger level="DEBUG" doc:name="Log payload after transform to x12-278" doc:id="6208ff0b-20e8-44c5-b2c8-a2d449e38493" message="#[payload]" category="${hc.logger.package}"/>
+			<x12:write doc:name="Write" doc:id="a1687d59-5443-4926-a178-83b88f5cf8d4" config-ref="X12_EDI_Config" outputEdiMimeType="APPLICATION_EDIX12" interchangeNumberKey="123" groupNumberKey="123" transactionNumberKey="123" />
+			<error-handler>
+				<on-error-propagate enableNotifications="true" logException="true" doc:name="Error Propagate" doc:id="7da61520-f946-4e4d-8568-0eccc7f3bb53">
+					<ee:transform doc:name="set-error" doc:id="b6dcf1ce-d878-4755-9908-0aeab9a61d75">
+						<ee:message />
+						<ee:variables>
+							<ee:set-variable variableName="errorPayload"><![CDATA[%dw 2.0
+output application/java
+---
+{
+	resourceType: "OperationOutcome",
+ 	issue: [{
+		severity: "error",
+		code: "processing",
+		details: {
+			text: error.detailedDescription
+		}
+	}]
+}]]></ee:set-variable>
+						</ee:variables>
+					</ee:transform>
+					<flow-ref doc:name="common_generate-error-payload" doc:id="42ab9f2e-9595-481a-857e-420e2b546833" name="common_generate-error-payload" />
+				</on-error-propagate>
+			</error-handler>
+		</try>
+		<logger level="INFO" doc:name="end claim professional operation" doc:id="5533e3e9-591c-48f6-8420-0f881401c6a9" message="Completed FHIR R4 to X12 Conversion" />
+	</sub-flow>
+	<sub-flow name="implementation_fhir-r4-to-x12-005010X217-278RQ" doc:id="e04f7bc4-bc3d-4176-88ac-d35e6035ce0b">
+		<logger level="INFO" doc:name="begin-claim-professional-operation" doc:id="05fadb30-9599-4b11-adb1-ddc39d51e9c6" message="Claim Professional Started for EDI 278RQ" />
+		<set-variable value="#[payload.id]" doc:name="store-id" doc:id="312c3b7d-e998-485b-b4ee-9f95167ff1a0" variableName="fhirId" />
+		<set-variable value="#[payload]" doc:name="set-bundleResources" doc:id="2b4a7181-ac65-432f-b6d3-b0c33ea80fd3" variableName="bundleResources" />
+		<flow-ref doc:name="common_createVariables" doc:id="b738737b-f32a-42c9-9b63-553285df256a" name="common_createVariables" />
+		<try doc:name="Try" doc:id="10b58edd-8cf8-4961-b451-e5416c75940e">
+			<ee:transform doc:name="transform-to-x12-278" doc:id="f08e2260-6168-46df-8670-164386054a0e">
+				<ee:message>
+					<ee:set-payload resource="dwl/Submit/fhirToSubmitRequest278.dwl" />
+				</ee:message>
+			</ee:transform>
+			<logger level="DEBUG" doc:name="Log payload after transform to x12-278" doc:id="99778d7d-5fd9-48fb-9775-9709c7fbcb06" message="#[payload]" category="${hc.logger.package}" />
+			<x12:write doc:name="Write" doc:id="1a175e41-a63b-404f-872c-1d1005f9b099" config-ref="X12_EDI_Config" outputEdiMimeType="APPLICATION_EDIX12" interchangeNumberKey="123" groupNumberKey="123" transactionNumberKey="123" >
+				<error-mapping sourceType="X12:SCHEMA" targetType="APP:SYNTAX-ERROR" />
+			</x12:write>
+			<error-handler>
+				<on-error-propagate enableNotifications="true" logException="true" doc:name="Error Propagate" doc:id="9187d65d-b16d-467f-9a71-bb8d81f29edb">
+					<ee:transform doc:name="set-error" doc:id="1babba89-4e94-4259-8732-86d35142d257">
+						<ee:message />
+						<ee:variables>
+							<ee:set-variable variableName="errorPayload"><![CDATA[%dw 2.0
+output application/java
+---
+{
+	resourceType: "OperationOutcome",
+ 	issue: [{
+		severity: "error",
+		code: "processing",
+		details: {
+			text: error.detailedDescription
+		}
+	}]
+}]]></ee:set-variable>
+						</ee:variables>
+					</ee:transform>
+					<flow-ref doc:name="common_generate-error-payload" doc:id="979a0d25-7fbd-4a95-97c5-b8e024d2efa8" name="common_generate-error-payload" />
+				</on-error-propagate>
+			</error-handler>
+		</try>
+		<logger level="INFO" doc:name="end claim professional operation" doc:id="9d0f6a74-71b2-4af8-abae-fe0a11050280" message="Completed FHIR R4 to X12 Conversion" />
+	
+</sub-flow>
+	<sub-flow name="implementation_fhir-r4-to-x12-005010X210-275" doc:id="c50b1770-8eeb-4e35-960c-af7a28bf3c05">
+		<logger level="INFO" doc:name="begin-claim-professional-operation" doc:id="ff200a5f-b353-45ec-ae9c-ad13d33bbb35" message="Claim Professional Started for EDI 275" />
+		<set-variable value="#[payload.id]" doc:name="store-id" doc:id="c0c1f758-b7cb-4c8d-b7f1-07d0e033426b" variableName="fhirId" />
+		<flow-ref doc:name="common_createVariables" doc:id="c241927c-daec-43bb-bcdc-c4ef18471580" name="common_createVariables" />
+		<try doc:name="Try" doc:id="d3c468c1-c692-436b-871c-effe5e517bb6">
+			<ee:transform doc:name="transform-to-x12-275" doc:id="eaa05fcc-f31f-4dbe-9da9-101d4d5947ea">
+				<ee:message>
+					<ee:set-payload resource="dwl/Submit/fhirtoAdditionalInfo275.dwl" />
+				</ee:message>
+			</ee:transform>
+			<x12:write doc:name="Write" doc:id="133fc1e3-92f8-4a16-b134-0a2c609edb59" config-ref="X12_EDI_Config" outputEdiMimeType="APPLICATION_EDIX12" interchangeNumberKey="123" groupNumberKey="123" transactionNumberKey="123" />
+			<error-handler>
+				<on-error-propagate enableNotifications="true" logException="true" doc:name="Error Propagate" doc:id="bb10e1c9-db62-4776-b2d3-d0520fe6476d">
+					<ee:transform doc:name="set-error" doc:id="247d0061-dec5-4081-ae6a-1908bc8e41b0">
+						<ee:message />
+						<ee:variables>
+							<ee:set-variable variableName="errorPayload"><![CDATA[%dw 2.0
+output application/java
+---
+{
+	resourceType: "OperationOutcome",
+ 	issue: [{
+		severity: "error",
+		code: "processing",
+		details: {
+			text: error.detailedDescription
+		}
+	}]
+}]]></ee:set-variable>
+						</ee:variables>
+					</ee:transform>
+					<flow-ref doc:name="common_generate-error-payload" doc:id="95728cfc-6a09-4cf3-98d0-b5074385384a" name="common_generate-error-payload" />
+				</on-error-propagate>
+			</error-handler>
+		</try>
+		<logger level="INFO" doc:name="end claim professional operation" doc:id="e5e7689a-e231-4b8e-803a-601e8ba78b24" message="Completed FHIR R4 to X12 Conversion" />
+	</sub-flow>
+	<sub-flow name="implementation_fhir-r4-to-x12-005010X279A1-271" doc:id="202f5e74-43f8-43b8-8e4b-9017caa35f82">
+		<logger level="INFO" doc:name="begin-x12-to-fhir-r4-transform" doc:id="a8542da7-e9e3-42b5-8e15-ef8ff53549b6" message="Start X12 to FHIR R4 Conversion for EDI 271" />
+		<x12:read doc:name="Read" doc:id="cd4914b8-af06-4ce4-9a56-88fdee2b1286" config-ref="X12_EDI_Config_Read" />
+		<choice doc:name="x12-read-successful" doc:id="d3737baa-3f77-41f8-8d2b-48869c8a0b7f">
+			<when expression="#[isEmpty(payload.Errors)]">
+				<ee:transform doc:name="x12-message-to-json" doc:id="8fde3c73-4e48-4ffe-8f6e-041c29e2d804">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"Heading" : payload.TransactionSets.v005010X279A1."271".Heading,
+	"Detail" : payload.TransactionSets.v005010X279A1."271".Detail
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+				<ee:transform doc:name="x12-to-fhir" doc:id="377cbdea-8ca8-4f26-8995-b344379cfe40">
+			<ee:message>
+				<ee:set-payload resource="dwl/x12271ToFhirResponse.dwl" />
+			</ee:message>
+		</ee:transform>
+			</when>
+			<otherwise>
+				<ee:transform doc:name="set-error" doc:id="d76fe80a-495b-4c56-ae64-6049fa29aed8">
+					<ee:message>
+					</ee:message>
+					<ee:variables>
+						<ee:set-variable variableName="errorPayload"><![CDATA[%dw 2.0
+output application/json
+/**
+ * Standard Error Message in FHIR Format for resources that are not implemented
+ * @param No required error message
+ * @return A FHIR R4 formated Operation Outcome message
+ */
+---
+{
+	resourceType: "OperationOutcome",
+ 	issue: payload.Errors map(err,errIdx) -> {
+		severity: "error",
+		code: "processing",
+		details: {
+			text: err
+		}
+	}
+}]]></ee:set-variable>
+						<ee:set-variable variableName="httpStatus"><![CDATA[%dw 2.0
+output application/java
+---
+"400"]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+				<flow-ref doc:name="common_generate-error-payload" doc:id="c7dc6ee3-1bde-44ff-91e6-0abc8b187474" name="common_generate-error-payload" />
+			</otherwise>
+		</choice>
+		<logger level="INFO" doc:name="end-x12-to fhir-r4-transform" doc:id="eabfab47-1b17-40b2-b50e-bc60e478af24" message="Completed X12 to FHIR R4 Conversion" />
+	</sub-flow>		
+	<sub-flow name="implementation_fhir-r4-to-x12-005010X217-278RS" doc:id="d9a93096-5da9-490e-ad36-a8410dc17b9e" >
+		<logger level="INFO" doc:name="begin-x12-to-fhir-r4-transform" doc:id="d8909906-391d-4db1-800d-88e600852268" message="Start X12 to FHIR R4 Conversion for EDI 278RS" />
+		<logger level="DEBUG" doc:name="Log X12 Payload" doc:id="460ca2fb-af78-43ae-999a-4c2ccf81e4d4" message="#[payload]" category="${hc.logger.package}" />
+		<x12:read doc:name="Read" doc:id="a78ba399-139f-48ad-8ca2-e5613ae1cd0a" config-ref="X12_EDI_Config_Read" />
+		<choice doc:name="x12-read-successful" doc:id="d5a49093-17b5-41e1-9c82-dbd3ef88c500" >
+			<when expression="#[isEmpty(payload.Errors)]">
+				<ee:transform doc:name="Transform Message" doc:id="9fdde073-9398-4fa6-baeb-50c80d48f2ae" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<ee:transform doc:name="transform-to-fhir" doc:id="a93bbb65-286f-48de-85d3-61b37bfb9e4a" >
+					<ee:message >
+						<ee:set-payload resource="dwl/Submit/submitResponse278toFHIR.dwl" />
+					</ee:message>
+				</ee:transform>
+				<logger level="DEBUG" doc:name="Log payload after transform to FHIR" doc:id="86a209bb-01f7-49a1-b1b3-8a8b0491176f" message="#[payload]" category="${hc.logger.package}" />
+			
+</when>
+			<otherwise >
+				<ee:transform doc:name="set-error" doc:id="0a2ce2e0-9938-4486-93ee-febc8fc6b8ab">
+					<ee:message>
+					</ee:message>
+					<ee:variables >
+						<ee:set-variable variableName="errorPayload" ><![CDATA[%dw 2.0
+output application/json
+/**
+ * Standard Error Message in FHIR Format for resources that are not implemented
+ * @param No required error message
+ * @return A FHIR R4 formated Operation Outcome message
+ */
+---
+{
+	resourceType: "OperationOutcome",
+ 	issue: payload.Errors map(err,errIdx) -> {
+		severity: "error",
+		code: "processing",
+		details: {
+			text: err
+		}
+	}
+}]]></ee:set-variable>
+						<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+output application/java
+---
+"400"]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+				<logger level="INFO" doc:name="Log httpStatus and Error" doc:id="6e53ab7c-b113-4119-b1ab-008ac0639808" message='#[vars.httpStatus ++ " " ++  vars.errorPayload]'/>
+				<flow-ref doc:name="common_generate-error-payload" doc:id="f1d5e529-7298-4799-be25-bb0697a6c467" name="common_generate-error-payload"/>
+			
+</otherwise>
+		</choice>
+		<logger level="INFO" doc:name="end-x12-to fhir-r4-transform" doc:id="d19b041d-de7a-4020-9f9e-e3aa6cfb76ee" message="Completed X12 to FHIR R4 Conversion" />
+		<flow-ref doc:name="Flow Reference" doc:id="48e20b66-c478-4934-befe-5d9a2884ba11" name="Mule-to-Cohere-FHIR-Submit"/>
+	
+</sub-flow>	
+	<sub-flow name="implementation_fhir-r4-to-x12-005010X215-278RS" doc:id="be7118c2-4d84-4dea-87cd-e45e6902a010" >
+		<logger level="INFO" doc:name="begin-x12-to-fhir-r4-transform" doc:id="bf39f95e-d156-44c3-8c49-899397df80fb" message="Start X12 to FHIR R4 Conversion for EDI 278RS" />
+		<logger level="DEBUG" doc:name="Log X12 Payload" doc:id="65902c8d-a749-4dbe-a044-2463ab7c3661" message="#[payload]" category="${hc.logger.package}" />
+		<x12:read doc:name="Read" doc:id="5636e453-13cf-45c1-9b0d-86ca3c3280e9" config-ref="X12_EDI_Config_Read" />
+		<choice doc:name="x12-read-successful" doc:id="4a052c3e-db7a-4be7-bf91-866afecc8323" >
+			<when expression="#[isEmpty(payload.Errors)]">
+				<ee:transform doc:name="Transform Message" doc:id="09faac3c-9396-41de-ba71-b640fed3d9cb" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<ee:transform doc:name="transform-to-fhir" doc:id="130d1ef9-3ade-47cf-8d1c-6395b4d11ef2" >
+					<ee:message >
+						<ee:set-payload resource="dwl/Inquiry/claimInquiryResponse278toFHIR.dwl" />
+					</ee:message>
+				</ee:transform>
+				<logger level="DEBUG" doc:name="Log payload after transform to FHIR" doc:id="ce98bf62-3ee2-4aaf-8d9d-11b7cee76eee" message="#[payload]" category="${hc.logger.package}" />
+			
+</when>
+			<otherwise >
+				<ee:transform doc:name="set-error" doc:id="8fea22b4-abd2-474b-86d7-bb6b3b33e82e">
+					<ee:message>
+					</ee:message>
+					<ee:variables >
+						<ee:set-variable variableName="errorPayload" ><![CDATA[%dw 2.0
+output application/json
+/**
+ * Standard Error Message in FHIR Format for resources that are not implemented
+ * @param No required error message
+ * @return A FHIR R4 formated Operation Outcome message
+ */
+---
+{
+	resourceType: "OperationOutcome",
+ 	issue: payload.Errors map(err,errIdx) -> {
+		severity: "error",
+		code: "processing",
+		details: {
+			text: err
+		}
+	}
+}]]></ee:set-variable>
+						<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+output application/java
+---
+"400"]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+				<logger level="INFO" doc:name="Log httpStatus and Error" doc:id="7a44ee03-565a-4a46-b989-8ec437b7b78e" message='#[vars.httpStatus ++ " " ++  vars.errorPayload]' />
+				<flow-ref doc:name="common_generate-error-payload" doc:id="174fb427-c42f-47d2-b352-4784145dd553" name="common_generate-error-payload"/>
+			
+</otherwise>
+		</choice>
+		<logger level="INFO" doc:name="end-x12-to fhir-r4-transform" doc:id="141e2c25-9994-424e-8685-130eaa846121" message="Completed X12 to FHIR R4 Conversion" />
+		<flow-ref doc:name="Flow Reference" doc:id="e32be472-90e6-4729-80e7-b7a7ae8a4b7e" name="Mule-to-Cohere-FHIR-Submit"/>
+	
+</sub-flow>		
+</mule>

@@ -1,0 +1,44 @@
+api:
+  name: "${project.artifactId}"
+  version: "${project.version}"
+  #Replace with respective autodiscovery id
+  autodiscoveryID: "REPLACE_BY_USER"    
+
+keystore:
+  alias: "solutionsteam"   
+  path: "keystore/accelerator-keystore.jks"
+
+hc:
+ logger:
+  package: "com.mulesoft.accelerator.hls.fhir-r4.x12.converter"
+
+https:
+  host: "0.0.0.0"
+  port: "8081"
+  entryPath: "/api/"
+
+# HIPAA Validation level for X12
+#Used to check the converted X12 transaction against HIPAA standards for EDI 
+hipaa:
+  validationLevel: "HIPAA_SNIP2"
+
+
+# Replace the sourceId(ISA06), sourceAppCode(GS02), receiverID(ISA08) and receiverAppCode(GS03) to your org's values
+# Replace the source and receveir qualifiers as per your requirement too
+transaction:
+  identifiers: 
+    sourceQualifier: "ZZ"
+    sourceId: "HCACC"
+    sourceAppCode: "HCACC"
+    receiverQualifier: "ZZ"
+    receiverId: "HCRCV"
+    receiverAppCode: "HCRCV"
+    
+environmentId: ""
+
+token:
+  host: "cp-dev.auth.us-east-2.amazoncognito.com" 
+  path: "/oauth2/token"
+  
+bearer:
+  username: "e8ifnokhob63catk9a469vlho"

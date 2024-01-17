@@ -1,0 +1,629 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:os="http://www.mulesoft.org/schema/mule/os"
+	xmlns:email="http://www.mulesoft.org/schema/mule/email"
+	xmlns:cloudhub="http://www.mulesoft.org/schema/mule/cloudhub"
+	xmlns:sftp="http://www.mulesoft.org/schema/mule/sftp"
+	xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:tls="http://www.mulesoft.org/schema/mule/tls"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/sftp http://www.mulesoft.org/schema/mule/sftp/current/mule-sftp.xsd
+http://www.mulesoft.org/schema/mule/cloudhub http://www.mulesoft.org/schema/mule/cloudhub/current/mule-cloudhub.xsd
+http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
+
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="3371ad18-9318-43ce-b37a-e38aa9b32009" >
+		<http:request-connection protocol="HTTPS" host="${token.host}" >
+			<http:authentication >
+				<http:basic-authentication username="${bearer.username}" password="${secure::bearer.password}" />
+			</http:authentication>
+		</http:request-connection>
+	</http:request-config>
+	<error-handler name="global_error_handler">
+		<on-error-propagate type="APIKIT:BAD_REQUEST"
+			enableNotifications="true" logException="true">
+			<!-- <logger level="INFO" doc:name="Entering Generic Error Handler"
+				doc:id="ac7ff2bd-c88e-49d0-90a6-44040bf0917d"
+				message='In apisero-generic-global-error-handler, CorrelationID :  #[correlationId]' /> -->
+			<logger level="INFO" doc:name="Logger" doc:id="8252b901-4a7d-469d-83c6-b8c97e81e830" message="#[error]"/>
+			<set-variable
+				value='#[output application/json --- error.description]'
+				doc:name="errorDescription" doc:id="2bcf392c-e50a-4e06-8888-f06164189064"
+				variableName="errorDescription" />
+			<ee:transform doc:name="Transform Message" doc:id="e5ccd1aa-adb3-446f-b081-4599b03216c3" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+/**
+ * Standard Error Message in FHIR Format for resources that are not implemented
+ * @param No required error message
+ * @return A FHIR R4 formated Operation Outcome message
+ */
+---
+{
+	resourceType: "OperationOutcome",
+	issue: [{
+		severity: "error",
+		code: "processing",
+		details: {
+			text: vars.errorDescription
+		}
+	}]
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<flow-ref doc:name="common-error-sub-flow"
+				doc:id="464bba2d-fe07-4a1c-8a6b-7f3c8d062603"
+				name="common-error-sub-flow" />
+		</on-error-propagate>
+		<on-error-propagate type="APIKIT:NOT_FOUND"
+			enableNotifications="true" logException="true">
+			<!-- <logger level="INFO" doc:name="Entering Generic Error Handler"
+				doc:id="28f61c25-55d8-4cf1-bab2-0d04bc9e9f3e"
+				message='"In apisero-generic-global-error-handler, CorrelationID :  #[correlationId]"' /> -->
+			<logger level="INFO" doc:name="Logger" doc:id="6ba6f606-77f0-4d8a-b373-500aaad5d2f0" message="#[error]"/>
+			<set-variable
+				value='#[output application/json --- error.description]'
+				doc:name="errorDescription" doc:id="d3b13aa7-76f0-4891-a261-1e3138a290f9"
+				variableName="errorDescription" />
+			<ee:transform doc:name="Transform Message" doc:id="d7c25391-b357-48d6-a934-521c981de47d" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+/**
+ * Standard Error Message in FHIR Format for resources that are not implemented
+ * @param No required error message
+ * @return A FHIR R4 formated Operation Outcome message
+ */
+---
+{
+	resourceType: "OperationOutcome",
+	issue: [{
+		severity: "error",
+		code: "processing",
+		details: {
+			text: vars.errorDescription
+		}
+	}]
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<flow-ref doc:name="common-error-sub-flow"
+				doc:id="0c60e8dd-f188-4dd6-a8a8-f65ba098cd4b"
+				name="common-error-sub-flow" />
+		</on-error-propagate>
+		<on-error-propagate
+			type="APIKIT:METHOD_NOT_ALLOWED">
+			<!-- <logger level="INFO" doc:name="Entering Generic Error Handler"
+				doc:id="8bb7e2fb-9192-4a60-8490-91b69aba3f12"
+				message='"In apisero-generic-global-error-handler, CorrelationID :  #[correlationId]"' /> -->
+			<logger level="INFO" doc:name="Logger" doc:id="8c582cfb-28ff-4319-8a2e-5bb65f16ec8e" message="#[error]"/>
+			<set-variable
+				value='#[output application/json --- error.description]'
+				doc:name="errorDescription" doc:id="b98be123-71bb-4b6f-9919-d40fa9f955e9"
+				variableName="errorDescription" />
+			<ee:transform doc:name="Transform Message" doc:id="209de257-9481-4681-8486-3d6c59a145f7" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+/**
+ * Standard Error Message in FHIR Format for resources that are not implemented
+ * @param No required error message
+ * @return A FHIR R4 formated Operation Outcome message
+ */
+---
+{
+	resourceType: "OperationOutcome",
+	issue: [{
+		severity: "error",
+		code: "processing",
+		details: {
+			text: vars.errorDescription
+		}
+	}]
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<flow-ref doc:name="common-error-sub-flow"
+				doc:id="8c970dfa-edde-4643-a087-a75282157cd2"
+				name="common-error-sub-flow" />
+		</on-error-propagate>
+		<on-error-propagate type="APIKIT:NOT_ACCEPTABLE"
+			enableNotifications="true" logException="true">
+			<!-- <logger level="INFO" doc:name="Entering Generic Error Handler"
+				doc:id="ecdce9e8-2b6d-4a77-9b59-68ce83d0ada0"
+				message='"In apisero-generic-global-error-handler, CorrelationID :  #[correlationId]"' /> -->
+			<logger level="INFO" doc:name="Logger" doc:id="5eea3cf1-f143-4aa7-8e87-b6992f549412" message="#[error]"/>
+			<set-variable
+				value='#[output application/json --- error.description]'
+				doc:name="errorDescription" doc:id="e462ca25-d2e7-4f44-9155-15e39961bbf9"
+				variableName="errorDescription" />
+			<ee:transform doc:name="Transform Message" doc:id="9e158dd7-80a2-426a-88dd-d004c6ad035c" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+/**
+ * Standard Error Message in FHIR Format for resources that are not implemented
+ * @param No required error message
+ * @return A FHIR R4 formated Operation Outcome message
+ */
+---
+{
+	resourceType: "OperationOutcome",
+	issue: [{
+		severity: "error",
+		code: "processing",
+		details: {
+			text: vars.errorDescription
+		}
+	}]
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<flow-ref doc:name="common-error-sub-flow"
+				doc:id="8cc63664-0ba9-4b9c-9779-0e2e90cb2782"
+				name="common-error-sub-flow" />
+		</on-error-propagate>
+		<on-error-propagate
+			type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+			<!-- <logger level="INFO" doc:name="Entering Generic Error Handler"
+				doc:id="cbc41f71-6aaa-4afb-ae5b-ab91c5db15d4"
+				message='"In apisero-generic-global-error-handler, CorrelationID :  #[correlationId]"' /> -->
+			<logger level="INFO" doc:name="Logger" doc:id="33d2f111-b425-4c22-90d4-2b8602154a61" message="#[error]"/>
+			<set-variable
+				value='#[output application/json --- error.description]'
+				doc:name="errorDescription" doc:id="710d6012-45c9-4cdd-a25c-14f540cd2e49"
+				variableName="errorDescription" />
+			<ee:transform doc:name="Transform Message" doc:id="509eef63-d134-46c1-afba-b1a804ac9cc1" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+/**
+ * Standard Error Message in FHIR Format for resources that are not implemented
+ * @param No required error message
+ * @return A FHIR R4 formated Operation Outcome message
+ */
+---
+{
+	resourceType: "OperationOutcome",
+	issue: [{
+		severity: "error",
+		code: "processing",
+		details: {
+			text: vars.errorDescription
+		}
+	}]
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<flow-ref doc:name="common-error-sub-flow"
+				doc:id="d16c6e56-0dc6-453a-bb0f-7b061bdcdf43"
+				name="common-error-sub-flow" />
+		</on-error-propagate>
+		<on-error-propagate type="APIKIT:NOT_IMPLEMENTED"
+			enableNotifications="true" logException="true">
+			<!-- <logger level="INFO" doc:name="Entering Generic Error Handler"
+				doc:id="553ad6a3-739e-47ec-93a7-b99e790758d3"
+				message='"In apisero-generic-global-error-handler, CorrelationID :  #[correlationId]"' /> -->
+			<logger level="INFO" doc:name="Logger" doc:id="30e53713-4214-43dd-a654-ae424248ffc8" message="#[error]"/>
+			<set-variable
+				value='#[output application/json --- error.description]'
+				doc:name="errorDescription" doc:id="4492b4a8-cb6c-49d6-a132-ad61479ce291"
+				variableName="errorDescription" />
+			<ee:transform doc:name="Transform Message" doc:id="3ee605fb-5e9a-40e8-8169-8f29929131cb" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+/**
+ * Standard Error Message in FHIR Format for resources that are not implemented
+ * @param No required error message
+ * @return A FHIR R4 formated Operation Outcome message
+ */
+---
+{
+	resourceType: "OperationOutcome",
+	issue: [{
+		severity: "error",
+		code: "processing",
+		details: {
+			text: vars.errorDescription
+		}
+	}]
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<flow-ref doc:name="common-error-sub-flow"
+				doc:id="dc6d6aff-1dac-49f7-b4b8-c86c929998a3"
+				name="common-error-sub-flow" />
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true"
+			logException="true" doc:name="On Error Propagate"
+			doc:id="e45e55a7-bedd-4e31-91b5-4eee9748c95c"
+			type="HTTP:CONNECTIVITY">
+			<!-- <logger level="INFO" doc:name="Entering Generic Error Handler"
+				doc:id="4d2e35e7-7aa1-4984-a5ff-590d99e2a66d"
+				message='"In apisero-generic-global-error-handler, CorrelationID :  #[correlationId]"' /> -->
+			<!-- <logger level="INFO" doc:name="Entering Generic Error Handler" doc:id="16194a19-b6a6-4fa4-8c47-633e7efaa340" 
+				message='#["From parent flow" ++ (vars.apiLayer default "")]'/> <logger level="INFO" 
+				doc:name="Entering Generic Error Handler" doc:id="d3026740-8e25-4191-a1e7-245d12f8a30e" 
+				message="From Properties file #[p('globalErrorHandler.api-layer')]"/> -->
+			<logger level="INFO" doc:name="Logger" doc:id="9966366d-cf10-41a8-a85d-40bf08dec038" message="#[error]"/>
+			<set-variable value="#[output application/json --- error.description]" doc:name="errorDescription" doc:id="a4095c06-6300-481a-8d56-3e475a190761" variableName="errorDescription" />
+			<ee:transform doc:name="Transform Message" doc:id="e55a1ad3-5691-4bc3-a5f9-5b554b741679" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+/**
+ * Standard Error Message in FHIR Format for resources that are not implemented
+ * @param No required error message
+ * @return A FHIR R4 formated Operation Outcome message
+ */
+---
+{
+	resourceType: "OperationOutcome",
+	issue: [{
+		severity: "error",
+		code: "processing",
+		details: {
+			text: vars.errorDescription
+		}
+	}]
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<flow-ref doc:name="common-error-sub-flow"
+				doc:id="d085beee-3761-42bb-9b1d-a2cbb56279d0"
+				name="common-error-sub-flow" />
+
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true"
+			logException="true" doc:name="On Error Propagate"
+			doc:id="79669995-e617-4285-b66b-f537fa84bfee" type="HTTP:FORBIDDEN">
+			<!-- <logger level="INFO" doc:name="Entering Generic Error Handler"
+				doc:id="3315c9d2-6703-40f1-b611-8b4e61848add"
+				message='"In apisero-generic-global-error-handler, CorrelationID :  #[correlationId]"' /> -->
+			<logger level="INFO" doc:name="Logger" doc:id="c82bebc4-8dc5-4225-8d7c-4d8d95a63b55" message="#[error]"/>
+			<set-variable
+				value='#[output application/json --- error.description]'
+				doc:name="errorDescription" doc:id="19320aaa-5336-4260-8ed7-aeab295b6c09"
+				variableName="errorDescription" />
+			<ee:transform doc:name="Transform Message" doc:id="d8b3d187-59a2-420f-868e-f172798da55e" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+/**
+ * Standard Error Message in FHIR Format for resources that are not implemented
+ * @param No required error message
+ * @return A FHIR R4 formated Operation Outcome message
+ */
+---
+{
+	resourceType: "OperationOutcome",
+	issue: [{
+		severity: "error",
+		code: "processing",
+		details: {
+			text: vars.errorDescription
+		}
+	}]
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<flow-ref doc:name="common-error-sub-flow"
+				doc:id="0bf657b7-febc-42e7-957f-f86a4123aeae"
+				name="common-error-sub-flow" />
+
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true"
+			logException="true" doc:name="On Error Propagate"
+			doc:id="9346fdeb-4375-4782-9511-0c7de14294ba"
+			type="HTTP:SERVICE_UNAVAILABLE">
+			<!-- <logger level="INFO" doc:name="Entering Generic Error Handler"
+				doc:id="b0d0a848-9d09-494e-bae2-3ebc858b6aea"
+				message='"In apisero-generic-global-error-handler, CorrelationID :  #[correlationId]"' /> -->
+			<logger level="INFO" doc:name="Logger" doc:id="e4573fbd-53ad-44a5-9ba0-edf5f6b75380" message="#[error]"/>
+			<set-variable
+				value='#[output application/json --- error.description]'
+				doc:name="errorDescription" doc:id="e3cf629e-1a0e-430c-913b-930d84153580"
+				variableName="errorDescription" />
+			<ee:transform doc:name="Transform Message" doc:id="2fa991d5-3e62-43a9-8488-ceb704f9b036" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+/**
+ * Standard Error Message in FHIR Format for resources that are not implemented
+ * @param No required error message
+ * @return A FHIR R4 formated Operation Outcome message
+ */
+---
+{
+	resourceType: "OperationOutcome",
+	issue: [{
+		severity: "error",
+		code: "processing",
+		details: {
+			text: vars.errorDescription
+		}
+	}]
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<flow-ref doc:name="common-error-sub-flow"
+				doc:id="363343dd-f40b-470e-8944-828408055f97"
+				name="common-error-sub-flow" />
+
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true"
+			logException="true" doc:name="On Error Propagate"
+			doc:id="b28484d6-bc6d-4bcf-a88d-14a2d3e79d5c" type="HTTP:TIMEOUT">
+			<!-- <logger level="INFO" doc:name="Entering Generic Error Handler"
+				doc:id="125d432b-c9f1-4516-a7ef-afe00a973068"
+				message='"In apisero-generic-global-error-handler, CorrelationID :  #[correlationId]"' /> -->
+			<logger level="INFO" doc:name="Logger" doc:id="e4b1b456-b7ba-446f-bec8-a4cf91291c9d" message="#[error]"/>
+			<set-variable
+				value='#[output application/json --- error.description]' doc:name="errorDescription"
+				doc:id="29a32eda-a080-4ac3-95d6-87400821fb2a"
+				variableName="errorDescription" />
+			<ee:transform doc:name="Transform Message" doc:id="3b51c699-3b48-4c2a-963a-13a0b0bf5026" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+/**
+ * Standard Error Message in FHIR Format for resources that are not implemented
+ * @param No required error message
+ * @return A FHIR R4 formated Operation Outcome message
+ */
+---
+{
+	resourceType: "OperationOutcome",
+	issue: [{
+		severity: "error",
+		code: "processing",
+		details: {
+			text: vars.errorDescription
+		}
+	}]
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<flow-ref doc:name="common-error-sub-flow"
+				doc:id="d674b66f-2c86-40b0-a2d6-b2c22659a5b1"
+				name="common-error-sub-flow" />
+
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true"
+			logException="true" doc:name="On Error Propagate"
+			doc:id="f5a1602b-35c6-4301-b0b8-201d40231d6a"
+			type="HTTP:UNAUTHORIZED">
+			<!-- <logger level="INFO" doc:name="Entering Generic Error Handler"
+				doc:id="f618a5aa-bad9-4a21-a09a-0a978f8191de"
+				message='"In apisero-generic-global-error-handler, CorrelationID :  #[correlationId]"' /> -->
+			<logger level="INFO" doc:name="Logger" doc:id="040e2a59-fdb3-473b-aef3-8954d770b430" message="#[error]"/>
+			<set-variable
+				value='#[output application/json --- error.description]'
+				doc:name="errorDescription" doc:id="7c680e6b-f742-414c-8f63-f97824ec1aea"
+				variableName="errorDescription" />
+			<ee:transform doc:name="Transform Message" doc:id="09af92c4-d645-4066-af7f-dade9f253996" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+/**
+ * Standard Error Message in FHIR Format for resources that are not implemented
+ * @param No required error message
+ * @return A FHIR R4 formated Operation Outcome message
+ */
+---
+{
+	resourceType: "OperationOutcome",
+	issue: [{
+		severity: "error",
+		code: "processing",
+		details: {
+			text: vars.errorDescription
+		}
+	}]
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<flow-ref doc:name="common-error-sub-flow"
+				doc:id="1d6d3fc2-c064-4bbe-823e-47407558c196"
+				name="common-error-sub-flow" />
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true"
+			logException="true" doc:name="On Error Propagate"
+			doc:id="36eb5441-1462-4736-a1cd-4bf8c1b31090" type="X12:WRITE">
+			<!-- <logger level="INFO" doc:name="Entering Generic Error Handler"
+				doc:id="64656748-8253-4138-bc85-5c06290856ef"
+				message='"In apisero-generic-global-error-handler, CorrelationID :  #[correlationId]"' /> -->
+			<logger level="INFO" doc:name="Logger" doc:id="2fab4115-c231-4571-b941-3193b3d10eb4" message="#[error]"/>
+			<set-variable
+				value='#[output application/json --- error.description]' doc:name="errorDescription"
+				doc:id="be028c09-db82-4414-936b-a5b2e1a1ec9e"
+				variableName="errorDescription" />
+			<ee:transform doc:name="set-OperationOutcome" doc:id="e0fa0ce0-c354-47a7-8756-d03f50a1bf7e" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+/**
+ * Standard Error Message in FHIR Format for resources that are not implemented
+ * @param No required error message
+ * @return A FHIR R4 formated Operation Outcome message
+ */
+---
+{
+	resourceType: "OperationOutcome",
+	issue: [{
+		severity: "error",
+		code: "processing",
+		details: {
+			text: vars.errorDescription
+		}
+	}]
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<flow-ref doc:name="common-error-sub-flow"
+				doc:id="6c089460-aee1-495f-b751-1bf213111e72"
+				name="common-error-sub-flow" />
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true"
+			logException="true" doc:name="On Error Propagate"
+			doc:id="4bc4bf83-ab3c-435c-83b8-fc5345a8a6d9" type="EXPRESSION">
+			<!-- <logger level="INFO" doc:name="Entering Generic Error Handler"
+				doc:id="a59764f6-351e-434b-a594-860074036e17"
+				message='"In apisero-generic-global-error-handler, CorrelationID :  #[correlationId]"' /> -->
+			<logger level="INFO" doc:name="Logger" doc:id="d9f162eb-3501-48fe-9922-109cad5e1028" message="#[error]"/>
+			<set-variable
+				value='#[output application/json --- error.description]' doc:name="errorDescription"
+				doc:id="f74116e2-5938-4a92-9f1b-e2d9a7ee0d27"
+				variableName="errorDescription" />
+			<ee:transform doc:name="Transform Message" doc:id="da7db154-6ad5-4566-bae9-39c8c7f4b3f8" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+/**
+ * Standard Error Message in FHIR Format for resources that are not implemented
+ * @param No required error message
+ * @return A FHIR R4 formated Operation Outcome message
+ */
+---
+{
+	resourceType: "OperationOutcome",
+	issue: [{
+		severity: "error",
+		code: "processing",
+		details: {
+			text: vars.errorDescription
+		}
+	}]
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<flow-ref doc:name="common-error-sub-flow"
+				doc:id="498b6a25-8fcb-41a1-95da-43633160c83b"
+				name="common-error-sub-flow" />
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="aab000c9-ddb9-4b81-917e-7fc741853716" type="ANY" >
+			<logger level="INFO" doc:name="Logger" doc:id="176de6d2-23d6-4411-bccc-165c47e9be76" message="#[error]" />
+			<set-variable value="#[output application/json --- error.description]" doc:name="errorDescription" doc:id="321076e7-0583-44db-9d08-d499399d2c1c" variableName="errorDescription" />
+			<ee:transform doc:name="Transform Message" doc:id="7247c6a5-8396-422f-8afd-7eaace5e7401" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+/**
+ * Standard Error Message in FHIR Format for resources that are not implemented
+ * @param No required error message
+ * @return A FHIR R4 formated Operation Outcome message
+ */
+---
+{
+	resourceType: "OperationOutcome",
+	issue: [{
+		severity: "error",
+		code: "processing",
+		details: {
+			text: vars.errorDescription
+		}
+	}]
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<flow-ref doc:name="common-error-sub-flow" doc:id="653ab082-464b-4368-8db4-d8c8e5ebdbd5" name="common-error-sub-flow" />
+		</on-error-propagate>
+	</error-handler>
+	<sub-flow name="common-error-sub-flow"
+		doc:id="a75257a7-93a8-4b00-bb47-affc7d0cffc2">
+		<!-- <ee:transform doc:name="DW - Initiate Logging Variables"
+			doc:id="a763cdc1-71c1-445c-8e2d-acf4a7e11961">
+			<ee:message>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable variableName="log_name"><![CDATA["apisero-generic-error-handler"]]></ee:set-variable>
+				<ee:set-variable variableName="log_flowName"><![CDATA["common-error-sub-flow"]]></ee:set-variable>
+				<ee:set-variable
+					variableName="log_originatingApplication"><![CDATA["Generic Error Handler"]]></ee:set-variable>
+				<ee:set-variable
+					variableName="log_destinationApplication"><![CDATA["Generic Error Handler"]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform> -->
+		<!-- <logger level="ERROR" doc:name="Log Error"
+			doc:id="a0c4832c-f090-4d70-bfcf-d58ae60535fd"
+			message='"Error - HTTP Status Code: " #[vars.httpStatus] " Error Message Description : " #[vars.errorDescription]' /> -->
+		<!-- <ee:transform doc:name="Error Response" doc:id="1abda29e-c587-43c4-8578-a603226ff9ba" 
+			xsi:schemaLocation=" http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd 
+			http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd 
+			http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd"> 
+			<ee:message> <ee:set-payload resource="dwTransformations/genericErrorResponse.dwl" 
+			/> </ee:message> <ee:variables> </ee:variables> </ee:transform> -->
+		<logger level="INFO" doc:name="Exit Generic Error Handler"
+			doc:id="07be7837-f77f-4611-be02-7b3f6e15ae33"
+			message='#[payload]' />
+		<try doc:name="Try" doc:id="02276dbf-43a1-4696-8d01-24326b6c255c" >
+			<os:retrieve doc:name="Retrieve Bearer_token" doc:id="50d747be-f45b-45d4-aa6a-ad7461218332" objectStore="Object_store" key="access_token" target="Bearer_token">
+			<os:default-value><![CDATA[#[vars.token.access_token]]]></os:default-value>
+		</os:retrieve>
+			<error-handler >
+				<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="c7535aed-b4da-4192-9b05-e5f5118db6f1" >
+					<set-variable value="#[null]" doc:name="Bearer_token" doc:id="e7b98484-584a-49dd-8547-a2a48a4d425b" variableName="Bearer_token"/>
+				</on-error-continue>
+			</error-handler>
+		</try>
+		<choice doc:name="Choice" doc:id="511bc99e-ee12-4606-8993-ce653fb26a8d" >
+			<when expression="#[(vars.Bearer_token) == null]">
+				<http:request method="POST" doc:name="Request for bearer token" doc:id="84f4f8bd-4984-4c5f-8afd-8d17ba8a3574" config-ref="HTTP_Request_configuration" path="${token.path}" target="token">
+			<http:body><![CDATA[#[%dw 2.0
+output application/x-www-form-urlencoded
+---
+{
+'grant_type': 'client_credentials'
+}]]]></http:body>
+			<http:headers><![CDATA[#[output application/java
+---
+{
+	'Content-Type' : "application/x-www-form-urlencoded"
+}]]]></http:headers>
+		</http:request>
+				<os:store doc:name="Store the token" doc:id="bfc40ed9-755b-4635-b958-cab9d319b3a4" objectStore="Object_store" key="access_token">
+			<os:value><![CDATA[#[vars.token.access_token]]]></os:value>
+		</os:store>
+				<http:request method="POST" doc:name="Request to generic notification api" doc:id="3e419a14-cfd3-433b-b507-17632b8444b3" url="https://hls-generic-notification-sys-api.us-e2.cloudhub.io/api/sendNotification" sendCorrelationId="ALWAYS" target="tokenResponse">
+					<http:headers ><![CDATA[#[output application/json
+---
+{
+	environmentId : Mule::p("environmentId"),
+	apiName: "x12tofhir",
+	client_id: Mule::p("client_id"),
+	client_secret: Mule::p('secure::client_secret'),
+    'Content-Type' : 'application/json',
+	'Authorization': 'Bearer' ++ " " ++ vars.token.access_token
+}]]]></http:headers>
+				</http:request>
+			</when>
+			<otherwise>
+				<logger level="INFO" doc:name="Logger" doc:id="035ccef7-e707-4c86-8693-a448c2299b0a" message='#["Bearer token exists already"]'/>
+				<http:request method="POST" doc:name="Request to generic notification api" doc:id="ac1c74db-d03f-495a-82fb-82011c7e830b" url="https://hls-generic-notification-sys-api.us-e2.cloudhub.io/api/sendNotification" sendCorrelationId="ALWAYS" target="tokenResponse">
+			<http:headers><![CDATA[#[output application/json
+---
+{
+	environmentId : Mule::p("environmentId"),
+	apiName: "x12tofhir",
+	client_id: Mule::p("client_id"),
+	client_secret: Mule::p('secure::client_secret'),
+    'Content-Type' : 'application/json',
+	'Authorization': 'Bearer' ++ " " ++ vars.Bearer_token
+}]]]></http:headers>
+		</http:request>
+			</otherwise>
+		</choice>
+	</sub-flow>
+</mule>

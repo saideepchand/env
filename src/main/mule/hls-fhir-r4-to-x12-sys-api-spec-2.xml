@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:oauth2-provider="http://www.mulesoft.org/schema/mule/oauth2-provider" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:cloudhub="http://www.mulesoft.org/schema/mule/cloudhub" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:workday="http://www.mulesoft.org/schema/mule/workday" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd  http://www.mulesoft.org/schema/mule/workday http://www.mulesoft.org/schema/mule/workday/current/mule-workday.xsd http://www.mulesoft.org/schema/mule/cloudhub http://www.mulesoft.org/schema/mule/cloudhub/current/mule-cloudhub.xsd
+http://www.mulesoft.org/schema/mule/oauth2-provider http://www.mulesoft.org/schema/mule/oauth2-provider/current/mule-oauth2-provider.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
+    <apikit:config name="hls-fhir-r4-to-x12-sys-api-spec-2-config" api="hls-fhir-r4-to-x12-sys-api-spec.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <flow name="hls-fhir-r4-to-x12-sys-api-spec-2-main">
+        <http:listener config-ref="hls-fhir-r4-to-x12-sys-api-spec-httpListenerConfig" path="/api/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body><![CDATA[#[payload]]]></http:body>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:error-response>
+        </http:listener>
+        <logger level="DEBUG" doc:name="Log payload" doc:id="a5c40cde-b324-422c-b7cd-2ddccfbe6a1a" message="#[payload]" category="${hc.logger.package}" />
+        <set-variable value="#[attributes.headers.'authorization']" doc:name="Get authorization" doc:id="04e3b41b-faac-4040-a9e0-ac9d6eeda612" variableName="authorization" />
+        <!-- <set-payload value="#[output text/plain &#10;-&#45;&#45; &#10;write(payload)]" doc:name="Set Payload" doc:id="4339f5c6-e320-4c97-8cf9-eca87db384db" /> -->
+		<apikit:router config-ref="hls-fhir-r4-to-x12-sys-api-spec-2-config" />
+        <error-handler ref="global_error_handler" />
+    </flow>
+    <flow name="hls-fhir-r4-to-x12-sys-api-spec-2-console">
+        <http:listener config-ref="hls-fhir-r4-to-x12-sys-api-spec-httpListenerConfig" path="/console/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body><![CDATA[#[payload]]]></http:body>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="hls-fhir-r4-to-x12-sys-api-spec-2-config" />
+        <error-handler ref="global_error_handler" />
+    </flow>
+    <flow name="post:\convertToFhir:application\json:hls-fhir-r4-to-x12-sys-api-spec-2-config">
+        <logger level="INFO" doc:name="Logger" doc:id="d3699e75-09dc-433c-ae21-ac27d89e4a5e" message="#[&quot;Start X12 to FHIR conversion&quot;]" />
+        <flow-ref doc:name="implementation_x12-to-fhir-request" doc:id="bc593c84-7f15-412b-a191-8f69cf150108" name="implementation_x12-to-fhir-request" />
+        <logger level="INFO" doc:name="Logger" doc:id="78b74578-b6f9-4e1b-b44e-fc5fd4c363e4" message="#[&quot;End X12 to FHIR conversion&quot;]" />
+        <error-handler ref="global_error_handler" />
+    </flow>
+    <flow name="post:\convertToX12:application\fhir+json:hls-fhir-r4-to-x12-sys-api-spec-2-config">
+        <logger level="INFO" doc:name="Logger" doc:id="5956b4a8-c94e-4654-882a-ba19116cff06" message="#[&quot;Start FHIR To X12 conversion&quot;]" />
+        <flow-ref doc:name="implementation_fhir-to-x12-request" doc:id="a291d897-f2b3-4ed1-a22c-38ea844435bd" name="implementation_fhir-to-x12-request" />
+        <logger level="INFO" doc:name="Logger" doc:id="b5ccbeb5-8ddc-40b1-bf6a-99a8d132416b" message="#[&quot;End FHIR To X12 conversion&quot;]" />
+        <error-handler ref="global_error_handler" />
+    </flow>
+    <flow name="post:\convertToX12:application\json:hls-fhir-r4-to-x12-sys-api-spec-2-config">
+		<logger level="INFO" doc:name="Logger" doc:id="d2e7cc02-5512-4256-ab4a-6be0e1ef8cef" message='#["Start FHIR To X12 conversion"]' />
+		<flow-ref doc:name="implementation_fhir-to-x12-request" doc:id="0cd3271f-fdc6-4989-b09a-ae948994b014" name="implementation_fhir-to-x12-request" />
+		<logger level="INFO" doc:name="Logger" doc:id="a7093bd2-73d2-4881-aced-b91de3a5a5cc" message='#["End FHIR To X12 conversion"]' />
+    </flow>
+	<flow name="post:\convertToX12:application\fhir+xml:hls-fhir-r4-to-x12-sys-api-spec-2-config">
+        <ee:transform doc:name="501-NotImplemented" doc:id="6f016431-9bc6-435f-8052-b8fc8ce4bd17">
+            <ee:message>
+                <ee:set-payload resource="dwl/501NotImplemented.dwl" />
+            </ee:message>
+        </ee:transform>
+        <error-handler ref="global_error_handler" />
+    </flow>
+	<flow name="Mule-to-Cohere-FHIR-Submit" doc:id="f8876239-9140-4e0b-87f8-848c91ab6876">
+        <logger level="INFO" doc:name="Log the FHIR payload for request to EPIC API" doc:id="835c6944-9625-40da-b044-964063bdc583" message="#[payload]" />
+		<logger level="INFO" doc:name="Logger" doc:id="5a20a8fb-8ba2-4ed1-b8c5-3e48fbc51075" message="#[payload]" />
+		<http:request method="POST" doc:name="Request to EPIC" doc:id="bd854682-b82a-4a7d-a624-f18fbc1cb7dd" config-ref="Core-Platform" path="/fhir/Claim/$submit" responseTimeout="99999">
+            <http:headers><![CDATA[#[%dw 2.0
+output application/java
+---
+{
+    "Authorization":vars.authorization
+}]]]></http:headers>
+        </http:request>
+        <set-payload value="#[%dw 2.0&#xA;output text/plain&#xA;---&#xA;payload // Use XPath or another method to extract the desired text content]" doc:name="Set Payload" doc:id="60a5682e-6a77-4c04-aa5e-b1d30d17ccb3" />
+		<set-variable value="#[(payload splitBy &quot;: &quot;)[1]]" doc:name="Get Cohere ID" doc:id="3c8e0ce8-056b-45b5-8a62-b97fb39cb82e" variableName="cohereID" />
+        <ee:transform doc:name="Put Cohere ID" doc:id="3184ddc2-5cce-4963-8294-d1a0ffa3f25c">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output text/plain
+---
+vars.originalX12Bundle splitBy "~\r\n" flatMap ((segment) -> 
+    if (segment startsWith "UM*") 
+        segment++"~\r\nREF*NT*" ++ vars.cohereID ++ "~\r\n" ++ "HCR**0W"
+    else segment
+) joinBy "~\r\n"]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <logger level="INFO" doc:name="Logger" doc:id="2470196a-0f92-4ecb-99c0-4ca6cbc7b62c" message="#[vars.originalX12Bundle]" />
+		<error-handler>
+            <on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="7f767ea2-e9b2-4324-80f7-bf49af21e96f">
+                <set-variable value="#[%dw 2.0&#10;output application/json&#10;var inputData = error.muleMessage.typedValue&#10;var errors = inputData&#10;---&#10;errors]" doc:name="Get Error" doc:id="d0887bd2-d4ec-4d92-bbb1-056a8406de01" variableName="error" />
+				<logger level="INFO" doc:name="Logger" doc:id="27a383f8-8b14-4ec6-9557-77418f97544c" message="#[vars.error]" />
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+</mule>

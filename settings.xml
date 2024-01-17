@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<settings xmlns="http://maven.apache.org/SETTINGS/1.2.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.2.0 http://maven.apache.org/xsd/settings-1.2.0.xsd">
+  
+<servers>
+<server>
+		<id>MuleRepository</id>
+		<username>apisero.nexus</username>
+		<password>pWhdnHcG</password>
+    </server>
+    <server>
+	    <id>anypoint-exchange-v3</id>
+            <username>~~~Client~~~</username>
+            <password>9cbfd8e1ed4f4825b4e2c59793bd6903~?~8DEF6d32fA1d4304aA2348776c0C9849</password>
+    </server>
+</servers>
+<profiles>
+    <profile>
+        <id>Mule</id>
+        <activation>
+            <activeByDefault>true</activeByDefault>
+        </activation>
+        <repositories>
+            <repository>
+                <id>MuleRepository</id>
+                <name>MuleRepository</name>
+                <url>https://repository.mulesoft.org/nexus-ee/content/repositories/releases-ee/</url>
+                <layout>default</layout>
+                <releases>
+                    <enabled>true</enabled>
+                </releases>
+                <snapshots>
+                    <enabled>true</enabled>
+                </snapshots>
+            </repository>
+        </repositories>
+    </profile>
+	<profile>
+        <id>anypoint-exchange-v3</id>
+        <activation>
+            <activeByDefault>true</activeByDefault>
+        </activation>
+		<properties>
+                <mulesoft.exchange.groupid>0f48682a-d23f-41a0-90e7-a783e260f5ca</mulesoft.exchange.groupid>
+         </properties>
+       
+    </profile>
+</profiles>   
+</settings>

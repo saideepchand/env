@@ -1,0 +1,8 @@
+{
+  "sampleData": {
+    "2981831b-a2ec-4491-88c6-875c80321486": {
+      "vars-bundleResources": "sample_data/json_1.json",
+      "payload": "sample_data/json.json"
+    }
+  }
+}

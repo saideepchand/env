@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:oauth2-provider="http://www.mulesoft.org/schema/mule/oauth2-provider" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:accelerator-healthcare="http://www.mulesoft.org/schema/mule/accelerator-healthcare" xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" xmlns:spring="http://www.mulesoft.org/schema/mule/spring" xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:x12="http://www.mulesoft.org/schema/mule/x12" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd  http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd  http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd http://www.mulesoft.org/schema/mule/accelerator-healthcare http://www.mulesoft.org/schema/mule/accelerator-healthcare/current/mule-accelerator-healthcare.xsd http://www.mulesoft.org/schema/mule/x12 http://www.mulesoft.org/schema/mule/x12/current/mule-x12.xsd http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd http://www.mulesoft.org/schema/mule/spring http://www.mulesoft.org/schema/mule/spring/current/mule-spring.xsd
+http://www.mulesoft.org/schema/mule/oauth2-provider http://www.mulesoft.org/schema/mule/oauth2-provider/current/mule-oauth2-provider.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
+    <global-property doc:name="Global Property Mule Env" doc:id="6e1ba124-283e-4638-993e-ed3ddb7dc155" name="mule.env" value="local" />
+    <global-property doc:name="Global Property Mule Key" doc:id="932d465f-4812-4b27-a68b-e3ffe074c662" name="mule.key" value="mulesoft" />
+    <secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="aa9d5e11-3b94-46bd-b1bf-98ba50e81289" file="config/config-secured-${mule.env}.yaml" key="${mule.key}">
+        <secure-properties:encrypt algorithm="Blowfish" />
+    </secure-properties:config>
+    <configuration-properties doc:name="Configuration properties env file" doc:id="f129fd37-7d8b-4484-9a75-ef25f758f54c" file="config/config-${mule.env}.yaml" />
+    <apikit:config name="hls-fhir-r4-to-x12-sys-api-spec-config" api="resource::org.mule.examples:hls-fhir-r4-to-x12-sys-api-spec:1.0.3:raml:zip:hls-fhir-r4-to-x12-sys-api-spec.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <http:listener-config name="hls-fhir-r4-to-x12-sys-api-spec-httpListenerConfig">
+        <http:listener-connection host="${https.host}" port="${https.port}" protocol="HTTPS">
+			<tls:context >
+				<tls:trust-store insecure="true" />
+				<tls:key-store type="jks" path="server-keystore.jks" alias="mule-server" keyPassword="keystore" password="keystore" />
+			</tls:context>
+		</http:listener-connection>
+    </http:listener-config>
+    <x12:config name="X12_EDI_Config" doc:name="X12 EDI Config" doc:id="e07e57d7-b460-4bb8-9dc6-8f6af603101a" interchangeIdQualifierSelf="${transaction.identifiers.sourceQualifier}" interchangeIdSelf="${transaction.identifiers.sourceId}" groupIdSelf="${transaction.identifiers.sourceAppCode}" interchangeIdQualifierPartner="${transaction.identifiers.receiverQualifier}" interchangeIdPartner="${transaction.identifiers.receiverId}" groupIdPartner="${transaction.identifiers.receiverAppCode}" formValidation="#[p('hipaa.validationLevel')]" requireUniqueInterchanges="false">
+        <x12:schemas>
+            <x12:schema value="hipaa/005010X279A1/270.esl" />
+            <x12:schema value="hipaa/005010X222A1/837.esl" />
+			<x12:schema value="hipaa/005010X217/278RQ.esl" />
+			<x12:schema value="hipaa/005010X210/275.esl" />
+        </x12:schemas>
+    </x12:config>
+	<x12:config name="X12_EDI_Config_Read" doc:name="X12 EDI Config" doc:id="28d1fce3-3643-4902-b92c-55195e4a962f" formValidation="#[p('hipaa.validationLevel')]" enforceLengthLimits="false" requireUniqueInterchanges="false" >
+		<x12:schemas >
+			<x12:schema value="hipaa/005010X279A1/271.esl" />
+			<x12:schema value="/hipaa/005010X217/278RS.esl" />
+			<x12:schema value="/hipaa/005010X215/278RS.esl" />
+		</x12:schemas>
+	</x12:config>  
+	<http:request-config name="Core-Platform" doc:name="HTTP Request configuration" doc:id="bd149f61-c63b-4258-aba4-785019f1b372">
+		<http:request-connection protocol="HTTPS" host="core-platform-dev.coherehealth.com" connectionIdleTimeout="600000">
+		</http:request-connection>
+	</http:request-config>     
+	<api-gateway:autodiscovery apiId="19015538" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="7b88cd77-dfa7-4b3f-8803-0e5be36fe558" flowRef="hls-fhir-r4-to-x12-sys-api-spec-2-main" />
+	<global-property doc:name="Global Property" doc:id="dcffd1ad-8929-49e8-a974-06975eaccff3" name="authorization" value="tbd"/>
+	<global-property doc:name="Global Property" doc:id="44adc95f-8c99-4453-bf24-734c606077ae" name="originalPayload" value="tbd" />
+	<global-property doc:name="Global Property" doc:id="3b429aeb-170b-4833-8dc6-eea8934c2910" name="cohereID" value="tbd" />
+	<global-property doc:name="Global Property" doc:id="fc25625c-9f1c-4ca6-ab96-2804379ae4dd" name="errorValue" value=" test"/>
+	<configuration doc:name="Configuration" doc:id="1fe21a15-ce60-48b7-8a7d-6bd6994acfb7" defaultErrorHandler-ref="global_error_handler" />
+	<os:config name="ObjectStore_Config" doc:name="ObjectStore Config" doc:id="7e9224f5-9988-4153-8ab1-5046b1702b8b" >
+		<os:connection >
+			<reconnection failsDeployment="true" >
+				<reconnect />
+			</reconnection>
+		</os:connection>
+	</os:config>
+	<os:object-store name="Object_store" doc:name="Object store" doc:id="6c2f9674-5c1e-47af-b85f-a9a6112933c3" config-ref="ObjectStore_Config" entryTtl="3600"/>
+
+</mule>
