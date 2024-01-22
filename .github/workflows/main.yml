@@ -27,9 +27,9 @@ jobs:
     - name: Checkout repository  
       uses: actions/checkout@v2
     - name: Publish to Exchange
-      run: mvn -s settings.xml clean deploy package -Denv=$ENVIRONMENT_DEV -DappName=hls-fhir-to-x12-dev -Dreplicas=${{ secrets.REPLICAS }} -DvCores=${{ secrets.VCORES }} -DbusinessGroupId=${{ secrets.BUSINESSGROUPID }} -Danypoint_platform_client_id=${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID }} -Danypoint_platform_client_secret=${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET }} -DconnectedAppClientId=${{ secrets.CONNECTEDAPPCLIENTID }} -DconnectedAppClientSecret=${{ secrets.CONNECTEDAPPCLIENTSECRET }} -Dtarget=${{ secrets.TARGET_SANDBOX}}
+      run: mvn -s settings.xml clean deploy package -Denv=$ENVIRONMENT_DEV -DappName=$APP_NAME_DEV -Dreplicas=1 -DvCores=0.1 -DbusinessGroupId=${{ secrets.BUSINESSGROUPID }} -Danypoint_platform_client_id=${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID }} -Danypoint_platform_client_secret=${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET }} -DconnectedAppClientId=${{ secrets.CONNECTEDAPPCLIENTID }} -DconnectedAppClientSecret=${{ secrets.CONNECTEDAPPCLIENTSECRET }} -Dtarget=${{ secrets.TARGET_SANDBOX}}
     - name: Deploying to Sandbox
-      run: mvn -s settings.xml clean deploy package -Denv=$ENVIRONMENT_DEV -DmuleDeploy -DappName=hls-fhir-to-x12-dev -Dreplicas=${{ secrets.REPLICAS }} -DvCores=${{ secrets.VCORES }} -DbusinessGroupId=${{ secrets.BUSINESSGROUPID }} -Danypoint_platform_client_id=${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID }} -Danypoint_platform_client_secret=${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET }} -DconnectedAppClientId=${{ secrets.CONNECTEDAPPCLIENTID }} -DconnectedAppClientSecret=${{ secrets.CONNECTEDAPPCLIENTSECRET }} -Dtarget=${{ secrets.TARGET_SANDBOX}}
+      run: mvn -s settings.xml clean deploy package -Denv=$ENVIRONMENT_DEV -DmuleDeploy -DappName=$APP_NAME_DEV -Dreplicas=1 -DvCores=0.1 -DbusinessGroupId=${{ secrets.BUSINESSGROUPID }} -Danypoint_platform_client_id=${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID }} -Danypoint_platform_client_secret=${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET }} -DconnectedAppClientId=${{ secrets.CONNECTEDAPPCLIENTID }} -DconnectedAppClientSecret=${{ secrets.CONNECTEDAPPCLIENTSECRET }} -Dtarget=${{ secrets.TARGET_SANDBOX}}
  
   Uat-Testing:
     if: ${{ github.ref == 'refs/heads/uat'}}
