@@ -11,7 +11,7 @@ on:
     types:
       - closed
 env:
- a: ${{ secrets.APPNAME }}
+ a: ${{ APPNAME }}
       
 jobs:
   Sandbox-Development:
@@ -22,5 +22,5 @@ jobs:
     - name: Checkout repository  
       uses: actions/checkout@v2
     - name: checking
-      run : echo "$a"
+      run : echo $a
     
