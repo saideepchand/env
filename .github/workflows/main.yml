@@ -10,7 +10,6 @@ on:
     types:
       - closed
 
-
       
 jobs:
   Sandbox-Development:
