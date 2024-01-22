@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>0f48682a-d23f-41a0-90e7-a783e260f5ca</groupId>
 	<artifactId>hls-fhir-to-x12-sys-api</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.4</version>
 	<packaging>mule-application</packaging>
 	<name>hls-fhir-to-x12-sys-api</name>
 	<description />
