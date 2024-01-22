@@ -20,8 +20,4 @@ jobs:
     - name: Checkout repository  
       uses: actions/checkout@v2
     - name: checking
-      run : echo $TARGET_SANDBOX
-    - name: Publish to Exchange
-      run: mvn -s settings.xml clean deploy package -Denv=Sandbox -DappName=hls-fhir-to-x12-sys-api-dev -Dreplicas=1 -DvCores=0.1 -DbusinessGroupId=${{ secrets.BUSINESSGROUPID }} -Danypoint_platform_client_id=${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID }} -Danypoint_platform_client_secret=${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET }} -DconnectedAppClientId=${{ secrets.CONNECTEDAPPCLIENTID }} -DconnectedAppClientSecret=${{ secrets.CONNECTEDAPPCLIENTSECRET }} -Dtarget=${{ secrets.TARGET_SANDBOX}}
-    - name: Deploying to Sandbox
-      run: mvn -s settings.xml clean deploy package -Denv=Sandbox -DmuleDeploy -DappName=hls-fhir-to-x12-sys-api-dev -Dreplicas=1 -DvCores=0.1 -DbusinessGroupId=${{ secrets.BUSINESSGROUPID }} -Danypoint_platform_client_id=${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID }} -Danypoint_platform_client_secret=${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET }} -DconnectedAppClientId=${{ secrets.CONNECTEDAPPCLIENTID }} -DconnectedAppClientSecret=${{ secrets.CONNECTEDAPPCLIENTSECRET }} -Dtarget=${{ secrets.TARGET_SANDBOX}}
+      run : echo ${{ vars.APPNAME }}
