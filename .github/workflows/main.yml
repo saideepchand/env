@@ -30,6 +30,7 @@ jobs:
   Uat-Testing:
     if: ${{ github.ref == 'refs/heads/uat'}}
     runs-on: ubuntu-latest
+    environment : uat
     steps: 
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -38,8 +39,6 @@ jobs:
     - name: Run after merge steps
       run: |
         if [ "${{ github.event_name }}" == "pull_request" ] && [ "${{ github.event.action }}" == "closed" ] && [ "${{ github.event.pull_request.merged }}" == "true" ]; then
-           - name: Publish to Exchange
-             run:  mvn -s settings.xml clean deploy package -Denv=${{ vars.MULESOFT_ENVIRONMENT }} -DappName=${{ vars.APPNAME }} -Dreplicas=${{ vars.REPLICAS }} -DvCores=${{ vars.VCORES }} -DbusinessGroupId=${{ secrets.BUSINESSGROUPID }} -Danypoint_platform_client_id=${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID }} -Danypoint_platform_client_secret=${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET }} -DconnectedAppClientId=${{ secrets.CONNECTEDAPPCLIENTID }} -DconnectedAppClientSecret=${{ secrets.CONNECTEDAPPCLIENTSECRET }} -Dtarget=${{ vars.TARGET }}
-           - name: Deploying to Sandbox
-             run: mvn -s settings.xml clean deploy package -Denv=${{ vars.MULESOFT_ENVIRONMENT }} -DappName=${{ vars.APPNAME }} -Dreplicas=${{ vars.REPLICAS }} -DvCores=${{ vars.VCORES }} -DbusinessGroupId=${{ secrets.BUSINESSGROUPID }} -Danypoint_platform_client_id=${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID }} -Danypoint_platform_client_secret=${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET }} -DconnectedAppClientId=${{ secrets.CONNECTEDAPPCLIENTID }} -DconnectedAppClientSecret=${{ secrets.CONNECTEDAPPCLIENTSECRET }} -Dtarget=${{ vars.TARGET }} -DmuleDeploy
+             mvn -s settings.xml clean deploy package -Denv=${{ vars.MULESOFT_ENVIRONMENT }} -DappName=${{ vars.APPNAME }} -Dreplicas=${{ vars.REPLICAS }} -DvCores=${{ vars.VCORES }} -DbusinessGroupId=${{ secrets.BUSINESSGROUPID }} -Danypoint_platform_client_id=${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID }} -Danypoint_platform_client_secret=${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET }} -DconnectedAppClientId=${{ secrets.CONNECTEDAPPCLIENTID }} -DconnectedAppClientSecret=${{ secrets.CONNECTEDAPPCLIENTSECRET }} -Dtarget=${{ vars.TARGET }}
+             mvn -s settings.xml clean deploy package -Denv=${{ vars.MULESOFT_ENVIRONMENT }} -DappName=${{ vars.APPNAME }} -Dreplicas=${{ vars.REPLICAS }} -DvCores=${{ vars.VCORES }} -DbusinessGroupId=${{ secrets.BUSINESSGROUPID }} -Danypoint_platform_client_id=${{ secrets.ANYPOINT_PLATFORM_CLIENT_ID }} -Danypoint_platform_client_secret=${{ secrets.ANYPOINT_PLATFORM_CLIENT_SECRET }} -DconnectedAppClientId=${{ secrets.CONNECTEDAPPCLIENTID }} -DconnectedAppClientSecret=${{ secrets.CONNECTEDAPPCLIENTSECRET }} -Dtarget=${{ vars.TARGET }} -DmuleDeploy
         fi
