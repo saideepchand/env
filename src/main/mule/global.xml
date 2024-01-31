@@ -17,20 +17,19 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 			</tls:context>
 		</http:listener-connection>
     </http:listener-config>
+    <accelerator-healthcare:config name="Accelerator_Healthcare_Config" doc:name="Accelerator Healthcare Config" doc:id="d3dfa400-8dec-4a2e-af49-be6d9825ba32" apiName="${api.name}" apiVersion="${api.version}" />
     <x12:config name="X12_EDI_Config" doc:name="X12 EDI Config" doc:id="e07e57d7-b460-4bb8-9dc6-8f6af603101a" interchangeIdQualifierSelf="${transaction.identifiers.sourceQualifier}" interchangeIdSelf="${transaction.identifiers.sourceId}" groupIdSelf="${transaction.identifiers.sourceAppCode}" interchangeIdQualifierPartner="${transaction.identifiers.receiverQualifier}" interchangeIdPartner="${transaction.identifiers.receiverId}" groupIdPartner="${transaction.identifiers.receiverAppCode}" formValidation="#[p('hipaa.validationLevel')]" requireUniqueInterchanges="false">
         <x12:schemas>
-            <x12:schema value="hipaa/005010X279A1/270.esl" />
-            <x12:schema value="hipaa/005010X222A1/837.esl" />
-			<x12:schema value="hipaa/005010X217/278RQ.esl" />
-			<x12:schema value="hipaa/005010X210/275.esl" />
+			<x12:schema value="/schemas/278RQ.esl" />
         </x12:schemas>
     </x12:config>
-	<x12:config name="X12_EDI_Config_Read" doc:name="X12 EDI Config" doc:id="28d1fce3-3643-4902-b92c-55195e4a962f" formValidation="#[p('hipaa.validationLevel')]" enforceLengthLimits="false" requireUniqueInterchanges="false" >
+	<x12:config name="X12_EDI_Config_Read" doc:name="X12 EDI Config" doc:id="28d1fce3-3643-4902-b92c-55195e4a962f" formValidation="#[p('hipaa.validationLevel')]" enforceLengthLimits="false" requireUniqueInterchanges="false" generate999Acks="true" batchAckRequested="true">
 		<x12:schemas >
 			<x12:schema value="hipaa/005010X279A1/271.esl" />
-			<x12:schema value="/hipaa/005010X217/278RS.esl" />
 			<x12:schema value="/hipaa/005010X215/278RS.esl" />
-		</x12:schemas>
+			<x12:schema value="/hipaa/005010X217/278RS.esl" />
+		
+</x12:schemas>
 	</x12:config>  
 	<http:request-config name="Core-Platform" doc:name="HTTP Request configuration" doc:id="bd149f61-c63b-4258-aba4-785019f1b372">
 		<http:request-connection protocol="HTTPS" host="core-platform-dev.coherehealth.com" connectionIdleTimeout="600000">
@@ -42,6 +41,10 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 	<global-property doc:name="Global Property" doc:id="3b429aeb-170b-4833-8dc6-eea8934c2910" name="cohereID" value="tbd" />
 	<global-property doc:name="Global Property" doc:id="fc25625c-9f1c-4ca6-ab96-2804379ae4dd" name="errorValue" value=" test"/>
 	<configuration doc:name="Configuration" doc:id="1fe21a15-ce60-48b7-8a7d-6bd6994acfb7" defaultErrorHandler-ref="global_error_handler" />
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="09884865-e0d1-479b-b4dc-5bb2bcf3e2db" >
+		<http:listener-connection host="0.0.0.0" port="8081" >
+		</http:listener-connection>
+	</http:listener-config>
 	<os:config name="ObjectStore_Config" doc:name="ObjectStore Config" doc:id="7e9224f5-9988-4153-8ab1-5046b1702b8b" >
 		<os:connection >
 			<reconnection failsDeployment="true" >

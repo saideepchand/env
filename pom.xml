@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>0f48682a-d23f-41a0-90e7-a783e260f5ca</groupId>
 	<artifactId>hls-fhir-to-x12-sys-api</artifactId>
-	<version>1.0.4</version>
+	<version>1.0.1</version>
 	<packaging>mule-application</packaging>
 	<name>hls-fhir-to-x12-sys-api</name>
 	<description />
@@ -79,7 +79,7 @@ FHIR to X12 provides helper functions for mapping FHIR objects to X12 ones and r
 				<artifactId>mule-maven-plugin</artifactId>
 				<version>${mule.maven.plugin.version}</version>
 				<extensions>true</extensions>
-				<configuration>
+			<configuration>
 					<cloudhub2Deployment>
 						<uri>https://anypoint.mulesoft.com</uri>
 						<provider>MC</provider>
@@ -104,6 +104,7 @@ FHIR to X12 provides helper functions for mapping FHIR objects to X12 ones and r
 					</cloudhub2Deployment>
 					<classifier>${mule.app.classifier}</classifier>
 				</configuration>
+
 			</plugin>
 			<plugin>
 				<groupId>com.mulesoft.munit.tools</groupId>
@@ -151,6 +152,7 @@ FHIR to X12 provides helper functions for mapping FHIR objects to X12 ones and r
 			</plugin>
 		</plugins>
 	</build>
+	
 	<distributionManagement>
 		<repository>
 			<id>anypoint-exchange-v3</id>
@@ -158,6 +160,8 @@ FHIR to X12 provides helper functions for mapping FHIR objects to X12 ones and r
 			<layout>default</layout>
 		</repository>
 	</distributionManagement>
+	
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.mule.connectors</groupId>
@@ -198,7 +202,7 @@ FHIR to X12 provides helper functions for mapping FHIR objects to X12 ones and r
 			<classifier>mule-plugin</classifier>
 			<scope>test</scope>
 		</dependency>
-
+		
 		<dependency>
 			<groupId>com.mulesoft.connectors</groupId>
 			<artifactId>mule-x12-connector</artifactId>

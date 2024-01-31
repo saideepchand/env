@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry kind="con" path="MULE_LIB/org.mule.modules/mule-apikit-module/1.9.0"/>
 	<classpathentry kind="con" path="MULE_LIB/com.mulesoft.connectors/mule-x12-connector/2.10.0"/>
 	<classpathentry kind="con" path="MULE_LIB/com.mulesoft.munit/munit-tools/2.3.16"/>
 	<classpathentry kind="con" path="MULE_LIB/com.mulesoft.munit/munit-runner/2.3.16"/>
-	<classpathentry kind="con" path="MULE_LIB/org.mule.modules/mule-apikit-module/1.9.0"/>
-	<classpathentry kind="con" path="MULE_LIB/com.mulesoft.modules/mule-secure-configuration-property-module/1.2.5"/>
 	<classpathentry kind="con" path="MULE_LIB/org.mule.connectors/mule-http-connector/1.7.3"/>
+	<classpathentry kind="con" path="org.mule.tooling.API_SPEC_LIB/org.mule.examples/fhir-r4-commons-library/3.0.1"/>
+	<classpathentry kind="con" path="org.mule.tooling.API_SPEC_LIB/org.mule.examples/fhir-r4-bundle-types-library/1.0.0"/>
+	<classpathentry kind="con" path="org.mule.tooling.API_SPEC_LIB/org.mule.examples/accelerator-global-resources/2.2.0"/>
 	<classpathentry kind="con" path="org.mule.tooling.API_SPEC_LIB/org.mule.examples/hls-fhir-r4-to-x12-sys-api-spec/1.0.3"/>
+	<classpathentry kind="con" path="org.mule.tooling.MULE_PROJECT_LIB"/>
+	<classpathentry kind="con" path="MULE_LIB/com.mulesoft.modules/mule-secure-configuration-property-module/1.2.5"/>
 	<classpathentry kind="con" path="MULE_LIB/org.mule.connectors/mule-objectstore-connector/1.2.2"/>
 	<classpathentry kind="con" path="MULE_LIB/org.mule.modules/mule-oauth-module/1.1.17"/>
-	<classpathentry kind="con" path="org.mule.tooling.API_SPEC_LIB/org.mule.examples/fhir-r4-commons-library/3.0.1"/>
-	<classpathentry kind="con" path="org.mule.tooling.API_SPEC_LIB/org.mule.examples/accelerator-global-resources/2.2.0"/>
-	<classpathentry kind="con" path="org.mule.tooling.MULE_PROJECT_LIB"/>
-	<classpathentry kind="con" path="org.mule.tooling.API_SPEC_LIB/org.mule.examples/fhir-r4-bundle-types-library/1.0.0"/>
 	<classpathentry exported="true" kind="con" path="MULE_RUNTIME/org.mule.tooling.server.4.4.0.ee"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src/main/mule"/>

@@ -138,18 +138,18 @@
      "BHT" : {
        "BHT_BeginningOfHierarchicalTransaction" : {
          "bht01" : "0007",
-         "bht02" : "13",
+         "bht02" : "11"
        }
      },
      "NM1" : {
        "NM1_UtlizationManagementOrganziation" : {
-         "nm101" : "PR",
+         "nm101" : "X3",
          "nm102" : "2",
          "nm108" : "PI" 
        },
        "NM1_RequesterName" : {
          "nm101" : "1P",
-         "nm102" : "2",
+         "nm102" : "1",
          "nm108" : "XX"
        },
        "NM1_SubscriberName" : {
@@ -183,17 +183,20 @@
      "TRN" : {
        "TRN_PatientEventTrackingNumber" : {
          "trn01" : "1",
-         "trn03" : "9"
+         "trn201" : "2",
+         "trn03" : "9",
+         "trn203": "9001000008"
        },
        "TRN_ServiceTraceNumber" : {
-       	"trn01" : "1"
+       	"trn01" : "2"
        }	
      },
      "UM" : {
        "UM_HealthCareServicesReviewInformation1" : {
          "um01" : "HS",
          "um02" : "I",
-         "um0401" : "11",
+         "um03": "3",
+         "um0401" : "49", //11
          "um0402" : "A"
        }
      },
@@ -335,7 +338,8 @@
      },
      "TRN" : {
        "TRN_PayerClaimControlNumberProviderAttachmentControlNumber" : {
-         "trn01": "1"
+         "trn01": "1",
+         "trn02": "2"
        }
      },
      "EFI" : {

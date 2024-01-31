@@ -1,0 +1,1484 @@
+form: HIPAA
+version: '005010X215'
+structures: 
+- id: '278'
+  name: 'Health Care Services Review Information - Response'
+  class: 'HI'
+  areas: 
+  - code: '1'
+    items: 
+    - { idRef: 'ST_TransactionSetHeader', position: '0100', usage: M }
+    - { idRef: 'BHT_BeginningOfHierarchicalTransaction', position: '0200', usage: M }
+  - code: '2'
+    items: 
+    - groupId: '2000A_Loop'
+      usage: M
+      items: 
+      - { idRef: 'HL_UtilizationManagementOrganizationUMOLevel', position: '0100', usage: I }
+      - { idRef: 'AAA_RequestValidation', position: '0300', usage: O, count: 9 }
+      - groupId: '2010A_Loop'
+        usage: O
+        items: 
+        - { idRef: 'NM1_UtilizationManagementOrganizationUMOName', position: '1700', usage: M }
+        - { idRef: 'PER_UtilizationManagementOrganizationUMOContactInformation', position: '2200', usage: O }
+        - { idRef: 'AAA_UtilizationManagementOrganizationUMORequestValidation', position: '2300', usage: O, count: 9 }
+      - { area: '3', usage: O }
+  - code: '3'
+    items: 
+    - groupId: '2000B_Loop'
+      usage: O
+      items: 
+      - { idRef: 'HL_RequesterLevel', position: '0100', usage: I }
+      - groupId: '2010B_Loop'
+        count: 2
+        usage: O
+        items: 
+        - { idRef: 'NM1_RequesterName', position: '1700', usage: M }
+        - { idRef: 'REF_RequesterSupplementalIdentification', position: '1800', usage: O, count: 9 }
+        - { idRef: 'AAA_RequesterRequestValidation', position: '2300', usage: O, count: 9 }
+        - { idRef: 'PRV_RequesterProviderInformation', position: '2400', usage: O }
+      - { area: '4', usage: O }
+  - code: '4'
+    items: 
+    - groupId: '2000C_Loop'
+      count: '>1'
+      usage: O
+      items: 
+      - { idRef: 'HL_SubscriberLevel', position: '0100', usage: I }
+      - { idRef: 'TRN_SubscriberTraceNumber', position: '0200', usage: O, count: 3 }
+      - groupId: '2010C_Loop'
+        usage: O
+        items: 
+        - { idRef: 'NM1_SubscriberName', position: '1700', usage: M }
+        - { idRef: 'REF_SubscriberSupplementalIdentification', position: '1800', usage: O, count: 9 }
+        - { idRef: 'N3_SubscriberMailingAddress', position: '2000', usage: O }
+        - { idRef: 'N4_SubscriberCityStateZIPCode', position: '2100', usage: O }
+        - { idRef: 'AAA_SubscriberRequestValidation', position: '2300', usage: O, count: 9 }
+        - { idRef: 'DMG_SubscriberDemographicInformation', position: '2500', usage: O }
+      - { area: '6', count: '>1', usage: O }
+      - { area: '5', usage: O }
+  - code: '5'
+    items: 
+    - groupId: '2000D_Loop'
+      count: '>1'
+      usage: O
+      items: 
+      - { idRef: 'HL_DependentLevel', position: '0100', usage: I }
+      - { idRef: 'TRN_DependentTraceNumber', position: '0200', usage: O, count: 3 }
+      - groupId: '2010D_Loop'
+        usage: O
+        items: 
+        - { idRef: 'NM1_DependentName', position: '1700', usage: M }
+        - { idRef: 'REF_DependentSupplementalIdentification', position: '1800', usage: O, count: 3 }
+        - { idRef: 'N3_DependentAddress', position: '2000', usage: O }
+        - { idRef: 'N4_DependentCityStateZIPCode', position: '2100', usage: O }
+        - { idRef: 'AAA_DependentRequestValidation', position: '2300', usage: O, count: 9 }
+        - { idRef: 'DMG_DependentDemographicInformation', position: '2500', usage: O }
+  - code: '6'
+    items: 
+    - groupId: '2000E_Loop'
+      count: '>1'
+      usage: O
+      items: 
+      - { idRef: 'HL_PatientEventLevel', position: '0100', usage: I }
+      - { idRef: 'TRN_PatientEventTrackingNumber', position: '0200', usage: O, count: 3 }
+      - { idRef: 'AAA_PatientEventRequestValidation', position: '0300', usage: O, count: 9 }
+      - { idRef: 'UM_HealthCareServicesReviewInformation', position: '0400', usage: O }
+      - { idRef: 'HCR_HealthCareServicesReview', position: '0500', usage: O }
+      - { idRef: 'REF_PreviousReviewAuthorizationNumber', position: '0610', usage: O }
+      - { idRef: 'REF_PreviousReviewAdministrativeReferenceNumber', position: '0620', usage: O }
+      - { idRef: 'DTP_EventDate', position: '0700', usage: O }
+      - { idRef: 'DTP_AdmissionDate', position: '0705', usage: O }
+      - { idRef: 'DTP_DischargeDate', position: '0710', usage: O }
+      - { idRef: 'DTP_CertificationIssueDate', position: '0715', usage: O }
+      - { idRef: 'DTP_CertificationExpirationDate', position: '0720', usage: O }
+      - { idRef: 'DTP_CertificationEffectiveDate', position: '0725', usage: O }
+      - { idRef: 'DTP_HealthCareServicesReviewRequestDate', position: '0730', usage: O }
+      - { idRef: 'HI_PatientDiagnosis', position: '0800', usage: O }
+      - { idRef: 'HSD_HealthCareServicesDelivery', position: '0900', usage: O }
+      - { idRef: 'CL1_InstitutionalClaimCode', position: '1100', usage: O }
+      - { idRef: 'CR1_AmbulanceTransportInformation', position: '1200', usage: O }
+      - { idRef: 'CR2_SpinalManipulationServiceInformation', position: '1300', usage: O }
+      - { idRef: 'CR5_HomeOxygenTherapyInformation', position: '1400', usage: O }
+      - { idRef: 'CR6_HomeHealthCareInformation', position: '1500', usage: O }
+      - { idRef: 'MSG_MessageText', position: '1600', usage: O }
+      - groupId: '2010EA_Loop'
+        count: 14
+        usage: O
+        items: 
+        - { idRef: 'NM1_PatientEventProviderName', position: '1700', usage: O }
+        - { idRef: 'REF_PatientEventProviderSupplementalIdentification', position: '1800', usage: O, count: 9 }
+        - { idRef: 'N3_PatientEventProviderAddress', position: '2000', usage: O }
+        - { idRef: 'N4_PatientEventProviderCityStateZIPCode', position: '2100', usage: O }
+        - { idRef: 'PER_PatientEventProviderContactInformation', position: '2200', usage: O }
+        - { idRef: 'AAA_PatientEventProviderRequestValidation', position: '2300', usage: O, count: 9 }
+        - { idRef: 'PRV_PatientEventProviderInformation', position: '2400', usage: O }
+      - groupId: '2010EB_Loop'
+        count: 5
+        usage: O
+        items: 
+        - { idRef: 'NM1_PatientEventTransportInformation', position: '3000', usage: O }
+        - { idRef: 'N3_PatientEventTransportLocationAddress', position: '3100', usage: M }
+        - { idRef: 'N4_PatientEventTransportLocationCityStateZIPCode', position: '3150', usage: M }
+      - { area: '8', count: '>1', usage: O }
+  - code: '8'
+    items: 
+    - groupId: '2000F_Loop'
+      count: '>1'
+      usage: O
+      items: 
+      - { idRef: 'HL_ServiceLevel', position: '0100', usage: I }
+      - { idRef: 'TRN_ServiceTraceNumber', position: '0200', usage: O, count: 3 }
+      - { idRef: 'AAA_ServiceRequestValidation', position: '0300', usage: O, count: 9 }
+      - { idRef: 'UM_HealthCareServicesReviewInformation1', position: '0400', usage: O }
+      - { idRef: 'HCR_HealthCareServicesReview1', position: '0500', usage: O }
+      - { idRef: 'REF_PreviousReviewAuthorizationNumber1', position: '0600', usage: O }
+      - { idRef: 'REF_PreviousReviewAdministrativeReferenceNumber1', position: '0610', usage: O }
+      - { idRef: 'DTP_ServiceDate', position: '0710', usage: O }
+      - { idRef: 'DTP_CertificationIssueDate1', position: '0750', usage: O }
+      - { idRef: 'DTP_CertificationExpirationDate1', position: '0760', usage: O }
+      - { idRef: 'DTP_CertificationEffectiveDate1', position: '0770', usage: O }
+      - { idRef: 'SV1_ProfessionalService', position: '0810', usage: O }
+      - { idRef: 'SV2_InstitutionalServiceLine', position: '0820', usage: O }
+      - { idRef: 'SV3_DentalService', position: '0830', usage: O }
+      - { idRef: 'TOO_ToothInformation', position: '0840', usage: O, count: 32 }
+      - { idRef: 'HSD_HealthCareServicesDelivery1', position: '0900', usage: O }
+      - { idRef: 'MSG_MessageText1', position: '1600', usage: O }
+      - groupId: '2010F_Loop'
+        count: 12
+        usage: O
+        items: 
+        - { idRef: 'NM1_ServiceProviderName', position: '1700', usage: O }
+        - { idRef: 'REF_ServiceProviderSupplementalIdentification', position: '1800', usage: O, count: 9 }
+        - { idRef: 'N3_ServiceProviderAddress', position: '2000', usage: O }
+        - { idRef: 'N4_ServiceProviderCityStateZipCode', position: '2100', usage: O }
+        - { idRef: 'PER_ServiceProviderContactInformation', position: '2200', usage: O }
+        - { idRef: 'AAA_ServiceProviderRequestValidation', position: '2300', usage: O, count: 9 }
+        - { idRef: 'PRV_ServiceProviderInformation', position: '2400', usage: O }
+segments: 
+- id: 'AAA_DependentRequestValidation'
+  name: 'Dependent Request Validation'
+  varTag: 'AAA'
+  values: 
+  - { id: '1073', name: 'Valid Request Indicator', usage: M, codeSet: { 'N': 'No', 'Y': 'Yes' }, type: ID, length: 1 }
+  - { id: '559', name: 'Agency Qualifier Code', usage: U, type: ID, length: 2 }
+  - { id: '901', name: 'Reject Reason Code', usage: M, codeSet: { '67': 'Patient Not Found', '77': 'Subscriber Found, Patient Not Found', '68': 'Duplicate Patient ID Number', '65': 'Invalid/Missing Patient Name', '71': 'Patient Birth Date Does Not Match That for the Patient on the Database', '95': 'Patient Not Eligible', '58': 'Invalid/Missing Date-of-Birth', '64': 'Invalid/Missing Patient ID' }, type: ID, length: 2 }
+  - { id: '889', name: 'Follow-up Action Code', usage: M, codeSet: { 'N': 'Resubmission Not Allowed', 'C': 'Please Correct and Resubmit' }, type: ID, length: 1 }
+- id: 'AAA_PatientEventProviderRequestValidation'
+  name: 'Patient Event Provider Request Validation'
+  varTag: 'AAA'
+  values: 
+  - { id: '1073', name: 'Valid Request Indicator', usage: M, codeSet: { 'N': 'No', 'Y': 'Yes' }, type: ID, length: 1 }
+  - { id: '559', name: 'Agency Qualifier Code', usage: U, type: ID, length: 2 }
+  - { id: '901', name: 'Reject Reason Code', usage: M, codeSet: { '45': 'Invalid/Missing Provider Specialty', '51': 'Provider Not on File', '15': 'Required application data missing', '44': 'Invalid/Missing Provider Name', '33': 'Input Errors', '46': 'Invalid/Missing Provider Phone Number', '35': 'Out of Network', '79': 'Invalid Participant Identification', '43': 'Invalid/Missing Provider Identification', '49': 'Provider is Not Primary Care Physician', '47': 'Invalid/Missing Provider State', 'IP': 'Inappropriate Provider Role', '97': 'Invalid or Missing Provider Address', '41': 'Authorization/Access Restrictions', '52': 'Service Dates Not Within Provider Plan Enrollment' }, type: ID, length: 2 }
+  - { id: '889', name: 'Follow-up Action Code', usage: M, codeSet: { 'N': 'Resubmission Not Allowed', 'C': 'Please Correct and Resubmit' }, type: ID, length: 1 }
+- id: 'AAA_PatientEventRequestValidation'
+  name: 'Patient Event Request Validation'
+  varTag: 'AAA'
+  values: 
+  - { id: '1073', name: 'Valid Request Indicator', usage: M, codeSet: { 'N': 'No', 'Y': 'Yes' }, type: ID, length: 1 }
+  - { id: '559', name: 'Agency Qualifier Code', usage: U, type: ID, length: 2 }
+  - { id: '901', name: 'Reject Reason Code', usage: M, codeSet: { '62': 'Date of Service Not Within Allowable Inquiry Period', '15': 'Required application data missing', '33': 'Input Errors', 'AN': 'Invalid/Missing Discharge Date', '61': 'Date of Death Precedes Date(s) of Service', 'CI': 'Certification Information Does Not Match Patient', 'AA': 'Authorization Number Not Found', 'AF': 'Invalid/Missing Diagnosis Code(s)', '57': 'Invalid/Missing Date(s) of Service', 'T5': 'Certification Information Missing', '60': 'Date of Birth Follows Date(s) of Service', 'AM': 'Invalid/Missing Admission Date', 'AI': 'Invalid/Missing Accident Date', '52': 'Service Dates Not Within Provider Plan Enrollment', 'NC': 'No Certification Information Found' }, type: ID, length: 2 }
+  - { id: '889', name: 'Follow-up Action Code', usage: M, codeSet: { 'N': 'Resubmission Not Allowed', 'C': 'Please Correct and Resubmit' }, type: ID, length: 1 }
+- id: 'AAA_RequestValidation'
+  name: 'Request Validation'
+  varTag: 'AAA'
+  values: 
+  - { id: '1073', name: 'Yes No Condition or Response Code', usage: M, codeSet: { 'N': 'No', 'Y': 'Yes' }, type: ID, length: 1 }
+  - { id: '559', name: 'Agency Qualifier Code', usage: U, type: ID, length: 2 }
+  - { id: '901', name: 'Reject Reason Code', usage: M, codeSet: { '79': 'Invalid Participant Identification', '04': 'Authorized Quantity Exceeded', '42': 'Unable to Respond at Current Time', '41': 'Authorization/Access Restrictions' }, type: ID, length: 2 }
+  - { id: '889', name: 'Follow-up Action Code', usage: M, codeSet: { 'N': 'Resubmission Not Allowed', 'Y': 'Do Not Resubmit; We Will Hold Your Request and Respond Again Shortly', 'P': 'Please Resubmit Original Transaction', 'C': 'Please Correct and Resubmit' }, type: ID, length: 1 }
+- id: 'AAA_RequesterRequestValidation'
+  name: 'Requester Request Validation'
+  varTag: 'AAA'
+  values: 
+  - { id: '1073', name: 'Valid Request Indicator', usage: M, codeSet: { 'N': 'No', 'Y': 'Yes' }, type: ID, length: 1 }
+  - { id: '559', name: 'Agency Qualifier Code', usage: U, type: ID, length: 2 }
+  - { id: '901', name: 'Reject Reason Code', usage: M, codeSet: { '45': 'Invalid/Missing Provider Specialty', '51': 'Provider Not on File', '15': 'Required application data missing', '44': 'Invalid/Missing Provider Name', '46': 'Invalid/Missing Provider Phone Number', '35': 'Out of Network', '79': 'Invalid Participant Identification', '43': 'Invalid/Missing Provider Identification', '49': 'Provider is Not Primary Care Physician', '47': 'Invalid/Missing Provider State', 'IP': 'Inappropriate Provider Role', '97': 'Invalid or Missing Provider Address', '41': 'Authorization/Access Restrictions' }, type: ID, length: 2 }
+  - { id: '889', name: 'Follow-up Action Code', usage: M, codeSet: { 'N': 'Resubmission Not Allowed', 'C': 'Please Correct and Resubmit', 'R': 'Resubmission Allowed' }, type: ID, length: 1 }
+- id: 'AAA_ServiceProviderRequestValidation'
+  name: 'Service Provider Request Validation'
+  varTag: 'AAA'
+  values: 
+  - { id: '1073', name: 'Valid Request Indicator', usage: M, codeSet: { 'N': 'No', 'Y': 'Yes' }, type: ID, length: 1 }
+  - { id: '559', name: 'Agency Qualifier Code', usage: U, type: ID, length: 2 }
+  - { id: '901', name: 'Reject Reason Code', usage: M, codeSet: { '45': 'Invalid/Missing Provider Specialty', '51': 'Provider Not on File', '15': 'Required application data missing', '44': 'Invalid/Missing Provider Name', '33': 'Input Errors', '46': 'Invalid/Missing Provider Phone Number', '35': 'Out of Network', '79': 'Invalid Participant Identification', '43': 'Invalid/Missing Provider Identification', '49': 'Provider is Not Primary Care Physician', '47': 'Invalid/Missing Provider State', 'IP': 'Inappropriate Provider Role', '97': 'Invalid or Missing Provider Address', '41': 'Authorization/Access Restrictions', '52': 'Service Dates Not Within Provider Plan Enrollment' }, type: ID, length: 2 }
+  - { id: '889', name: 'Follow-up Action Code', usage: M, codeSet: { 'N': 'Resubmission Not Allowed', 'C': 'Please Correct and Resubmit' }, type: ID, length: 1 }
+- id: 'AAA_ServiceRequestValidation'
+  name: 'Service Request Validation'
+  varTag: 'AAA'
+  values: 
+  - { id: '1073', name: 'Valid Request Indicator', usage: M, codeSet: { 'N': 'No', 'Y': 'Yes' }, type: ID, length: 1 }
+  - { id: '559', name: 'Agency Qualifier Code', usage: U, type: ID, length: 2 }
+  - { id: '901', name: 'Reject Reason Code', usage: M, codeSet: { '62': 'Date of Service Not Within Allowable Inquiry Period', '15': 'Required application data missing', '33': 'Input Errors', '61': 'Date of Death Precedes Date(s) of Service', 'CI': 'Certification Information Does Not Match Patient', 'AA': 'Authorization Number Not Found', '57': 'Invalid/Missing Date(s) of Service', 'T5': 'Certification Information Missing', '60': 'Date of Birth Follows Date(s) of Service', 'AG': 'Invalid/Missing Procedure Code(s)', '52': 'Service Dates Not Within Provider Plan Enrollment', 'NC': 'No Certification Information Found' }, type: ID, length: 2 }
+  - { id: '889', name: 'Follow-up Action Code', usage: M, codeSet: { 'N': 'Resubmission Not Allowed', 'C': 'Please Correct and Resubmit' }, type: ID, length: 1 }
+- id: 'AAA_SubscriberRequestValidation'
+  name: 'Subscriber Request Validation'
+  varTag: 'AAA'
+  values: 
+  - { id: '1073', name: 'Valid Request Indicator', usage: M, codeSet: { 'N': 'No', 'Y': 'Yes' }, type: ID, length: 1 }
+  - { id: '559', name: 'Agency Qualifier Code', usage: U, type: ID, length: 2 }
+  - { id: '901', name: 'Reject Reason Code', usage: M, codeSet: { '67': 'Patient Not Found', '73': 'Invalid/Missing Subscriber/Insured Name', '78': 'Subscriber/Insured Not in Group/Plan Identified', '77': 'Subscriber Found, Patient Not Found', '68': 'Duplicate Patient ID Number', '79': 'Invalid Participant Identification', '72': 'Invalid/Missing Subscriber/Insured ID', '76': 'Duplicate Subscriber/Insured ID Number', '65': 'Invalid/Missing Patient Name', '71': 'Patient Birth Date Does Not Match That for the Patient on the Database', '95': 'Patient Not Eligible', '58': 'Invalid/Missing Date-of-Birth', '64': 'Invalid/Missing Patient ID', '75': 'Subscriber/Insured Not Found' }, type: ID, length: 2 }
+  - { id: '889', name: 'Follow-up Action Code', usage: M, codeSet: { 'N': 'Resubmission Not Allowed', 'C': 'Please Correct and Resubmit' }, type: ID, length: 1 }
+- id: 'AAA_UtilizationManagementOrganizationUMORequestValidation'
+  name: 'Utilization Management Organization (UMO) Request Validation'
+  varTag: 'AAA'
+  values: 
+  - { id: '1073', name: 'Yes No Condition or Response Code', usage: M, codeSet: { 'N': 'No', 'Y': 'Yes' }, type: ID, length: 1 }
+  - { id: '559', name: 'Agency Qualifier Code', usage: U, type: ID, length: 2 }
+  - { id: '901', name: 'Reject Reason Code', usage: M, codeSet: { 'ZZ': 'Mutually Defined', '79': 'Invalid Participant Identification', '04': 'Authorized Quantity Exceeded', '80': 'No Response received - Transaction Terminated', '42': 'Unable to Respond at Current Time', 'T4': 'Payer Name or Identifier Missing' }, type: ID, length: 2 }
+  - { id: '889', name: 'Follow-up Action Code', usage: O, codeSet: { 'N': 'Resubmission Not Allowed', 'Y': 'Do Not Resubmit; We Will Hold Your Request and Respond Again Shortly', 'P': 'Please Resubmit Original Transaction' }, type: ID, length: 1 }
+- id: 'BHT_BeginningOfHierarchicalTransaction'
+  name: 'Beginning of Hierarchical Transaction'
+  varTag: 'BHT'
+  values: 
+  - { id: '1005', name: 'Hierarchical Structure Code', usage: M, codeSet: { '0007': 'Information Source, Information Receiver, Subscriber, Dependent, Event,' }, type: ID, length: 4 }
+  - { id: '353', name: 'Transaction Set Purpose Code', usage: M, codeSet: { '49': 'Original - No Response Necessary', '11': 'Response to Historical Inquiry' }, type: ID, length: 2 }
+  - { id: '127', name: 'Submitter Transaction Identifier', usage: M, type: AN, minLength: 1, maxLength: 50 }
+  - { id: '373', name: 'Transaction Set Creation Date', usage: M, type: DT, length: 8 }
+  - { id: '337', name: 'Transaction Set Creation Time', usage: M, type: TM, minLength: 4, maxLength: 8 }
+  - { id: '640', name: 'Transaction Type Code', usage: M, codeSet: { 'ZW': 'Sort and Segregate Detail', 'RD': 'Returns Detail', 'RS': 'Response - Additional Response(s) Available', '19': 'Response - No Further Updates to Follow' }, type: ID, length: 2 }
+- id: 'CL1_InstitutionalClaimCode'
+  name: 'Institutional Claim Code'
+  varTag: 'CL1'
+  values: 
+  - { id: '1315', name: 'Admission Type Code', usage: O, type: ID, length: 1 }
+  - { id: '1314', name: 'Admission Source Code', usage: O, type: ID, length: 1 }
+  - { id: '1352', name: 'Patient Status Code', usage: O, type: ID, minLength: 1, maxLength: 2 }
+  - { id: '1345', name: 'Nursing Home Residential Status Code', usage: U, type: ID, length: 1 }
+- id: 'CR1_AmbulanceTransportInformation'
+  name: 'Ambulance Transport Information'
+  varTag: 'CR1'
+  values: 
+  - { id: '355', name: 'Unit or Basis for Measurement Code', usage: U, type: ID, length: 2 }
+  - { id: '81', name: 'Weight', usage: U, type: R, minLength: 1, maxLength: 10 }
+  - { id: '1316', name: 'Ambulance Transport Code', usage: M, codeSet: { 'I': 'Initial Trip', 'R': 'Return Trip', 'T': 'Transfer Trip', 'X': 'Round Trip' }, type: ID, length: 1 }
+  - { id: '1317', name: 'Ambulance Transport Reason Code', usage: U, type: ID, length: 1 }
+  - { id: '355', name: 'Unit or Basis for Measurement Code', usage: O, codeSet: { 'DH': 'Miles', 'DK': 'Kilometers' }, type: ID, length: 2 }
+  - { id: '380', name: 'Transport Distance', usage: O, type: R, minLength: 1, maxLength: 15 }
+  - { id: '166', name: 'Address Information', usage: U, type: AN, minLength: 1, maxLength: 55 }
+  - { id: '166', name: 'Address Information', usage: U, type: AN, minLength: 1, maxLength: 55 }
+  - { id: '352', name: 'Description', usage: U, type: AN, minLength: 1, maxLength: 80 }
+  - { id: '352', name: 'Description', usage: U, type: AN, minLength: 1, maxLength: 80 }
+  rules: 
+  - { type: P, items: [1, 2] }
+  - { type: P, items: [5, 6] }
+- id: 'CR2_SpinalManipulationServiceInformation'
+  name: 'Spinal Manipulation Service Information'
+  varTag: 'CR2'
+  values: 
+  - { id: '609', name: 'Treatment Series Number', usage: O, type: N0, minLength: 1, maxLength: 9 }
+  - { id: '380', name: 'Treatment Count', usage: O, type: R, minLength: 1, maxLength: 15 }
+  - { id: '1367', name: 'Subluxation Level Code', usage: O, codeSet: { 'C6': 'Cervical 6', 'T7': 'Thoracic 7', 'OC': 'Occiput', 'L1': 'Lumbar 1', 'T2': 'Thoracic 2', 'IL': 'Ilium', 'C1': 'Cervical 1', 'T8': 'Thoracic 8', 'L5': 'Lumbar 5', 'C7': 'Cervical 7', 'T1': 'Thoracic 1', 'SA': 'Sacrum', 'L4': 'Lumbar 4', 'T12': 'Thoracic 12', 'T5': 'Thoracic 5', 'C4': 'Cervical 4', 'CO': 'Coccyx', 'T9': 'Thoracic 9', 'L3': 'Lumbar 3', 'T4': 'Thoracic 4', 'C3': 'Cervical 3', 'T11': 'Thoracic 11', 'T6': 'Thoracic 6', 'L2': 'Lumbar 2', 'C5': 'Cervical 5', 'C2': 'Cervical 2', 'T10': 'Thoracic 10', 'T3': 'Thoracic 3' }, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '1367', name: 'Subluxation Level Code', usage: O, codeSet: { 'C6': 'Cervical 6', 'T7': 'Thoracic 7', 'OC': 'Occiput', 'L1': 'Lumbar 1', 'T2': 'Thoracic 2', 'IL': 'Ilium', 'C1': 'Cervical 1', 'T8': 'Thoracic 8', 'L5': 'Lumbar 5', 'C7': 'Cervical 7', 'T1': 'Thoracic 1', 'SA': 'Sacrum', 'L4': 'Lumbar 4', 'T12': 'Thoracic 12', 'T5': 'Thoracic 5', 'C4': 'Cervical 4', 'CO': 'Coccyx', 'T9': 'Thoracic 9', 'L3': 'Lumbar 3', 'T4': 'Thoracic 4', 'C3': 'Cervical 3', 'T11': 'Thoracic 11', 'T6': 'Thoracic 6', 'L2': 'Lumbar 2', 'C5': 'Cervical 5', 'C2': 'Cervical 2', 'T10': 'Thoracic 10', 'T3': 'Thoracic 3' }, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '355', name: 'Unit or Basis for Measurement Code', usage: U, type: ID, length: 2 }
+  - { id: '380', name: 'Quantity', usage: U, type: R, minLength: 1, maxLength: 15 }
+  - { id: '380', name: 'Quantity', usage: U, type: R, minLength: 1, maxLength: 15 }
+  - { id: '1342', name: 'Nature of Condition Code', usage: U, type: ID, length: 1 }
+  - { id: '1073', name: 'Yes/No Condition or Response Code', usage: U, type: ID, length: 1 }
+  - { id: '352', name: 'Description', usage: U, type: AN, minLength: 1, maxLength: 80 }
+  - { id: '352', name: 'Description', usage: U, type: AN, minLength: 1, maxLength: 80 }
+  - { id: '1073', name: 'Yes/No Condition or Response Code', usage: U, type: ID, length: 1 }
+  rules: 
+  - { type: P, items: [1, 2] }
+  - { type: C, items: [4, 3] }
+  - { type: P, items: [5, 6] }
+- id: 'CR5_HomeOxygenTherapyInformation'
+  name: 'Home Oxygen Therapy Information'
+  varTag: 'CR5'
+  values: 
+  - { id: '1322', name: 'Certification Type Code', usage: U, type: ID, length: 1 }
+  - { id: '380', name: 'Quantity', usage: U, type: R, minLength: 1, maxLength: 15 }
+  - { id: '1348', name: 'Oxygen Equipment Type Code', usage: O, codeSet: { 'E': 'Gaseous Portable', 'A': 'Concentrator', 'B': 'Liquid Stationary', 'C': 'Gaseous Stationary', 'O': 'Other', 'D': 'Liquid Portable' }, type: ID, length: 1 }
+  - { id: '1348', name: 'Oxygen Equipment Type Code', usage: O, codeSet: { 'E': 'Gaseous Portable', 'A': 'Concentrator', 'B': 'Liquid Stationary', 'C': 'Gaseous Stationary', 'O': 'Other', 'D': 'Liquid Portable' }, type: ID, length: 1 }
+  - { id: '352', name: 'Description', usage: U, type: AN, minLength: 1, maxLength: 80 }
+  - { id: '380', name: 'Oxygen Flow Rate', usage: M, type: R, minLength: 1, maxLength: 15 }
+  - { id: '380', name: 'Daily Oxygen Use Count', usage: O, type: R, minLength: 1, maxLength: 15 }
+  - { id: '380', name: 'Oxygen Use Period Hour Count', usage: O, type: R, minLength: 1, maxLength: 15 }
+  - { id: '352', name: 'Respiratory Therapist Order Text', usage: O, type: AN, minLength: 1, maxLength: 80 }
+  - { id: '380', name: 'Quantity', usage: U, type: R, minLength: 1, maxLength: 15 }
+  - { id: '380', name: 'Quantity', usage: U, type: R, minLength: 1, maxLength: 15 }
+  - { id: '1349', name: 'Oxygen Test Condition Code', usage: U, type: ID, length: 1 }
+  - { id: '1350', name: 'Oxygen Test Findings Code', usage: U, type: ID, length: 1 }
+  - { id: '1350', name: 'Oxygen Test Findings Code', usage: U, type: ID, length: 1 }
+  - { id: '1350', name: 'Oxygen Test Findings Code', usage: U, type: ID, length: 1 }
+  - { id: '380', name: 'Portable Oxygen System Flow Rate', usage: O, type: R, minLength: 1, maxLength: 15 }
+  - { id: '1382', name: 'Oxygen Delivery System Code', usage: M, codeSet: { 'E': 'Transtracheal Catheter', 'A': 'Nasal Cannula', 'B': 'Oxygen Conserving Device', 'C': 'Oxygen Conserving Device with Oxygen Pulse System', 'D': 'Oxygen Conserving Device with Reservoir System' }, type: ID, length: 1 }
+  - { id: '1348', name: 'Oxygen Equipment Type Code', usage: O, codeSet: { 'E': 'Gaseous Portable', 'A': 'Concentrator', 'B': 'Liquid Stationary', 'C': 'Gaseous Stationary', 'O': 'Other', 'D': 'Liquid Portable' }, type: ID, length: 1 }
+- id: 'CR6_HomeHealthCareInformation'
+  name: 'Home Health Care Information'
+  varTag: 'CR6'
+  values: 
+  - { id: '923', name: 'Prognosis Code', usage: M, codeSet: { '8': 'Terminal', '4': 'Good', '5': 'Very Good', '6': 'Excellent', '1': 'Poor', '2': 'Guarded', '7': 'Less than 6 Months to Live', '3': 'Fair' }, type: ID, length: 1 }
+  - { id: '373', name: 'Home Health Start Date', usage: M, type: DT, length: 8 }
+  - { id: '1250', name: 'Date Time Period Format Qualifier', usage: O, codeSet: { 'RD8': 'Range of Dates Expressed in Format CCYYMMDD-CCYYMMDD' }, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '1251', name: 'Home Health Certification Period', usage: O, type: AN, minLength: 1, maxLength: 35 }
+  - { id: '373', name: 'Date', usage: U, type: DT, length: 8 }
+  - { id: '1073', name: 'Yes/No Condition or Response Code', usage: U, type: ID, length: 1 }
+  - { id: '1073', name: 'Medicare Coverage Indicator', usage: M, codeSet: { 'W': 'Not Applicable' }, type: ID, length: 1 }
+  - { id: '1322', name: 'Certification Type Code', usage: M, codeSet: { '4': 'Extension', 'N': 'Reconsideration', 'I': 'Initial', '1': 'Appeal - Immediate', '2': 'Appeal - Standard', 'R': 'Renewal', '3': 'Cancel', 'S': 'Revised' }, type: ID, length: 1 }
+  - { id: '373', name: 'Date', usage: U, type: DT, length: 8 }
+  - { id: '235', name: 'Product/Service ID Qualifier', usage: U, type: ID, length: 2 }
+  - { id: '1137', name: 'Medical Code Value', usage: U, type: AN, minLength: 1, maxLength: 15 }
+  - { id: '373', name: 'Date', usage: U, type: DT, length: 8 }
+  - { id: '373', name: 'Date', usage: U, type: DT, length: 8 }
+  - { id: '373', name: 'Date', usage: U, type: DT, length: 8 }
+  - { id: '1250', name: 'Date Time Period Format Qualifier', usage: U, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '1251', name: 'Date Time Period', usage: U, type: AN, minLength: 1, maxLength: 35 }
+  - { id: '1384', name: 'Patient Location Code', usage: U, type: ID, length: 1 }
+  - { id: '373', name: 'Date', usage: U, type: DT, length: 8 }
+  - { id: '373', name: 'Date', usage: U, type: DT, length: 8 }
+  - { id: '373', name: 'Date', usage: U, type: DT, length: 8 }
+  - { id: '373', name: 'Date', usage: U, type: DT, length: 8 }
+  rules: 
+  - { type: P, items: [3, 4] }
+  - { type: P, items: [9, 10, 11] }
+  - { type: P, items: [15, 16, 17] }
+- id: 'DMG_DependentDemographicInformation'
+  name: 'Dependent Demographic Information'
+  varTag: 'DMG'
+  values: 
+  - { id: '1250', name: 'Date Time Period Format Qualifier', usage: M, codeSet: { 'D8': 'Date Expressed in Format CCYYMMDD' }, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '1251', name: 'Dependent Birth Date', usage: M, type: AN, minLength: 1, maxLength: 35 }
+  - { id: '1068', name: 'Gender Code', usage: U, type: ID, length: 1 }
+  - { id: '1067', name: 'Marital Status Code', usage: U, type: ID, length: 1 }
+  - id: 'C056'
+    name: 'Composite Race or Ethnicity Information'
+    usage: U
+    count: 10
+    values: 
+    - { id: '1109', name: 'Race or Ethnicity Code', usage: U, type: ID, length: 1 }
+    - { id: '1270', name: 'Code List Qualifier Code', usage: U, type: ID, minLength: 1, maxLength: 3 }
+    - { id: '1271', name: 'Industry Code', usage: U, type: AN, minLength: 1, maxLength: 30 }
+  - { id: '1066', name: 'Citizenship Status Code', usage: U, type: ID, minLength: 1, maxLength: 2 }
+  - { id: '26', name: 'Country Code', usage: U, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '659', name: 'Basis of Verification Code', usage: U, type: ID, minLength: 1, maxLength: 2 }
+  - { id: '380', name: 'Quantity', usage: U, type: R, minLength: 1, maxLength: 15 }
+  - { id: '1270', name: 'Code List Qualifier Code', usage: U, type: ID, minLength: 1, maxLength: 3 }
+  - { id: '1271', name: 'Industry Code', usage: U, type: AN, minLength: 1, maxLength: 30 }
+  rules: 
+  - { type: P, items: [1, 2] }
+  - { type: P, items: [10, 11] }
+  - { type: C, items: [11, 5] }
+- id: 'DMG_SubscriberDemographicInformation'
+  name: 'Subscriber Demographic Information'
+  varTag: 'DMG'
+  values: 
+  - { id: '1250', name: 'Date Time Period Format Qualifier', usage: M, codeSet: { 'D8': 'Date Expressed in Format CCYYMMDD' }, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '1251', name: 'Subscriber Birth Date', usage: M, type: AN, minLength: 1, maxLength: 35 }
+  - { id: '1068', name: 'Gender Code', usage: U, type: ID, length: 1 }
+  - { id: '1067', name: 'Marital Status Code', usage: U, type: ID, length: 1 }
+  - id: 'C056'
+    name: 'Composite Race or Ethnicity Information'
+    usage: U
+    count: 10
+    values: 
+    - { id: '1109', name: 'Race or Ethnicity Code', usage: U, type: ID, length: 1 }
+    - { id: '1270', name: 'Code List Qualifier Code', usage: U, type: ID, minLength: 1, maxLength: 3 }
+    - { id: '1271', name: 'Industry Code', usage: U, type: AN, minLength: 1, maxLength: 30 }
+  - { id: '1066', name: 'Citizenship Status Code', usage: U, type: ID, minLength: 1, maxLength: 2 }
+  - { id: '26', name: 'Country Code', usage: U, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '659', name: 'Basis of Verification Code', usage: U, type: ID, minLength: 1, maxLength: 2 }
+  - { id: '380', name: 'Quantity', usage: U, type: R, minLength: 1, maxLength: 15 }
+  - { id: '1270', name: 'Code List Qualifier Code', usage: U, type: ID, minLength: 1, maxLength: 3 }
+  - { id: '1271', name: 'Industry Code', usage: U, type: AN, minLength: 1, maxLength: 30 }
+  rules: 
+  - { type: P, items: [1, 2] }
+  - { type: P, items: [10, 11] }
+  - { type: C, items: [11, 5] }
+- id: 'DTP_AdmissionDate'
+  name: 'Admission Date'
+  varTag: 'DTP'
+  values: 
+  - { id: '374', name: 'Date Time Qualifier', usage: M, varValue: true, codeSet: { '435': 'Admission' }, type: ID, length: 3 }
+  - { id: '1250', name: 'Date Time Period Format Qualifier', usage: M, codeSet: { 'D8': 'Date Expressed in Format CCYYMMDD', 'RD8': 'Range of Dates Expressed in Format CCYYMMDD-CCYYMMDD' }, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '1251', name: 'Proposed or Actual Admission Date', usage: M, type: AN, minLength: 1, maxLength: 35 }
+- id: 'DTP_CertificationEffectiveDate'
+  name: 'Certification Effective Date'
+  varTag: 'DTP'
+  values: 
+  - { id: '374', name: 'Date Time Qualifier', usage: M, varValue: true, codeSet: { '007': 'Effective' }, type: ID, length: 3 }
+  - { id: '1250', name: 'Date Time Period Format Qualifier', usage: M, codeSet: { 'D8': 'Date Expressed in Format CCYYMMDD', 'RD8': 'Range of Dates Expressed in Format CCYYMMDD-CCYYMMDD' }, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '1251', name: 'Certification Effective Date', usage: M, type: AN, minLength: 1, maxLength: 35 }
+- id: 'DTP_CertificationEffectiveDate1'
+  name: 'Certification Effective Date'
+  varTag: 'DTP'
+  values: 
+  - { id: '374', name: 'Date Time Qualifier', usage: M, varValue: true, codeSet: { '007': 'Effective' }, type: ID, length: 3 }
+  - { id: '1250', name: 'Date Time Period Format Qualifier', usage: M, codeSet: { 'D8': 'Date Expressed in Format CCYYMMDD', 'RD8': 'Range of Dates Expressed in Format CCYYMMDD-CCYYMMDD' }, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '1251', name: 'Certification Effective Date', usage: M, type: AN, minLength: 1, maxLength: 35 }
+- id: 'DTP_CertificationExpirationDate'
+  name: 'Certification Expiration Date'
+  varTag: 'DTP'
+  values: 
+  - { id: '374', name: 'Date Time Qualifier', usage: M, varValue: true, codeSet: { '036': 'Expiration' }, type: ID, length: 3 }
+  - { id: '1250', name: 'Date Time Period Format Qualifier', usage: M, codeSet: { 'D8': 'Date Expressed in Format CCYYMMDD' }, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '1251', name: 'Certification Expiration Date', usage: M, type: AN, minLength: 1, maxLength: 35 }
+- id: 'DTP_CertificationExpirationDate1'
+  name: 'Certification Expiration Date'
+  varTag: 'DTP'
+  values: 
+  - { id: '374', name: 'Date Time Qualifier', usage: M, varValue: true, codeSet: { '036': 'Expiration' }, type: ID, length: 3 }
+  - { id: '1250', name: 'Date Time Period Format Qualifier', usage: M, codeSet: { 'D8': 'Date Expressed in Format CCYYMMDD' }, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '1251', name: 'Certification Expiration Date', usage: M, type: AN, minLength: 1, maxLength: 35 }
+- id: 'DTP_CertificationIssueDate'
+  name: 'Certification Issue Date'
+  varTag: 'DTP'
+  values: 
+  - { id: '374', name: 'Date Time Qualifier', usage: M, varValue: true, codeSet: { '102': 'Issue' }, type: ID, length: 3 }
+  - { id: '1250', name: 'Date Time Period Format Qualifier', usage: M, codeSet: { 'D8': 'Date Expressed in Format CCYYMMDD' }, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '1251', name: 'Certification Issue Date', usage: M, type: AN, minLength: 1, maxLength: 35 }
+- id: 'DTP_CertificationIssueDate1'
+  name: 'Certification Issue Date'
+  varTag: 'DTP'
+  values: 
+  - { id: '374', name: 'Date Time Qualifier', usage: M, varValue: true, codeSet: { '102': 'Issue' }, type: ID, length: 3 }
+  - { id: '1250', name: 'Date Time Period Format Qualifier', usage: M, codeSet: { 'D8': 'Date Expressed in Format CCYYMMDD' }, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '1251', name: 'Certification Issue Date', usage: M, type: AN, minLength: 1, maxLength: 35 }
+- id: 'DTP_DischargeDate'
+  name: 'Discharge Date'
+  varTag: 'DTP'
+  values: 
+  - { id: '374', name: 'Date Time Qualifier', usage: M, varValue: true, codeSet: { '096': 'Discharge' }, type: ID, length: 3 }
+  - { id: '1250', name: 'Date Time Period Format Qualifier', usage: M, codeSet: { 'D8': 'Date Expressed in Format CCYYMMDD' }, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '1251', name: 'Proposed or Actual Discharge Date', usage: M, type: AN, minLength: 1, maxLength: 35 }
+- id: 'DTP_EventDate'
+  name: 'Event Date'
+  varTag: 'DTP'
+  values: 
+  - { id: '374', name: 'Date Time Qualifier', usage: M, varValue: true, codeSet: { 'AAH': 'Event' }, type: ID, length: 3 }
+  - { id: '1250', name: 'Date Time Period Format Qualifier', usage: M, codeSet: { 'D8': 'Date Expressed in Format CCYYMMDD', 'RD8': 'Range of Dates Expressed in Format CCYYMMDD-CCYYMMDD' }, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '1251', name: 'Proposed or Actual Event Date', usage: M, type: AN, minLength: 1, maxLength: 35 }
+- id: 'DTP_HealthCareServicesReviewRequestDate'
+  name: 'Health Care Services Review Request Date'
+  varTag: 'DTP'
+  values: 
+  - { id: '374', name: 'Date Time Qualifier', usage: M, varValue: true, codeSet: { '881': 'Request' }, type: ID, length: 3 }
+  - { id: '1250', name: 'Date Time Period Format Qualifier', usage: M, codeSet: { 'D8': 'Date Expressed in Format CCYYMMDD', 'RD8': 'Range of Dates Expressed in Format CCYYMMDD-CCYYMMDD' }, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '1251', name: 'Health Care Services Review Request Date', usage: M, type: AN, minLength: 1, maxLength: 35 }
+- id: 'DTP_ServiceDate'
+  name: 'Service Date'
+  varTag: 'DTP'
+  values: 
+  - { id: '374', name: 'Date Time Qualifier', usage: M, varValue: true, codeSet: { '472': 'Service' }, type: ID, length: 3 }
+  - { id: '1250', name: 'Date Time Period Format Qualifier', usage: M, codeSet: { 'D8': 'Date Expressed in Format CCYYMMDD', 'RD8': 'Range of Dates Expressed in Format CCYYMMDD-CCYYMMDD' }, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '1251', name: 'Proposed or Actual Service Date', usage: M, type: AN, minLength: 1, maxLength: 35 }
+- id: 'HCR_HealthCareServicesReview'
+  name: 'Health Care Services Review'
+  varTag: 'HCR'
+  values: 
+  - { id: '306', name: 'Action Code', usage: M, codeSet: { '51': 'Complete', 'A4': 'Pended', 'NA': 'No Action Required', '11': 'Term Expired', 'CT': 'Contact Payer', 'A2': 'Certified - partial', 'A1': 'Certified in total', 'A6': 'Modified', 'C': 'Cancelled', 'A3': 'Not Certified' }, type: ID, minLength: 1, maxLength: 2 }
+  - { id: '127', name: 'Review Identification Number', usage: O, type: AN, minLength: 1, maxLength: 50 }
+  - { id: '1271', name: 'Review Decision Reason Code', usage: O, count: 5, type: AN, minLength: 1, maxLength: 30 }
+  - { id: '1073', name: 'Second Surgical Opinion Indicator', usage: O, codeSet: { 'N': 'No', 'Y': 'Yes' }, type: ID, length: 1 }
+- id: 'HCR_HealthCareServicesReview1'
+  name: 'Health Care Services Review'
+  varTag: 'HCR'
+  values: 
+  - { id: '306', name: 'Action Code', usage: M, codeSet: { '51': 'Complete', 'A4': 'Pended', 'NA': 'No Action Required', '11': 'Term Expired', 'CT': 'Contact Payer', 'A1': 'Certified in total', 'A6': 'Modified', 'C': 'Cancelled', 'A3': 'Not Certified' }, type: ID, minLength: 1, maxLength: 2 }
+  - { id: '127', name: 'Review Identification Number', usage: O, type: AN, minLength: 1, maxLength: 50 }
+  - { id: '1271', name: 'Review Decision Reason Code', usage: O, count: 5, type: AN, minLength: 1, maxLength: 30 }
+  - { id: '1073', name: 'Second Surgical Opinion Indicator', usage: O, codeSet: { 'N': 'No', 'Y': 'Yes' }, type: ID, length: 1 }
+- id: 'HI_PatientDiagnosis'
+  name: 'Patient Diagnosis'
+  varTag: 'HI'
+  values: 
+  - id: 'C022'
+    name: 'Health Care Code Information'
+    usage: M
+    values: 
+    - { id: '1270', name: 'Diagnosis Type Code', usage: M, codeSet: { 'APR': 'International Classification of Diseases Clinical Modification (ICD-10-CM)', 'PR': 'International Classification of Diseases Clinical Modification (ICD-9-CM)', 'DR': 'Diagnosis Related Group (DRG)', 'ABK': 'International Classification of Diseases Clinical Modification (ICD-10-CM)', 'BK': 'International Classification of Diseases Clinical Modification (ICD-9-CM)', 'BF': 'International Classification of Diseases Clinical Modification (ICD-9-CM)', 'ABJ': 'International Classification of Diseases Clinical Modification (ICD-10-CM)', 'ABF': 'International Classification of Diseases Clinical Modification (ICD-10-CM)', 'BJ': 'International Classification of Diseases Clinical Modification (ICD-9-CM)' }, type: ID, minLength: 1, maxLength: 3 }
+    - { id: '1271', name: 'Diagnosis Code', usage: M, type: AN, minLength: 1, maxLength: 30 }
+    - { id: '1250', name: 'Date Time Period Format Qualifier', usage: C, codeSet: { 'RTS': 'Date and Time Expressed in Format CCYYMMDDHHMMSS', 'TC': 'Julian Date Expressed in Format DDD', 'TR': 'Date and Time Expressed in Format DDMMYYHHMM', 'DA': 'Range of Dates within a Single Month Expressed in Format DD-DD', 'UN': 'Unstructured', 'CQ': 'Date in Format CCYYQ', 'RDM': 'Range of Dates Expressed in Format YYMMDD-MMDD', 'YMM': 'Range of Year and Months, Expressed in CCYYMMM-MMM Format', 'CM': 'Date in Format CCYYMM', 'RTM': 'Range of Time Expressed in Format HHMM-HHMM', 'D8': 'Date Expressed in Format CCYYMMDD', 'MM': 'Month of Year in Numeric Format', 'EH': 'Last Digit of Year and Julian Date Expressed in Format YDDD', 'TQ': 'Date Expressed in Format MMYY', 'RD6': 'Range of Dates Expressed in Format YYMMDD-YYMMDD', 'MD': 'Month of Year and Day of Month Expressed in Format MMDD', 'TM': 'Time Expressed in Format HHMM', 'YM': 'Year and Month Expressed in Format YYMM', 'CC': 'First Two Digits of Year Expressed in Format CCYY', 'DD': 'Day of Month in Numeric Format', 'RMY': 'Range of Years and Months Expressed in Format YYMM-YYMM', 'MCY': 'MMCCYY', 'RD5': 'Range of Years and Months Expressed in Format CCYYMM-CCYYMM', 'CY': 'Year Expressed in Format CCYY', 'RD': 'Range of Dates Expressed in Format MMDDCCYY-MMDDCCYY', 'KA': 'Date Expressed in Format YYMMMDD', 'DT': 'Date and Time Expressed in Format CCYYMMDDHHMM', 'TU': 'Date Expressed in Format YYDDD', 'RD2': 'Range of Years Expressed in Format YY-YY', 'TT': 'Date Expressed in Format MMDDYY', 'CD': 'Month and Year Expressed in Format MMMYYYY', 'DTD': 'Range of Dates and Time, Expressed in CCYYMMDDHHMM-CCYYMMDD', 'YY': 'Last Two Digits of Year Expressed in Format CCYY', 'DB': 'Date Expressed in Format MMDDCCYY', 'DTS': 'Range of Date and Time Expressed in Format CCYYMMDDHHMMSS-CCYYMMDDHHMMSS', 'D6': 'Date Expressed in Format YYMMDD', 'DDT': 'Range of Dates and Time, Expressed in CCYYMMDD-CCYYMMDDHHMM', 'RD8': 'Range of Dates Expressed in Format CCYYMMDD-CCYYMMDD', 'RMD': 'Range of Months and Days Expressed in Format MMDD-MMDD', 'RDT': 'Range of Date and Time, Expressed in Format CCYYMMDDHHMM-CCYYMMDDHHMM', 'RD4': 'Range of Years Expressed in Format CCYY-CCYY', 'TS': 'Time Expressed in Format HHMMSS' }, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '1251', name: 'Date Time Period', usage: C, type: AN, minLength: 1, maxLength: 35 }
+    - { id: '782', name: 'Monetary Amount', usage: O, type: R, minLength: 1, maxLength: 18 }
+    - { id: '380', name: 'Quantity', usage: O, type: R, minLength: 1, maxLength: 15 }
+    - { id: '799', name: 'Version Identifier', usage: O, type: AN, minLength: 1, maxLength: 30 }
+    - { id: '1271', name: 'Industry Code', usage: C, type: AN, minLength: 1, maxLength: 30 }
+    - { id: '1073', name: 'Yes/No Condition or Response Code', usage: C, codeSet: { 'N': 'No', 'U': 'Unknown', 'W': 'Not Applicable', 'Y': 'Yes' }, type: ID, length: 1 }
+  - id: 'C022'
+    name: 'Health Care Code Information'
+    usage: U
+    values: 
+    - { id: '1270', name: 'Code List Qualifier Code', usage: U, type: ID, minLength: 1, maxLength: 3 }
+    - { id: '1271', name: 'Industry Code', usage: U, type: AN, minLength: 1, maxLength: 30 }
+    - { id: '1250', name: 'Date Time Period Format Qualifier', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '1251', name: 'Date Time Period', usage: U, type: AN, minLength: 1, maxLength: 35 }
+    - { id: '782', name: 'Monetary Amount', usage: U, type: R, minLength: 1, maxLength: 18 }
+    - { id: '380', name: 'Quantity', usage: U, type: R, minLength: 1, maxLength: 15 }
+    - { id: '799', name: 'Version Identifier', usage: U, type: AN, minLength: 1, maxLength: 30 }
+    - { id: '1271', name: 'Industry Code', usage: U, type: AN, minLength: 1, maxLength: 30 }
+    - { id: '1073', name: 'Yes/No Condition or Response Code', usage: U, type: ID, length: 1 }
+  - id: 'C022'
+    name: 'Health Care Code Information'
+    usage: U
+    values: 
+    - { id: '1270', name: 'Code List Qualifier Code', usage: U, type: ID, minLength: 1, maxLength: 3 }
+    - { id: '1271', name: 'Industry Code', usage: U, type: AN, minLength: 1, maxLength: 30 }
+    - { id: '1250', name: 'Date Time Period Format Qualifier', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '1251', name: 'Date Time Period', usage: U, type: AN, minLength: 1, maxLength: 35 }
+    - { id: '782', name: 'Monetary Amount', usage: U, type: R, minLength: 1, maxLength: 18 }
+    - { id: '380', name: 'Quantity', usage: U, type: R, minLength: 1, maxLength: 15 }
+    - { id: '799', name: 'Version Identifier', usage: U, type: AN, minLength: 1, maxLength: 30 }
+    - { id: '1271', name: 'Industry Code', usage: U, type: AN, minLength: 1, maxLength: 30 }
+    - { id: '1073', name: 'Yes/No Condition or Response Code', usage: U, type: ID, length: 1 }
+  - id: 'C022'
+    name: 'Health Care Code Information'
+    usage: U
+    values: 
+    - { id: '1270', name: 'Code List Qualifier Code', usage: U, type: ID, minLength: 1, maxLength: 3 }
+    - { id: '1271', name: 'Industry Code', usage: U, type: AN, minLength: 1, maxLength: 30 }
+    - { id: '1250', name: 'Date Time Period Format Qualifier', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '1251', name: 'Date Time Period', usage: U, type: AN, minLength: 1, maxLength: 35 }
+    - { id: '782', name: 'Monetary Amount', usage: U, type: R, minLength: 1, maxLength: 18 }
+    - { id: '380', name: 'Quantity', usage: U, type: R, minLength: 1, maxLength: 15 }
+    - { id: '799', name: 'Version Identifier', usage: U, type: AN, minLength: 1, maxLength: 30 }
+    - { id: '1271', name: 'Industry Code', usage: U, type: AN, minLength: 1, maxLength: 30 }
+    - { id: '1073', name: 'Yes/No Condition or Response Code', usage: U, type: ID, length: 1 }
+  - id: 'C022'
+    name: 'Health Care Code Information'
+    usage: U
+    values: 
+    - { id: '1270', name: 'Code List Qualifier Code', usage: U, type: ID, minLength: 1, maxLength: 3 }
+    - { id: '1271', name: 'Industry Code', usage: U, type: AN, minLength: 1, maxLength: 30 }
+    - { id: '1250', name: 'Date Time Period Format Qualifier', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '1251', name: 'Date Time Period', usage: U, type: AN, minLength: 1, maxLength: 35 }
+    - { id: '782', name: 'Monetary Amount', usage: U, type: R, minLength: 1, maxLength: 18 }
+    - { id: '380', name: 'Quantity', usage: U, type: R, minLength: 1, maxLength: 15 }
+    - { id: '799', name: 'Version Identifier', usage: U, type: AN, minLength: 1, maxLength: 30 }
+    - { id: '1271', name: 'Industry Code', usage: U, type: AN, minLength: 1, maxLength: 30 }
+    - { id: '1073', name: 'Yes/No Condition or Response Code', usage: U, type: ID, length: 1 }
+  - id: 'C022'
+    name: 'Health Care Code Information'
+    usage: U
+    values: 
+    - { id: '1270', name: 'Code List Qualifier Code', usage: U, type: ID, minLength: 1, maxLength: 3 }
+    - { id: '1271', name: 'Industry Code', usage: U, type: AN, minLength: 1, maxLength: 30 }
+    - { id: '1250', name: 'Date Time Period Format Qualifier', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '1251', name: 'Date Time Period', usage: U, type: AN, minLength: 1, maxLength: 35 }
+    - { id: '782', name: 'Monetary Amount', usage: U, type: R, minLength: 1, maxLength: 18 }
+    - { id: '380', name: 'Quantity', usage: U, type: R, minLength: 1, maxLength: 15 }
+    - { id: '799', name: 'Version Identifier', usage: U, type: AN, minLength: 1, maxLength: 30 }
+    - { id: '1271', name: 'Industry Code', usage: U, type: AN, minLength: 1, maxLength: 30 }
+    - { id: '1073', name: 'Yes/No Condition or Response Code', usage: U, type: ID, length: 1 }
+  - id: 'C022'
+    name: 'Health Care Code Information'
+    usage: U
+    values: 
+    - { id: '1270', name: 'Code List Qualifier Code', usage: U, type: ID, minLength: 1, maxLength: 3 }
+    - { id: '1271', name: 'Industry Code', usage: U, type: AN, minLength: 1, maxLength: 30 }
+    - { id: '1250', name: 'Date Time Period Format Qualifier', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '1251', name: 'Date Time Period', usage: U, type: AN, minLength: 1, maxLength: 35 }
+    - { id: '782', name: 'Monetary Amount', usage: U, type: R, minLength: 1, maxLength: 18 }
+    - { id: '380', name: 'Quantity', usage: U, type: R, minLength: 1, maxLength: 15 }
+    - { id: '799', name: 'Version Identifier', usage: U, type: AN, minLength: 1, maxLength: 30 }
+    - { id: '1271', name: 'Industry Code', usage: U, type: AN, minLength: 1, maxLength: 30 }
+    - { id: '1073', name: 'Yes/No Condition or Response Code', usage: U, type: ID, length: 1 }
+  - id: 'C022'
+    name: 'Health Care Code Information'
+    usage: U
+    values: 
+    - { id: '1270', name: 'Code List Qualifier Code', usage: U, type: ID, minLength: 1, maxLength: 3 }
+    - { id: '1271', name: 'Industry Code', usage: U, type: AN, minLength: 1, maxLength: 30 }
+    - { id: '1250', name: 'Date Time Period Format Qualifier', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '1251', name: 'Date Time Period', usage: U, type: AN, minLength: 1, maxLength: 35 }
+    - { id: '782', name: 'Monetary Amount', usage: U, type: R, minLength: 1, maxLength: 18 }
+    - { id: '380', name: 'Quantity', usage: U, type: R, minLength: 1, maxLength: 15 }
+    - { id: '799', name: 'Version Identifier', usage: U, type: AN, minLength: 1, maxLength: 30 }
+    - { id: '1271', name: 'Industry Code', usage: U, type: AN, minLength: 1, maxLength: 30 }
+    - { id: '1073', name: 'Yes/No Condition or Response Code', usage: U, type: ID, length: 1 }
+  - id: 'C022'
+    name: 'Health Care Code Information'
+    usage: U
+    values: 
+    - { id: '1270', name: 'Code List Qualifier Code', usage: U, type: ID, minLength: 1, maxLength: 3 }
+    - { id: '1271', name: 'Industry Code', usage: U, type: AN, minLength: 1, maxLength: 30 }
+    - { id: '1250', name: 'Date Time Period Format Qualifier', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '1251', name: 'Date Time Period', usage: U, type: AN, minLength: 1, maxLength: 35 }
+    - { id: '782', name: 'Monetary Amount', usage: U, type: R, minLength: 1, maxLength: 18 }
+    - { id: '380', name: 'Quantity', usage: U, type: R, minLength: 1, maxLength: 15 }
+    - { id: '799', name: 'Version Identifier', usage: U, type: AN, minLength: 1, maxLength: 30 }
+    - { id: '1271', name: 'Industry Code', usage: U, type: AN, minLength: 1, maxLength: 30 }
+    - { id: '1073', name: 'Yes/No Condition or Response Code', usage: U, type: ID, length: 1 }
+  - id: 'C022'
+    name: 'Health Care Code Information'
+    usage: U
+    values: 
+    - { id: '1270', name: 'Code List Qualifier Code', usage: U, type: ID, minLength: 1, maxLength: 3 }
+    - { id: '1271', name: 'Industry Code', usage: U, type: AN, minLength: 1, maxLength: 30 }
+    - { id: '1250', name: 'Date Time Period Format Qualifier', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '1251', name: 'Date Time Period', usage: U, type: AN, minLength: 1, maxLength: 35 }
+    - { id: '782', name: 'Monetary Amount', usage: U, type: R, minLength: 1, maxLength: 18 }
+    - { id: '380', name: 'Quantity', usage: U, type: R, minLength: 1, maxLength: 15 }
+    - { id: '799', name: 'Version Identifier', usage: U, type: AN, minLength: 1, maxLength: 30 }
+    - { id: '1271', name: 'Industry Code', usage: U, type: AN, minLength: 1, maxLength: 30 }
+    - { id: '1073', name: 'Yes/No Condition or Response Code', usage: U, type: ID, length: 1 }
+  - id: 'C022'
+    name: 'Health Care Code Information'
+    usage: U
+    values: 
+    - { id: '1270', name: 'Code List Qualifier Code', usage: U, type: ID, minLength: 1, maxLength: 3 }
+    - { id: '1271', name: 'Industry Code', usage: U, type: AN, minLength: 1, maxLength: 30 }
+    - { id: '1250', name: 'Date Time Period Format Qualifier', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '1251', name: 'Date Time Period', usage: U, type: AN, minLength: 1, maxLength: 35 }
+    - { id: '782', name: 'Monetary Amount', usage: U, type: R, minLength: 1, maxLength: 18 }
+    - { id: '380', name: 'Quantity', usage: U, type: R, minLength: 1, maxLength: 15 }
+    - { id: '799', name: 'Version Identifier', usage: U, type: AN, minLength: 1, maxLength: 30 }
+    - { id: '1271', name: 'Industry Code', usage: U, type: AN, minLength: 1, maxLength: 30 }
+    - { id: '1073', name: 'Yes/No Condition or Response Code', usage: U, type: ID, length: 1 }
+  - id: 'C022'
+    name: 'Health Care Code Information'
+    usage: U
+    values: 
+    - { id: '1270', name: 'Code List Qualifier Code', usage: U, type: ID, minLength: 1, maxLength: 3 }
+    - { id: '1271', name: 'Industry Code', usage: U, type: AN, minLength: 1, maxLength: 30 }
+    - { id: '1250', name: 'Date Time Period Format Qualifier', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '1251', name: 'Date Time Period', usage: U, type: AN, minLength: 1, maxLength: 35 }
+    - { id: '782', name: 'Monetary Amount', usage: U, type: R, minLength: 1, maxLength: 18 }
+    - { id: '380', name: 'Quantity', usage: U, type: R, minLength: 1, maxLength: 15 }
+    - { id: '799', name: 'Version Identifier', usage: U, type: AN, minLength: 1, maxLength: 30 }
+    - { id: '1271', name: 'Industry Code', usage: U, type: AN, minLength: 1, maxLength: 30 }
+    - { id: '1073', name: 'Yes/No Condition or Response Code', usage: U, type: ID, length: 1 }
+- id: 'HL_DependentLevel'
+  name: 'Dependent Level'
+  varTag: 'HL'
+  values: 
+  - { id: '628', name: 'Hierarchical ID Number', usage: M, type: AN, minLength: 1, maxLength: 12 }
+  - { id: '734', name: 'Hierarchical Parent ID Number', usage: M, type: AN, minLength: 1, maxLength: 12 }
+  - { id: '735', name: 'Hierarchical Level Code', usage: M, varValue: true, codeSet: { '23': 'Dependent' }, type: ID, minLength: 1, maxLength: 2 }
+  - { id: '736', name: 'Hierarchical Child Code', usage: M, codeSet: { '0': 'No Subordinate HL Segment in This Hierarchical Structure.', '1': 'Additional Subordinate HL Data Segment in This Hierarchical Structure.' }, type: ID, length: 1 }
+- id: 'HL_PatientEventLevel'
+  name: 'Patient Event Level'
+  varTag: 'HL'
+  values: 
+  - { id: '628', name: 'Hierarchical ID Number', usage: M, type: AN, minLength: 1, maxLength: 12 }
+  - { id: '734', name: 'Hierarchical Parent ID Number', usage: M, type: AN, minLength: 1, maxLength: 12 }
+  - { id: '735', name: 'Hierarchical Level Code', usage: M, varValue: true, codeSet: { 'EV': 'Event' }, type: ID, minLength: 1, maxLength: 2 }
+  - { id: '736', name: 'Hierarchical Child Code', usage: M, codeSet: { '0': 'No Subordinate HL Segment in This Hierarchical Structure.', '1': 'Additional Subordinate HL Data Segment in This Hierarchical Structure.' }, type: ID, length: 1 }
+- id: 'HL_RequesterLevel'
+  name: 'Requester Level'
+  varTag: 'HL'
+  values: 
+  - { id: '628', name: 'Hierarchical ID Number', usage: M, type: AN, minLength: 1, maxLength: 12 }
+  - { id: '734', name: 'Hierarchical Parent ID Number', usage: M, type: AN, minLength: 1, maxLength: 12 }
+  - { id: '735', name: 'Hierarchical Level Code', usage: M, varValue: true, codeSet: { '21': 'Information Receiver' }, type: ID, minLength: 1, maxLength: 2 }
+  - { id: '736', name: 'Hierarchical Child Code', usage: M, codeSet: { '0': 'No Subordinate HL Segment in This Hierarchical Structure.', '1': 'Additional Subordinate HL Data Segment in This Hierarchical Structure.' }, type: ID, length: 1 }
+- id: 'HL_ServiceLevel'
+  name: 'Service Level'
+  varTag: 'HL'
+  values: 
+  - { id: '628', name: 'Hierarchical ID Number', usage: M, type: AN, minLength: 1, maxLength: 12 }
+  - { id: '734', name: 'Hierarchical Parent ID Number', usage: M, type: AN, minLength: 1, maxLength: 12 }
+  - { id: '735', name: 'Hierarchical Level Code', usage: M, varValue: true, codeSet: { 'SS': 'Services' }, type: ID, minLength: 1, maxLength: 2 }
+  - { id: '736', name: 'Hierarchical Child Code', usage: M, codeSet: { '0': 'No Subordinate HL Segment in This Hierarchical Structure.' }, type: ID, length: 1 }
+- id: 'HL_SubscriberLevel'
+  name: 'Subscriber Level'
+  varTag: 'HL'
+  values: 
+  - { id: '628', name: 'Hierarchical ID Number', usage: M, type: AN, minLength: 1, maxLength: 12 }
+  - { id: '734', name: 'Hierarchical Parent ID Number', usage: M, type: AN, minLength: 1, maxLength: 12 }
+  - { id: '735', name: 'Hierarchical Level Code', usage: M, varValue: true, codeSet: { '22': 'Subscriber' }, type: ID, minLength: 1, maxLength: 2 }
+  - { id: '736', name: 'Hierarchical Child Code', usage: M, codeSet: { '0': 'No Subordinate HL Segment in This Hierarchical Structure.', '1': 'Additional Subordinate HL Data Segment in This Hierarchical Structure.' }, type: ID, length: 1 }
+- id: 'HL_UtilizationManagementOrganizationUMOLevel'
+  name: 'Utilization Management Organization (UMO) Level'
+  varTag: 'HL'
+  values: 
+  - { id: '628', name: 'Hierarchical ID Number', usage: M, type: AN, minLength: 1, maxLength: 12 }
+  - { id: '734', name: 'Hierarchical Parent ID Number', usage: U, type: AN, minLength: 1, maxLength: 12 }
+  - { id: '735', name: 'Hierarchical Level Code', usage: M, varValue: true, codeSet: { '20': 'Information Source' }, type: ID, minLength: 1, maxLength: 2 }
+  - { id: '736', name: 'Hierarchical Child Code', usage: M, codeSet: { '0': 'No Subordinate HL Segment in This Hierarchical Structure.', '1': 'Additional Subordinate HL Data Segment in This Hierarchical Structure.' }, type: ID, length: 1 }
+- id: 'HSD_HealthCareServicesDelivery'
+  name: 'Health Care Services Delivery'
+  varTag: 'HSD'
+  values: 
+  - { id: '673', name: 'Quantity Qualifier', usage: O, codeSet: { 'MN': 'Month', 'VS': 'Visits', 'FL': 'Units', 'DY': 'Days', 'HS': 'Hours' }, type: ID, length: 2 }
+  - { id: '380', name: 'Service Unit Count', usage: O, type: R, minLength: 1, maxLength: 15 }
+  - { id: '355', name: 'Unit or Basis for Measurement Code', usage: O, codeSet: { 'DA': 'Days', 'MO': 'Months', 'WK': 'Week' }, type: ID, length: 2 }
+  - { id: '1167', name: 'Sample Selection Modulus', usage: O, type: R, minLength: 1, maxLength: 6 }
+  - { id: '615', name: 'Time Period Qualifier', usage: O, codeSet: { '34': 'Month', '26': 'Episode', '35': 'Week', '21': 'Years', '6': 'Hour', '27': 'Visit', '7': 'Day', '29': 'Remaining' }, type: ID, minLength: 1, maxLength: 2 }
+  - { id: '616', name: 'Period Count', usage: O, type: N0, minLength: 1, maxLength: 3 }
+  - { id: '678', name: 'Delivery Frequency Code', usage: O, codeSet: { 'E': 'Tuesday', 'X': '1/2 By Wed., Bal. By Fri.', 'SG': 'Tuesday through Friday', '8': '1st Working Day of Period', '4': '4th Week of the Month', '9': 'Last Working Day of Period', 'N': 'As Directed', 'T': '1/2 Tue. & 1/2 Fri.', 'Y': 'None (Also Used to Cancel or Override a Previous Pattern)', 'SB': 'Tuesday through Saturday', 'J': 'Saturday', 'U': '1/2 Mon. & 1/2 Wed.', 'SD': 'Monday, Wednesday, Thursday, Friday, Saturday', 'F': 'Wednesday', 'A': 'Monday through Friday', 'SZ': 'Tuesday, Thursday and Friday', 'SP': 'Monday, Tuesday and Friday', '5': '5th Week of the Month', 'SA': 'Sunday, Monday, Thursday, Friday, Saturday', 'M': 'Immediately', 'SL': 'Monday, Tuesday and Thursday', 'WE': 'Weekend', 'SY': 'Monday, Wednesday and Thursday', 'G': 'Thursday', '6': '1st & 3rd Weeks of the Month', '1': '1st Week of the Month', 'V': '1/3 Mon., 1/3 Wed., 1/3 Fri.', 'Q': '1/2 Tues. & 1/2 Thurs.', 'L': 'Monday through Thursday', 'B': 'Monday through Saturday', 'P': '1/2 Mon. & 1/2 Thurs.', 'SX': 'Wednesday and Thursday', '2': '2nd Week of the Month', 'C': 'Monday through Sunday', 'H': 'Friday', 'W': 'Whenever Necessary', '7': '2nd & 4th Weeks of the Month', 'K': 'Sunday', 'R': '1/2 Wed. & 1/2 Fri.', '3': '3rd Week of the Month', 'O': 'Daily Mon. through Fri.', 'D': 'Monday', 'SC': 'Sunday, Wednesday, Thursday, Friday, Saturday', 'S': 'Once Anytime Mon. through Fri.' }, type: ID, minLength: 1, maxLength: 2 }
+  - { id: '679', name: 'Delivery Pattern Time Code', usage: O, codeSet: { 'E': 'P.M.', 'Y': 'None (Also Used to Cancel or Override a Previous Pattern)', 'F': 'As Directed', 'A': '1st Shift (Normal Working Hours)', 'G': 'Any Shift', 'B': '2nd Shift', 'C': '3rd Shift', 'D': 'A.M.' }, type: ID, length: 1 }
+  rules: 
+  - { type: P, items: [1, 2] }
+  - { type: C, items: [6, 5] }
+- id: 'HSD_HealthCareServicesDelivery1'
+  name: 'Health Care Services Delivery'
+  varTag: 'HSD'
+  values: 
+  - { id: '673', name: 'Quantity Qualifier', usage: O, codeSet: { 'MN': 'Month', 'VS': 'Visits', 'FL': 'Units', 'DY': 'Days', 'HS': 'Hours' }, type: ID, length: 2 }
+  - { id: '380', name: 'Service Unit Count', usage: O, type: R, minLength: 1, maxLength: 15 }
+  - { id: '355', name: 'Unit or Basis for Measurement Code', usage: O, codeSet: { 'DA': 'Days', 'MO': 'Months', 'WK': 'Week' }, type: ID, length: 2 }
+  - { id: '1167', name: 'Sample Selection Modulus', usage: O, type: R, minLength: 1, maxLength: 6 }
+  - { id: '615', name: 'Time Period Qualifier', usage: O, codeSet: { '34': 'Month', '26': 'Episode', '35': 'Week', '21': 'Years', '6': 'Hour', '27': 'Visit', '7': 'Day', '29': 'Remaining' }, type: ID, minLength: 1, maxLength: 2 }
+  - { id: '616', name: 'Period Count', usage: O, type: N0, minLength: 1, maxLength: 3 }
+  - { id: '678', name: 'Delivery Frequency Code', usage: O, codeSet: { 'E': 'Tuesday', 'X': '1/2 By Wed., Bal. By Fri.', 'SG': 'Tuesday through Friday', '8': '1st Working Day of Period', '4': '4th Week of the Month', '9': 'Last Working Day of Period', 'N': 'As Directed', 'T': '1/2 Tue. & 1/2 Fri.', 'Y': 'None (Also Used to Cancel or Override a Previous Pattern)', 'SB': 'Tuesday through Saturday', 'J': 'Saturday', 'U': '1/2 Mon. & 1/2 Wed.', 'SD': 'Monday, Wednesday, Thursday, Friday, Saturday', 'F': 'Wednesday', 'A': 'Monday through Friday', 'SZ': 'Tuesday, Thursday and Friday', 'SP': 'Monday, Tuesday and Friday', '5': '5th Week of the Month', 'SA': 'Sunday, Monday, Thursday, Friday, Saturday', 'M': 'Immediately', 'SL': 'Monday, Tuesday and Thursday', 'SY': 'Monday, Wednesday and Thursday', 'G': 'Thursday', '6': '1st & 3rd Weeks of the Month', '1': '1st Week of the Month', 'V': '1/3 Mon., 1/3 Wed., 1/3 Fri.', 'Q': '1/2 Tues. & 1/2 Thurs.', 'L': 'Monday through Thursday', 'B': 'Monday through Saturday', 'P': '1/2 Mon. & 1/2 Thurs.', 'SX': 'Wednesday and Thursday', '2': '2nd Week of the Month', 'C': 'Monday through Sunday', 'H': 'Friday', 'W': 'Whenever Necessary', '7': '2nd & 4th Weeks of the Month', 'K': 'Sunday', 'R': '1/2 Wed. & 1/2 Fri.', '3': '3rd Week of the Month', 'O': 'Daily Mon. through Fri.', 'D': 'Monday', 'SC': 'Sunday, Wednesday, Thursday, Friday, Saturday', 'S': 'Once Anytime Mon. through Fri.' }, type: ID, minLength: 1, maxLength: 2 }
+  - { id: '679', name: 'Delivery Pattern Time Code', usage: O, codeSet: { 'E': 'P.M.', 'Y': 'None (Also Used to Cancel or Override a Previous Pattern)', 'F': 'As Directed', 'A': '1st Shift (Normal Working Hours)', 'G': 'Any Shift', 'B': '2nd Shift', 'C': '3rd Shift', 'D': 'A.M.' }, type: ID, length: 1 }
+  rules: 
+  - { type: P, items: [1, 2] }
+  - { type: C, items: [6, 5] }
+- id: 'MSG_MessageText'
+  name: 'Message Text'
+  varTag: 'MSG'
+  values: 
+  - { id: '933', name: 'Free Form Message Text', usage: M, type: AN, minLength: 1, maxLength: 264 }
+  - { id: '934', name: 'Printer Carriage Control Code', usage: U, type: ID, length: 2 }
+  - { id: '1470', name: 'Number', usage: U, type: N0, minLength: 1, maxLength: 9 }
+  rules: 
+  - { type: C, items: [3, 2] }
+- id: 'MSG_MessageText1'
+  name: 'Message Text'
+  varTag: 'MSG'
+  values: 
+  - { id: '933', name: 'Free Form Message Text', usage: M, type: AN, minLength: 1, maxLength: 264 }
+  - { id: '934', name: 'Printer Carriage Control Code', usage: U, type: ID, length: 2 }
+  - { id: '1470', name: 'Number', usage: U, type: N0, minLength: 1, maxLength: 9 }
+  rules: 
+  - { type: C, items: [3, 2] }
+- id: 'N3_DependentAddress'
+  name: 'Dependent Address'
+  varTag: 'N3'
+  values: 
+  - { id: '166', name: 'Dependent Address Line', usage: M, type: AN, minLength: 1, maxLength: 55 }
+  - { id: '166', name: 'Dependent Address Line', usage: O, type: AN, minLength: 1, maxLength: 55 }
+- id: 'N3_PatientEventProviderAddress'
+  name: 'Patient Event Provider Address'
+  varTag: 'N3'
+  values: 
+  - { id: '166', name: 'Patient Event Provider Address Line', usage: M, type: AN, minLength: 1, maxLength: 55 }
+  - { id: '166', name: 'Patient Event Provider Address Line', usage: O, type: AN, minLength: 1, maxLength: 55 }
+- id: 'N3_PatientEventTransportLocationAddress'
+  name: 'Patient Event Transport Location Address'
+  varTag: 'N3'
+  values: 
+  - { id: '166', name: 'Patient Event Transport Location Address Line', usage: M, type: AN, minLength: 1, maxLength: 55 }
+  - { id: '166', name: 'Patient Event Transport Location Address Line', usage: O, type: AN, minLength: 1, maxLength: 55 }
+- id: 'N3_ServiceProviderAddress'
+  name: 'Service Provider Address'
+  varTag: 'N3'
+  values: 
+  - { id: '166', name: 'Service Provider Address Line', usage: M, type: AN, minLength: 1, maxLength: 55 }
+  - { id: '166', name: 'Service Provider Address Line', usage: O, type: AN, minLength: 1, maxLength: 55 }
+- id: 'N3_SubscriberMailingAddress'
+  name: 'Subscriber Mailing Address'
+  varTag: 'N3'
+  values: 
+  - { id: '166', name: 'Subscriber Address Line', usage: M, type: AN, minLength: 1, maxLength: 55 }
+  - { id: '166', name: 'Subscriber Address Line', usage: O, type: AN, minLength: 1, maxLength: 55 }
+- id: 'N4_DependentCityStateZIPCode'
+  name: 'Dependent City, State, ZIP Code'
+  varTag: 'N4'
+  values: 
+  - { id: '19', name: 'Dependent City Name', usage: M, type: AN, minLength: 2, maxLength: 30 }
+  - { id: '156', name: 'Dependent State Code', usage: O, type: ID, length: 2 }
+  - { id: '116', name: 'Dependent Postal Zone or ZIP Code', usage: O, type: ID, minLength: 3, maxLength: 15 }
+  - { id: '26', name: 'Country Code', usage: O, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '309', name: 'Location Qualifier', usage: U, type: ID, minLength: 1, maxLength: 2 }
+  - { id: '310', name: 'Location Identifier', usage: U, type: AN, minLength: 1, maxLength: 30 }
+  - { id: '1715', name: 'Country Subdivision Code', usage: O, type: ID, minLength: 1, maxLength: 3 }
+  rules: 
+  - { type: E, items: [2, 7] }
+  - { type: C, items: [6, 5] }
+  - { type: C, items: [7, 4] }
+- id: 'N4_PatientEventProviderCityStateZIPCode'
+  name: 'Patient Event Provider City, State, ZIP Code'
+  varTag: 'N4'
+  values: 
+  - { id: '19', name: 'Patient Event Provider City Name', usage: M, type: AN, minLength: 2, maxLength: 30 }
+  - { id: '156', name: 'Patient Event Provider State or Province Code', usage: O, type: ID, length: 2 }
+  - { id: '116', name: 'Patient Event Provider Postal Zone or ZIP Code', usage: O, type: ID, minLength: 3, maxLength: 15 }
+  - { id: '26', name: 'Country Code', usage: O, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '309', name: 'Location Qualifier', usage: U, type: ID, minLength: 1, maxLength: 2 }
+  - { id: '310', name: 'Location Identifier', usage: U, type: AN, minLength: 1, maxLength: 30 }
+  - { id: '1715', name: 'Country Subdivision Code', usage: O, type: ID, minLength: 1, maxLength: 3 }
+  rules: 
+  - { type: E, items: [2, 7] }
+  - { type: C, items: [6, 5] }
+  - { type: C, items: [7, 4] }
+- id: 'N4_PatientEventTransportLocationCityStateZIPCode'
+  name: 'Patient Event Transport Location City/State/ZIP Code'
+  varTag: 'N4'
+  values: 
+  - { id: '19', name: 'Patient Event Transport Location City Name', usage: O, type: AN, minLength: 2, maxLength: 30 }
+  - { id: '156', name: 'Patient Event Transport Location State or Province Code', usage: O, type: ID, length: 2 }
+  - { id: '116', name: 'Patient Event Transport Location Postal Zone or ZIP Code', usage: O, type: ID, minLength: 3, maxLength: 15 }
+  - { id: '26', name: 'Country Code', usage: U, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '309', name: 'Location Qualifier', usage: U, type: ID, minLength: 1, maxLength: 2 }
+  - { id: '310', name: 'Location Identifier', usage: U, type: AN, minLength: 1, maxLength: 30 }
+  - { id: '1715', name: 'Country Subdivision Code', usage: U, type: ID, minLength: 1, maxLength: 3 }
+  rules: 
+  - { type: E, items: [2, 7] }
+  - { type: C, items: [6, 5] }
+  - { type: C, items: [7, 4] }
+- id: 'N4_ServiceProviderCityStateZipCode'
+  name: 'Service Provider City, State, Zip Code'
+  varTag: 'N4'
+  values: 
+  - { id: '19', name: 'Service Provider City Name', usage: M, type: AN, minLength: 2, maxLength: 30 }
+  - { id: '156', name: 'Service Provider State or Province Code', usage: O, type: ID, length: 2 }
+  - { id: '116', name: 'Service Provider Postal Zone or ZIP Code', usage: O, type: ID, minLength: 3, maxLength: 15 }
+  - { id: '26', name: 'Country Code', usage: O, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '309', name: 'Location Qualifier', usage: U, type: ID, minLength: 1, maxLength: 2 }
+  - { id: '310', name: 'Location Identifier', usage: U, type: AN, minLength: 1, maxLength: 30 }
+  - { id: '1715', name: 'Country Subdivision Code', usage: O, type: ID, minLength: 1, maxLength: 3 }
+  rules: 
+  - { type: E, items: [2, 7] }
+  - { type: C, items: [6, 5] }
+  - { type: C, items: [7, 4] }
+- id: 'N4_SubscriberCityStateZIPCode'
+  name: 'Subscriber City, State, ZIP Code'
+  varTag: 'N4'
+  values: 
+  - { id: '19', name: 'Subscriber City Name', usage: M, type: AN, minLength: 2, maxLength: 30 }
+  - { id: '156', name: 'Subscriber State Code', usage: O, type: ID, length: 2 }
+  - { id: '116', name: 'Subscriber Postal Zone or ZIP Code', usage: O, type: ID, minLength: 3, maxLength: 15 }
+  - { id: '26', name: 'Country Code', usage: O, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '309', name: 'Location Qualifier', usage: U, type: ID, minLength: 1, maxLength: 2 }
+  - { id: '310', name: 'Location Identifier', usage: U, type: AN, minLength: 1, maxLength: 30 }
+  - { id: '1715', name: 'Country Subdivision Code', usage: O, type: ID, minLength: 1, maxLength: 3 }
+  rules: 
+  - { type: E, items: [2, 7] }
+  - { type: C, items: [6, 5] }
+  - { type: C, items: [7, 4] }
+- id: 'NM1_DependentName'
+  name: 'Dependent Name'
+  varTag: 'NM1'
+  values: 
+  - { id: '98', name: 'Entity Identifier Code', usage: M, codeSet: { 'QC': 'Patient' }, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '1065', name: 'Entity Type Qualifier', usage: M, codeSet: { '1': 'Person' }, type: ID, length: 1 }
+  - { id: '1035', name: 'Dependent Last Name', usage: O, type: AN, minLength: 1, maxLength: 60 }
+  - { id: '1036', name: 'Dependent First Name', usage: O, type: AN, minLength: 1, maxLength: 35 }
+  - { id: '1037', name: 'Dependent Middle Name', usage: O, type: AN, minLength: 1, maxLength: 25 }
+  - { id: '1038', name: 'Name Prefix', usage: U, type: AN, minLength: 1, maxLength: 10 }
+  - { id: '1039', name: 'Dependent Name Suffix', usage: O, type: AN, minLength: 1, maxLength: 10 }
+  - { id: '66', name: 'Identification Code Qualifier', usage: O, codeSet: { 'II': 'Standard Unique Health Identifier for each Individual in the United States', 'MI': 'Member Identification Number' }, type: ID, minLength: 1, maxLength: 2 }
+  - { id: '67', name: 'Dependent Primary Identifier', usage: O, type: AN, minLength: 2, maxLength: 80 }
+  - { id: '706', name: 'Entity Relationship Code', usage: U, type: ID, length: 2 }
+  - { id: '98', name: 'Entity Identifier Code', usage: U, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '1035', name: 'Name Last or Organization Name', usage: U, type: AN, minLength: 1, maxLength: 60 }
+  rules: 
+  - { type: P, items: [8, 9] }
+  - { type: C, items: [11, 10] }
+  - { type: C, items: [12, 3] }
+- id: 'NM1_PatientEventProviderName'
+  name: 'Patient Event Provider Name'
+  varTag: 'NM1'
+  values: 
+  - { id: '98', name: 'Entity Identifier Code', usage: M, varValue: true, codeSet: { '73': 'Other Physician', 'P3': 'Primary Care Provider', '77': 'Service Location', 'QB': 'Purchase Service Provider', '72': 'Operating Physician', 'FA': 'Facility', 'AAJ': 'Admitting Services', 'DD': 'Assistant Surgeon', '71': 'Attending Physician', 'SJ': 'Service Provider', 'G3': 'Clinic', 'QV': 'Group Practice', 'DK': 'Ordering Physician', 'DN': 'Referring Provider' }, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '1065', name: 'Entity Type Qualifier', usage: M, codeSet: { '1': 'Person', '2': 'Non-Person Entity' }, type: ID, length: 1 }
+  - { id: '1035', name: 'Patient Event Provider Last or Organization Name', usage: O, type: AN, minLength: 1, maxLength: 60 }
+  - { id: '1036', name: 'Patient Event Provider First Name', usage: O, type: AN, minLength: 1, maxLength: 35 }
+  - { id: '1037', name: 'Patient Event Provider Middle Name', usage: O, type: AN, minLength: 1, maxLength: 25 }
+  - { id: '1038', name: 'Patient Event Provider Name Prefix', usage: O, type: AN, minLength: 1, maxLength: 10 }
+  - { id: '1039', name: 'Patient Event Provider Name Suffix', usage: O, type: AN, minLength: 1, maxLength: 10 }
+  - { id: '66', name: 'Identification Code Qualifier', usage: O, codeSet: { '34': 'Social Security Number', '46': 'Electronic Transmitter Identification Number (ETIN)', '24': 'Employer''s Identification Number', 'XX': 'Centers for Medicare and Medicaid Services National Provider Identifier' }, type: ID, minLength: 1, maxLength: 2 }
+  - { id: '67', name: 'Patient Event Provider Identifier', usage: O, type: AN, minLength: 2, maxLength: 80 }
+  - { id: '706', name: 'Entity Relationship Code', usage: U, type: ID, length: 2 }
+  - { id: '98', name: 'Entity Identifier Code', usage: U, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '1035', name: 'Name Last or Organization Name', usage: U, type: AN, minLength: 1, maxLength: 60 }
+  rules: 
+  - { type: P, items: [8, 9] }
+  - { type: C, items: [11, 10] }
+  - { type: C, items: [12, 3] }
+- id: 'NM1_PatientEventTransportInformation'
+  name: 'Patient Event Transport Information'
+  varTag: 'NM1'
+  values: 
+  - { id: '98', name: 'Entity Identifier Code', usage: M, varValue: true, codeSet: { '45': 'Drop-off Location', 'FS': 'Final Scheduled Destination', 'R3': 'Next Scheduled Destination', 'PW': 'Pickup Address', 'ND': 'Next Destination' }, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '1065', name: 'Entity Type Qualifier', usage: M, codeSet: { '2': 'Non-Person Entity' }, type: ID, length: 1 }
+  - { id: '1035', name: 'Patient Event Transport Location Name', usage: M, type: AN, minLength: 1, maxLength: 60 }
+  - { id: '1036', name: 'Name First', usage: U, type: AN, minLength: 1, maxLength: 35 }
+  - { id: '1037', name: 'Name Middle', usage: U, type: AN, minLength: 1, maxLength: 25 }
+  - { id: '1038', name: 'Name Prefix', usage: U, type: AN, minLength: 1, maxLength: 10 }
+  - { id: '1039', name: 'Name Suffix', usage: U, type: AN, minLength: 1, maxLength: 10 }
+  - { id: '66', name: 'Identification Code Qualifier', usage: U, type: ID, minLength: 1, maxLength: 2 }
+  - { id: '67', name: 'Identification Code', usage: U, type: AN, minLength: 2, maxLength: 80 }
+  - { id: '706', name: 'Entity Relationship Code', usage: U, type: ID, length: 2 }
+  - { id: '98', name: 'Entity Identifier Code', usage: U, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '1035', name: 'Name Last or Organization Name', usage: U, type: AN, minLength: 1, maxLength: 60 }
+  rules: 
+  - { type: P, items: [8, 9] }
+  - { type: C, items: [11, 10] }
+  - { type: C, items: [12, 3] }
+- id: 'NM1_RequesterName'
+  name: 'Requester Name'
+  varTag: 'NM1'
+  values: 
+  - { id: '98', name: 'Entity Identifier Code', usage: M, codeSet: { 'PR': 'Payer', '1P': 'Provider', '2B': 'Third-Party Administrator', 'FA': 'Facility', '2A': 'Federal, State, County or City Facility', '36': 'Employer', 'X3': 'Utilization Management Organization' }, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '1065', name: 'Entity Type Qualifier', usage: M, codeSet: { '1': 'Person', '2': 'Non-Person Entity' }, type: ID, length: 1 }
+  - { id: '1035', name: 'Requester Last or Organization Name', usage: O, type: AN, minLength: 1, maxLength: 60 }
+  - { id: '1036', name: 'Requester First Name', usage: O, type: AN, minLength: 1, maxLength: 35 }
+  - { id: '1037', name: 'Requester Middle Name', usage: O, type: AN, minLength: 1, maxLength: 25 }
+  - { id: '1038', name: 'Name Prefix', usage: U, type: AN, minLength: 1, maxLength: 10 }
+  - { id: '1039', name: 'Requester Name Suffix', usage: O, type: AN, minLength: 1, maxLength: 10 }
+  - { id: '66', name: 'Identification Code Qualifier', usage: M, codeSet: { '34': 'Social Security Number', 'XV': 'Centers for Medicare and Medicaid Services PlanID', '46': 'Electronic Transmitter Identification Number (ETIN)', '24': 'Employer''s Identification Number', 'PI': 'Payor Identification', 'XX': 'Centers for Medicare and Medicaid Services National Provider Identifier' }, type: ID, minLength: 1, maxLength: 2 }
+  - { id: '67', name: 'Requester Identifier', usage: M, type: AN, minLength: 2, maxLength: 80 }
+  - { id: '706', name: 'Entity Relationship Code', usage: U, type: ID, length: 2 }
+  - { id: '98', name: 'Entity Identifier Code', usage: U, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '1035', name: 'Name Last or Organization Name', usage: U, type: AN, minLength: 1, maxLength: 60 }
+  rules: 
+  - { type: P, items: [8, 9] }
+  - { type: C, items: [11, 10] }
+  - { type: C, items: [12, 3] }
+- id: 'NM1_ServiceProviderName'
+  name: 'Service Provider Name'
+  varTag: 'NM1'
+  values: 
+  - { id: '98', name: 'Entity Identifier Code', usage: M, codeSet: { '73': 'Other Physician', 'P3': 'Primary Care Provider', '77': 'Service Location', 'QB': 'Purchase Service Provider', '72': 'Operating Physician', 'DQ': 'Supervising Physician', 'FA': 'Facility', 'DD': 'Assistant Surgeon', 'SJ': 'Service Provider', 'G3': 'Clinic', 'QV': 'Group Practice', 'DK': 'Ordering Physician' }, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '1065', name: 'Entity Type Qualifier', usage: M, codeSet: { '1': 'Person', '2': 'Non-Person Entity' }, type: ID, length: 1 }
+  - { id: '1035', name: 'Service Provider Last or Organization Name', usage: O, type: AN, minLength: 1, maxLength: 60 }
+  - { id: '1036', name: 'Service Provider First Name', usage: O, type: AN, minLength: 1, maxLength: 35 }
+  - { id: '1037', name: 'Service Provider Middle Name', usage: O, type: AN, minLength: 1, maxLength: 25 }
+  - { id: '1038', name: 'Service Provider Name Prefix', usage: O, type: AN, minLength: 1, maxLength: 10 }
+  - { id: '1039', name: 'Service Provider Name Suffix', usage: O, type: AN, minLength: 1, maxLength: 10 }
+  - { id: '66', name: 'Identification Code Qualifier', usage: O, codeSet: { '34': 'Social Security Number', '46': 'Electronic Transmitter Identification Number (ETIN)', '24': 'Employer''s Identification Number', 'XX': 'Centers for Medicare and Medicaid Services National Provider Identifier' }, type: ID, minLength: 1, maxLength: 2 }
+  - { id: '67', name: 'Service Provider Identifier', usage: O, type: AN, minLength: 2, maxLength: 80 }
+  - { id: '706', name: 'Entity Relationship Code', usage: U, type: ID, length: 2 }
+  - { id: '98', name: 'Entity Identifier Code', usage: U, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '1035', name: 'Name Last or Organization Name', usage: U, type: AN, minLength: 1, maxLength: 60 }
+  rules: 
+  - { type: P, items: [8, 9] }
+  - { type: C, items: [11, 10] }
+  - { type: C, items: [12, 3] }
+- id: 'NM1_SubscriberName'
+  name: 'Subscriber Name'
+  varTag: 'NM1'
+  values: 
+  - { id: '98', name: 'Entity Identifier Code', usage: M, codeSet: { 'IL': 'Insured or Subscriber' }, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '1065', name: 'Entity Type Qualifier', usage: M, codeSet: { '1': 'Person' }, type: ID, length: 1 }
+  - { id: '1035', name: 'Subscriber Last Name', usage: O, type: AN, minLength: 1, maxLength: 60 }
+  - { id: '1036', name: 'Subscriber First Name', usage: O, type: AN, minLength: 1, maxLength: 35 }
+  - { id: '1037', name: 'Subscriber Middle Name or Initial', usage: O, type: AN, minLength: 1, maxLength: 25 }
+  - { id: '1038', name: 'Subscriber Name Prefix', usage: O, type: AN, minLength: 1, maxLength: 10 }
+  - { id: '1039', name: 'Subscriber Name Suffix', usage: O, type: AN, minLength: 1, maxLength: 10 }
+  - { id: '66', name: 'Identification Code Qualifier', usage: M, codeSet: { 'II': 'Standard Unique Health Identifier for each Individual in the United States', 'MI': 'Member Identification Number' }, type: ID, minLength: 1, maxLength: 2 }
+  - { id: '67', name: 'Subscriber Primary Identifier', usage: M, type: AN, minLength: 2, maxLength: 80 }
+  - { id: '706', name: 'Entity Relationship Code', usage: U, type: ID, length: 2 }
+  - { id: '98', name: 'Entity Identifier Code', usage: U, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '1035', name: 'Name Last or Organization Name', usage: U, type: AN, minLength: 1, maxLength: 60 }
+  rules: 
+  - { type: P, items: [8, 9] }
+  - { type: C, items: [11, 10] }
+  - { type: C, items: [12, 3] }
+- id: 'NM1_UtilizationManagementOrganizationUMOName'
+  name: 'Utilization Management Organization (UMO) Name'
+  varTag: 'NM1'
+  values: 
+  - { id: '98', name: 'Entity Identifier Code', usage: M, codeSet: { 'PR': 'Payer', '1P': 'Provider', '2B': 'Third-Party Administrator', '36': 'Employer', 'X3': 'Utilization Management Organization' }, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '1065', name: 'Entity Type Qualifier', usage: M, codeSet: { '1': 'Person', '2': 'Non-Person Entity' }, type: ID, length: 1 }
+  - { id: '1035', name: 'Utilization Management Organization (UMO) Last or Organization Name', usage: O, type: AN, minLength: 1, maxLength: 60 }
+  - { id: '1036', name: 'Utilization Management Organization (UMO) First Name', usage: O, type: AN, minLength: 1, maxLength: 35 }
+  - { id: '1037', name: 'Utilization Management Organization (UMO) Middle Name', usage: O, type: AN, minLength: 1, maxLength: 25 }
+  - { id: '1038', name: 'Name Prefix', usage: U, type: AN, minLength: 1, maxLength: 10 }
+  - { id: '1039', name: 'Utilization Management Organization (UMO) Name Suffix', usage: O, type: AN, minLength: 1, maxLength: 10 }
+  - { id: '66', name: 'Identification Code Qualifier', usage: M, codeSet: { '34': 'Social Security Number', 'XV': 'Centers for Medicare and Medicaid Services PlanID', '46': 'Electronic Transmitter Identification Number (ETIN)', '24': 'Employer''s Identification Number', 'PI': 'Payor Identification', 'XX': 'Centers for Medicare and Medicaid Services National Provider Identifier' }, type: ID, minLength: 1, maxLength: 2 }
+  - { id: '67', name: 'Utilization Management Organization (UMO) Identifier', usage: M, type: AN, minLength: 2, maxLength: 80 }
+  - { id: '706', name: 'Entity Relationship Code', usage: U, type: ID, length: 2 }
+  - { id: '98', name: 'Entity Identifier Code', usage: U, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '1035', name: 'Name Last or Organization Name', usage: U, type: AN, minLength: 1, maxLength: 60 }
+  rules: 
+  - { type: P, items: [8, 9] }
+  - { type: C, items: [11, 10] }
+  - { type: C, items: [12, 3] }
+- id: 'PER_PatientEventProviderContactInformation'
+  name: 'Patient Event Provider Contact Information'
+  varTag: 'PER'
+  values: 
+  - { id: '366', name: 'Contact Function Code', usage: M, codeSet: { 'IC': 'Information Contact' }, type: ID, length: 2 }
+  - { id: '93', name: 'Patient Event Provider Contact Name', usage: O, type: AN, minLength: 1, maxLength: 60 }
+  - { id: '365', name: 'Communication Number Qualifier', usage: M, codeSet: { 'EM': 'Electronic Mail', 'TE': 'Telephone', 'UR': 'Uniform Resource Locator (URL)', 'FX': 'Facsimile' }, type: ID, length: 2 }
+  - { id: '364', name: 'Patient Event Provider Contact Communications Number', usage: M, type: AN, minLength: 1, maxLength: 256 }
+  - { id: '365', name: 'Communication Number Qualifier', usage: O, codeSet: { 'EM': 'Electronic Mail', 'EX': 'Telephone Extension', 'TE': 'Telephone', 'UR': 'Uniform Resource Locator (URL)', 'FX': 'Facsimile' }, type: ID, length: 2 }
+  - { id: '364', name: 'Patient Event Provider Contact Communications Number', usage: O, type: AN, minLength: 1, maxLength: 256 }
+  - { id: '365', name: 'Communication Number Qualifier', usage: O, codeSet: { 'EM': 'Electronic Mail', 'EX': 'Telephone Extension', 'TE': 'Telephone', 'UR': 'Uniform Resource Locator (URL)', 'FX': 'Facsimile' }, type: ID, length: 2 }
+  - { id: '364', name: 'Patient Event Provider Contact Communications Number', usage: O, type: AN, minLength: 1, maxLength: 256 }
+  - { id: '443', name: 'Contact Inquiry Reference', usage: U, type: AN, minLength: 1, maxLength: 20 }
+  rules: 
+  - { type: P, items: [3, 4] }
+  - { type: P, items: [5, 6] }
+  - { type: P, items: [7, 8] }
+- id: 'PER_ServiceProviderContactInformation'
+  name: 'Service Provider Contact Information'
+  varTag: 'PER'
+  values: 
+  - { id: '366', name: 'Contact Function Code', usage: M, codeSet: { 'IC': 'Information Contact' }, type: ID, length: 2 }
+  - { id: '93', name: 'Service Provider Contact Name', usage: O, type: AN, minLength: 1, maxLength: 60 }
+  - { id: '365', name: 'Communication Number Qualifier', usage: M, codeSet: { 'EM': 'Electronic Mail', 'TE': 'Telephone', 'UR': 'Uniform Resource Locator (URL)', 'FX': 'Facsimile' }, type: ID, length: 2 }
+  - { id: '364', name: 'Service Provider Contact Communication Number', usage: M, type: AN, minLength: 1, maxLength: 256 }
+  - { id: '365', name: 'Communication Number Qualifier', usage: O, codeSet: { 'EM': 'Electronic Mail', 'EX': 'Telephone Extension', 'TE': 'Telephone', 'UR': 'Uniform Resource Locator (URL)', 'FX': 'Facsimile' }, type: ID, length: 2 }
+  - { id: '364', name: 'Service Provider Contact Communication Number', usage: O, type: AN, minLength: 1, maxLength: 256 }
+  - { id: '365', name: 'Communication Number Qualifier', usage: O, codeSet: { 'EM': 'Electronic Mail', 'EX': 'Telephone Extension', 'TE': 'Telephone', 'UR': 'Uniform Resource Locator (URL)' }, type: ID, length: 2 }
+  - { id: '364', name: 'Service Provider Contact Communication Number', usage: O, type: AN, minLength: 1, maxLength: 256 }
+  - { id: '443', name: 'Contact Inquiry Reference', usage: U, type: AN, minLength: 1, maxLength: 20 }
+  rules: 
+  - { type: P, items: [3, 4] }
+  - { type: P, items: [5, 6] }
+  - { type: P, items: [7, 8] }
+- id: 'PER_UtilizationManagementOrganizationUMOContactInformation'
+  name: 'Utilization Management Organization (UMO) Contact Information'
+  varTag: 'PER'
+  values: 
+  - { id: '366', name: 'Contact Function Code', usage: M, codeSet: { 'IC': 'Information Contact' }, type: ID, length: 2 }
+  - { id: '93', name: 'Utilization Management Organization (UMO) Contact Name', usage: O, type: AN, minLength: 1, maxLength: 60 }
+  - { id: '365', name: 'Communication Number Qualifier', usage: M, codeSet: { 'EM': 'Electronic Mail', 'TE': 'Telephone', 'UR': 'Uniform Resource Locator (URL)', 'FX': 'Facsimile' }, type: ID, length: 2 }
+  - { id: '364', name: 'Utilization Management Organization (UMO) Contact Communication Number', usage: M, type: AN, minLength: 1, maxLength: 256 }
+  - { id: '365', name: 'Communication Number Qualifier', usage: O, codeSet: { 'EM': 'Electronic Mail', 'EX': 'Telephone Extension', 'TE': 'Telephone', 'UR': 'Uniform Resource Locator (URL)', 'FX': 'Facsimile' }, type: ID, length: 2 }
+  - { id: '364', name: 'Utilization Management Organization (UMO) Contact Communication Number', usage: O, type: AN, minLength: 1, maxLength: 256 }
+  - { id: '365', name: 'Communication Number Qualifier', usage: O, codeSet: { 'EM': 'Electronic Mail', 'EX': 'Telephone Extension', 'TE': 'Telephone', 'UR': 'Uniform Resource Locator (URL)', 'FX': 'Facsimile' }, type: ID, length: 2 }
+  - { id: '364', name: 'Utilization Management Organization (UMO) Contact Communication Number', usage: O, type: AN, minLength: 1, maxLength: 256 }
+  - { id: '443', name: 'Contact Inquiry Reference', usage: U, type: AN, minLength: 1, maxLength: 20 }
+  rules: 
+  - { type: P, items: [3, 4] }
+  - { type: P, items: [5, 6] }
+  - { type: P, items: [7, 8] }
+- id: 'PRV_PatientEventProviderInformation'
+  name: 'Patient Event Provider Information'
+  varTag: 'PRV'
+  values: 
+  - { id: '1221', name: 'Provider Code', usage: M, codeSet: { 'RF': 'Referring', 'AT': 'Attending', 'OR': 'Ordering', 'OT': 'Other Physician', 'AD': 'Admitting', 'PC': 'Primary Care Physician', 'OP': 'Operating', 'AS': 'Assistant Surgeon', 'PE': 'Performing' }, type: ID, minLength: 1, maxLength: 3 }
+  - { id: '128', name: 'Reference Identification Qualifier', usage: M, codeSet: { 'PXC': 'Health Care Provider Taxonomy Code' }, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '127', name: 'Provider Taxonomy Code', usage: M, type: AN, minLength: 1, maxLength: 50 }
+  - { id: '156', name: 'State or Province Code', usage: U, type: ID, length: 2 }
+  - id: 'C035'
+    name: 'Provider Specialty Information'
+    usage: U
+    values: 
+    - { id: '1222', name: 'Provider Specialty Code', usage: U, type: AN, minLength: 1, maxLength: 3 }
+    - { id: '559', name: 'Agency Qualifier Code', usage: U, type: ID, length: 2 }
+    - { id: '1073', name: 'Yes/No Condition or Response Code', usage: U, type: ID, length: 1 }
+  - { id: '1223', name: 'Provider Organization Code', usage: U, type: ID, length: 3 }
+  rules: 
+  - { type: P, items: [2, 3] }
+- id: 'PRV_RequesterProviderInformation'
+  name: 'Requester Provider Information'
+  varTag: 'PRV'
+  values: 
+  - { id: '1221', name: 'Provider Code', usage: M, codeSet: { 'CV': 'Covering', 'RF': 'Referring', 'AT': 'Attending', 'OR': 'Ordering', 'OT': 'Other Physician', 'AD': 'Admitting', 'PC': 'Primary Care Physician', 'OP': 'Operating', 'CO': 'Consulting', 'AS': 'Assistant Surgeon', 'PE': 'Performing' }, type: ID, minLength: 1, maxLength: 3 }
+  - { id: '128', name: 'Reference Identification Qualifier', usage: O, codeSet: { 'PXC': 'Health Care Provider Taxonomy Code' }, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '127', name: 'Provider Taxonomy Code', usage: O, type: AN, minLength: 1, maxLength: 50 }
+  - { id: '156', name: 'State or Province Code', usage: U, type: ID, length: 2 }
+  - id: 'C035'
+    name: 'Provider Specialty Information'
+    usage: U
+    values: 
+    - { id: '1222', name: 'Provider Specialty Code', usage: U, type: AN, minLength: 1, maxLength: 3 }
+    - { id: '559', name: 'Agency Qualifier Code', usage: U, type: ID, length: 2 }
+    - { id: '1073', name: 'Yes/No Condition or Response Code', usage: U, type: ID, length: 1 }
+  - { id: '1223', name: 'Provider Organization Code', usage: U, type: ID, length: 3 }
+  rules: 
+  - { type: P, items: [2, 3] }
+- id: 'PRV_ServiceProviderInformation'
+  name: 'Service Provider Information'
+  varTag: 'PRV'
+  values: 
+  - { id: '1221', name: 'Provider Code', usage: M, codeSet: { 'OR': 'Ordering', 'OT': 'Other Physician', 'PC': 'Primary Care Physician', 'OP': 'Operating', 'AS': 'Assistant Surgeon', 'PE': 'Performing' }, type: ID, minLength: 1, maxLength: 3 }
+  - { id: '128', name: 'Reference Identification Qualifier', usage: M, codeSet: { 'PXC': 'Health Care Provider Taxonomy Code' }, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '127', name: 'Provider Taxonomy Code', usage: M, type: AN, minLength: 1, maxLength: 50 }
+  - { id: '156', name: 'State or Province Code', usage: U, type: ID, length: 2 }
+  - id: 'C035'
+    name: 'Provider Specialty Information'
+    usage: U
+    values: 
+    - { id: '1222', name: 'Provider Specialty Code', usage: U, type: AN, minLength: 1, maxLength: 3 }
+    - { id: '559', name: 'Agency Qualifier Code', usage: U, type: ID, length: 2 }
+    - { id: '1073', name: 'Yes/No Condition or Response Code', usage: U, type: ID, length: 1 }
+  - { id: '1223', name: 'Provider Organization Code', usage: U, type: ID, length: 3 }
+  rules: 
+  - { type: P, items: [2, 3] }
+- id: 'REF_DependentSupplementalIdentification'
+  name: 'Dependent Supplemental Identification'
+  varTag: 'REF'
+  values: 
+  - { id: '128', name: 'Reference Identification Qualifier', usage: M, codeSet: { 'EJ': 'Patient Account Number', 'SY': 'Social Security Number', '28': 'Employee Identification Number' }, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '127', name: 'Dependent Supplemental Identifier', usage: M, type: AN, minLength: 1, maxLength: 50 }
+  - { id: '352', name: 'Description', usage: U, type: AN, minLength: 1, maxLength: 80 }
+  - id: 'C040'
+    name: 'Reference Identifier'
+    usage: U
+    values: 
+    - { id: '128', name: 'Reference Identification Qualifier', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '127', name: 'Reference Identification', usage: U, type: AN, minLength: 1, maxLength: 50 }
+    - { id: '128', name: 'Reference Identification Qualifier', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '127', name: 'Reference Identification', usage: U, type: AN, minLength: 1, maxLength: 50 }
+    - { id: '128', name: 'Reference Identification Qualifier', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '127', name: 'Reference Identification', usage: U, type: AN, minLength: 1, maxLength: 50 }
+  rules: 
+  - { type: R, items: [2, 3] }
+- id: 'REF_PatientEventProviderSupplementalIdentification'
+  name: 'Patient Event Provider Supplemental Identification'
+  varTag: 'REF'
+  values: 
+  - { id: '128', name: 'Reference Identification Qualifier', usage: M, codeSet: { '0B': 'State License Number', 'G5': 'Provider Site Number', 'N7': 'Facility Network Identification Number', 'ZH': 'Carrier Assigned Reference Number', 'SY': 'Social Security Number', 'EI': 'Employer''s Identification Number', 'N5': 'Provider Plan Network Identification Number', '1G': 'Provider UPIN Number', '1J': 'Facility ID Number' }, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '127', name: 'Patient Event Provider Supplemental Identifier', usage: M, type: AN, minLength: 1, maxLength: 50 }
+  - { id: '352', name: 'License Number State Code', usage: O, type: AN, minLength: 1, maxLength: 80 }
+  - id: 'C040'
+    name: 'Reference Identifier'
+    usage: U
+    values: 
+    - { id: '128', name: 'Reference Identification Qualifier', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '127', name: 'Reference Identification', usage: U, type: AN, minLength: 1, maxLength: 50 }
+    - { id: '128', name: 'Reference Identification Qualifier', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '127', name: 'Reference Identification', usage: U, type: AN, minLength: 1, maxLength: 50 }
+    - { id: '128', name: 'Reference Identification Qualifier', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '127', name: 'Reference Identification', usage: U, type: AN, minLength: 1, maxLength: 50 }
+  rules: 
+  - { type: R, items: [2, 3] }
+- id: 'REF_PreviousReviewAdministrativeReferenceNumber'
+  name: 'Previous Review Administrative Reference Number'
+  varTag: 'REF'
+  values: 
+  - { id: '128', name: 'Reference Identification Qualifier', usage: M, varValue: true, codeSet: { 'NT': 'Administrator''s Reference Number' }, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '127', name: 'Previous Administrative Reference Number', usage: M, type: AN, minLength: 1, maxLength: 50 }
+  - { id: '352', name: 'Description', usage: U, type: AN, minLength: 1, maxLength: 80 }
+  - id: 'C040'
+    name: 'Reference Identifier'
+    usage: U
+    values: 
+    - { id: '128', name: 'Reference Identification Qualifier', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '127', name: 'Reference Identification', usage: U, type: AN, minLength: 1, maxLength: 50 }
+    - { id: '128', name: 'Reference Identification Qualifier', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '127', name: 'Reference Identification', usage: U, type: AN, minLength: 1, maxLength: 50 }
+    - { id: '128', name: 'Reference Identification Qualifier', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '127', name: 'Reference Identification', usage: U, type: AN, minLength: 1, maxLength: 50 }
+  rules: 
+  - { type: R, items: [2, 3] }
+- id: 'REF_PreviousReviewAdministrativeReferenceNumber1'
+  name: 'Previous Review Administrative Reference Number'
+  varTag: 'REF'
+  values: 
+  - { id: '128', name: 'Reference Identification Qualifier', usage: M, varValue: true, codeSet: { 'NT': 'Administrator''s Reference Number' }, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '127', name: 'Previous Administrative Reference Number', usage: M, type: AN, minLength: 1, maxLength: 50 }
+  - { id: '352', name: 'Description', usage: U, type: AN, minLength: 1, maxLength: 80 }
+  - id: 'C040'
+    name: 'Reference Identifier'
+    usage: U
+    values: 
+    - { id: '128', name: 'Reference Identification Qualifier', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '127', name: 'Reference Identification', usage: U, type: AN, minLength: 1, maxLength: 50 }
+    - { id: '128', name: 'Reference Identification Qualifier', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '127', name: 'Reference Identification', usage: U, type: AN, minLength: 1, maxLength: 50 }
+    - { id: '128', name: 'Reference Identification Qualifier', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '127', name: 'Reference Identification', usage: U, type: AN, minLength: 1, maxLength: 50 }
+  rules: 
+  - { type: R, items: [2, 3] }
+- id: 'REF_PreviousReviewAuthorizationNumber'
+  name: 'Previous Review Authorization Number'
+  varTag: 'REF'
+  values: 
+  - { id: '128', name: 'Reference Identification Qualifier', usage: M, varValue: true, codeSet: { 'BB': 'Authorization Number' }, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '127', name: 'Previous Review Authorization Number', usage: M, type: AN, minLength: 1, maxLength: 50 }
+  - { id: '352', name: 'Description', usage: U, type: AN, minLength: 1, maxLength: 80 }
+  - id: 'C040'
+    name: 'Reference Identifier'
+    usage: U
+    values: 
+    - { id: '128', name: 'Reference Identification Qualifier', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '127', name: 'Reference Identification', usage: U, type: AN, minLength: 1, maxLength: 50 }
+    - { id: '128', name: 'Reference Identification Qualifier', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '127', name: 'Reference Identification', usage: U, type: AN, minLength: 1, maxLength: 50 }
+    - { id: '128', name: 'Reference Identification Qualifier', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '127', name: 'Reference Identification', usage: U, type: AN, minLength: 1, maxLength: 50 }
+  rules: 
+  - { type: R, items: [2, 3] }
+- id: 'REF_PreviousReviewAuthorizationNumber1'
+  name: 'Previous Review Authorization Number'
+  varTag: 'REF'
+  values: 
+  - { id: '128', name: 'Reference Identification Qualifier', usage: M, varValue: true, codeSet: { 'BB': 'Authorization Number' }, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '127', name: 'Previous Review Authorization Number', usage: M, type: AN, minLength: 1, maxLength: 50 }
+  - { id: '352', name: 'Description', usage: U, type: AN, minLength: 1, maxLength: 80 }
+  - id: 'C040'
+    name: 'Reference Identifier'
+    usage: U
+    values: 
+    - { id: '128', name: 'Reference Identification Qualifier', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '127', name: 'Reference Identification', usage: U, type: AN, minLength: 1, maxLength: 50 }
+    - { id: '128', name: 'Reference Identification Qualifier', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '127', name: 'Reference Identification', usage: U, type: AN, minLength: 1, maxLength: 50 }
+    - { id: '128', name: 'Reference Identification Qualifier', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '127', name: 'Reference Identification', usage: U, type: AN, minLength: 1, maxLength: 50 }
+  rules: 
+  - { type: R, items: [2, 3] }
+- id: 'REF_RequesterSupplementalIdentification'
+  name: 'Requester Supplemental Identification'
+  varTag: 'REF'
+  values: 
+  - { id: '128', name: 'Reference Identification Qualifier', usage: M, codeSet: { 'G5': 'Provider Site Number', 'N7': 'Facility Network Identification Number', 'ZH': 'Carrier Assigned Reference Number', 'SY': 'Social Security Number', 'EI': 'Employer''s Identification Number', 'N5': 'Provider Plan Network Identification Number', '1G': 'Provider UPIN Number', '1J': 'Facility ID Number' }, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '127', name: 'Requester Supplemental Identifier', usage: M, type: AN, minLength: 1, maxLength: 50 }
+  - { id: '352', name: 'Description', usage: U, type: AN, minLength: 1, maxLength: 80 }
+  - id: 'C040'
+    name: 'Reference Identifier'
+    usage: U
+    values: 
+    - { id: '128', name: 'Reference Identification Qualifier', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '127', name: 'Reference Identification', usage: U, type: AN, minLength: 1, maxLength: 50 }
+    - { id: '128', name: 'Reference Identification Qualifier', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '127', name: 'Reference Identification', usage: U, type: AN, minLength: 1, maxLength: 50 }
+    - { id: '128', name: 'Reference Identification Qualifier', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '127', name: 'Reference Identification', usage: U, type: AN, minLength: 1, maxLength: 50 }
+  rules: 
+  - { type: R, items: [2, 3] }
+- id: 'REF_ServiceProviderSupplementalIdentification'
+  name: 'Service Provider Supplemental Identification'
+  varTag: 'REF'
+  values: 
+  - { id: '128', name: 'Reference Identification Qualifier', usage: M, codeSet: { '0B': 'State License Number', 'G5': 'Provider Site Number', 'N7': 'Facility Network Identification Number', 'ZH': 'Carrier Assigned Reference Number', 'SY': 'Social Security Number', 'EI': 'Employer''s Identification Number', 'N5': 'Provider Plan Network Identification Number', '1G': 'Provider UPIN Number', '1J': 'Facility ID Number' }, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '127', name: 'Service Provider Supplemental Identifier', usage: M, type: AN, minLength: 1, maxLength: 50 }
+  - { id: '352', name: 'License Number State Code', usage: O, type: AN, minLength: 1, maxLength: 80 }
+  - id: 'C040'
+    name: 'Reference Identifier'
+    usage: U
+    values: 
+    - { id: '128', name: 'Reference Identification Qualifier', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '127', name: 'Reference Identification', usage: U, type: AN, minLength: 1, maxLength: 50 }
+    - { id: '128', name: 'Reference Identification Qualifier', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '127', name: 'Reference Identification', usage: U, type: AN, minLength: 1, maxLength: 50 }
+    - { id: '128', name: 'Reference Identification Qualifier', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '127', name: 'Reference Identification', usage: U, type: AN, minLength: 1, maxLength: 50 }
+  rules: 
+  - { type: R, items: [2, 3] }
+- id: 'REF_SubscriberSupplementalIdentification'
+  name: 'Subscriber Supplemental Identification'
+  varTag: 'REF'
+  values: 
+  - { id: '128', name: 'Reference Identification Qualifier', usage: M, codeSet: { 'HJ': 'Identity Card Number', 'NQ': 'Medicaid Recipient Identification Number', 'EJ': 'Patient Account Number', 'N6': 'Plan Network Identification Number', 'SY': 'Social Security Number', '6P': 'Group Number', '1L': 'Group or Policy Number', 'DP': 'Department Number', 'F6': 'Health Insurance Claim (HIC) Number', '3L': 'Branch Identifier', 'IG': 'Insurance Policy Number' }, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '127', name: 'Subscriber Supplemental Identifier', usage: M, type: AN, minLength: 1, maxLength: 50 }
+  - { id: '352', name: 'Description', usage: U, type: AN, minLength: 1, maxLength: 80 }
+  - id: 'C040'
+    name: 'Reference Identifier'
+    usage: U
+    values: 
+    - { id: '128', name: 'Reference Identification Qualifier', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '127', name: 'Reference Identification', usage: U, type: AN, minLength: 1, maxLength: 50 }
+    - { id: '128', name: 'Reference Identification Qualifier', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '127', name: 'Reference Identification', usage: U, type: AN, minLength: 1, maxLength: 50 }
+    - { id: '128', name: 'Reference Identification Qualifier', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '127', name: 'Reference Identification', usage: U, type: AN, minLength: 1, maxLength: 50 }
+  rules: 
+  - { type: R, items: [2, 3] }
+- id: 'ST_TransactionSetHeader'
+  name: 'Transaction Set Header'
+  varTag: 'ST'
+  values: 
+  - { id: '143', name: 'Transaction Set Identifier Code', usage: M, codeSet: { '205': 'Mortgage Note', '858': 'Shipment Information', '113': 'Election Campaign and Lobbyist Reporting', '874': 'Commodity Movement Services Response', '455': 'Railroad Parameter Trace Registration', '310': 'Freight Receipt and Invoice (Ocean)', '120': 'Vehicle Shipping Order', '153': 'Unemployment Insurance Tax Claim or Charge Information', '844': 'Product Transfer Account Adjustment', '885': 'Retail Account Characteristics', '158': 'Tax Jurisdiction Sourcing', '142': 'Product Service Claim', '997': 'Functional Acknowledgment', '147': 'Response to Request for Student Educational Record (Transcript)', '436': 'Locomotive Information', '862': 'Shipping Schedule', '836': 'Procurement Notices', '223': 'Consolidators Freight Bill and Invoice', '822': 'Account Analysis', '216': 'Motor Carrier Shipment Pickup Notification', '925': 'Claim Tracer', '124': 'Vehicle Damage', '833': 'Mortgage Credit Report Order', '620': 'Excavation Communication', '501': 'Vendor Performance Review', '276': 'Health Care Claim Status Request', '170': 'Revenue Receipts Statement', '425': 'Rail Waybill Request', '813': 'Electronic Filing of Tax Return Data', '881': 'Manufacturer Coupon Redemption Detail', '993': 'Secured Receipt or Acknowledgment', '324': 'Vessel Stow Plan (Ocean)', '175': 'Court and Law Enforcement Notice', '313': 'Shipment Status Inquiry (Ocean)', '362': 'Cargo Insurance Advice of Shipment', '265': 'Real Estate Title Insurance Services Order', '806': 'Project Schedule Reporting', '100': 'Insurance Plan Description', '847': 'Material Claim', '433': 'Railroad Reciprocal Switch File', '135': 'Student Aid Origination Record', '896': 'Product Dimension Maintenance', '128': 'Dealer Information', '869': 'Order Status Inquiry', '121': 'Vehicle Service', '404': 'Rail Carrier Shipment Information', '829': 'Payment Cancellation Request', '421': 'Estimated Time of Arrival and Car Scheduling', '418': 'Rail Advance Interchange Consist', '110': 'Air Freight Details and Invoice', '990': 'Response to a Load Tender', '284': 'Commercial Vehicle Safety Reports', '504': 'Clauses and Provisions', '475': 'Rail Route File Maintenance', '944': 'Warehouse Stock Transfer Receipt Advice', '269': 'Health Care Benefit Coordination Verification', '920': 'Loss or Damage Claim - General Commodities', '486': 'Rate Docket Expiration', '104': 'Air Shipment Information', '851': 'Asset Schedule', '141': 'Product Service Claim Response', '139': 'Student Loan Guarantee Result', '132': 'Human Resource Information', '870': 'Order Status Report', '201': 'Residential Loan Application', '273': 'Insurance/Annuity Application Status', '567': 'Contract Completion Status', '650': 'Maintenance Service Order', '197': 'Real Estate Title Evidence', '492': 'Miscellaneous Rates', '280': 'Voter Registration Information', '840': 'Request for Quotation', '466': 'Rate Request', '540': 'Notice of Employment Status', '866': 'Production Sequence', '262': 'Real Estate Information Report', '470': 'Railroad Clearance', '186': 'Insurance Underwriting Requirements Reporting', '227': 'Trailer Usage Report', '250': 'Purchase Order Shipment Management Document', '855': 'Purchase Order Acknowledgment', '212': 'Motor Carrier Delivery Trailer Manifest', '602': 'Transportation Services Tender', '163': 'Transportation Appointment Schedule Information', '224': 'Motor Carrier Summary Freight Bill Manifest', '821': 'Financial Information Reporting', '303': 'Booking Cancellation (Ocean)', '884': 'Market Development Fund Settlement', '843': 'Response to Request for Quotation', '244': 'Product Source Information', '895': 'Delivery/Return Acknowledgment or Adjustment', '460': 'Railroad Price Distribution Request or Response', '410': 'Rail Carrier Freight Details and Invoice', '361': 'Carrier Interchange Agreement (Ocean)', '429': 'Railroad Retirement Activity', '242': 'Data Status Tracking', '107': 'Request for Motor Carrier Rate Proposal', '928': 'Automotive Inspection Detail', '356': 'U.S. Customs Permit to Transfer Request', '217': 'Motor Carrier Loading and Route Guide', '206': 'Real Estate Inspection', '255': 'Underwriting Information Services', '325': 'Consolidation of Goods In Container', '877': 'Manufacturer Coupon Family Code Structure', '859': 'Freight Invoice', '865': 'Purchase Order Change Acknowledgment/Request - Seller Initiated', '437': 'Railroad Junctions and Interchanges Activity', '837': 'Health Care Claim', '816': 'Organizational Relationships', '848': 'Material Safety Data Sheet', '805': 'Contract Pricing Proposal', '527': 'Material Due-In and Receipt', '888': 'Item Maintenance', '155': 'Business Credit Report', '414': 'Rail Carhire Settlements', '754': 'Routing Instructions', '426': 'Rail Revenue Waybill', '152': 'Statistical Government Information', '832': 'Price/Sales Catalog', '873': 'Commodity Movement Services', '350': 'Customs Status Information', '861': 'Receiving Advice/Acceptance Certificate', '940': 'Warehouse Shipping Order', '103': 'Abandoned Property Filings', '112': 'Property Damage Report', '268': 'Annuity Activity', '980': 'Functional Group Totals', '500': 'Medical Event Reporting', '850': 'Purchase Order', '812': 'Credit/Debit Adjustment', '274': 'Healthcare Provider Information', '199': 'Real Estate Settlement Information', '159': 'Motion Picture Booking Confirmation', '353': 'Customs Events Advisory Details', '144': 'Student Loan Transfer and Status Verification', '263': 'Residential Mortgage Insurance Application Response', '256': 'Periodic Compensation', '317': 'Delivery/Pickup Order', '196': 'Contractor Cost Data Reporting', '601': 'U.S. Customs Export Shipment Information', '996': 'File Transfer', '422': 'Equipment Order', '419': 'Advance Car Disposition', '854': 'Shipment Delivery Discrepancy Information', '228': 'Equipment Inspection Report', '270': 'Eligibility, Coverage or Benefit Inquiry', '138': 'Educational Testing and Prospect Request and Report', '511': 'Requisition', '188': 'Educational Course Inventory', '148': 'Report of Injury, Illness or Incident', '127': 'Vehicle Baying Order', '889': 'Promotion Announcement', '561': 'Contract Abstract', '924': 'Loss or Damage Claim - Motor Vehicle', '213': 'Motor Carrier Shipment Status Inquiry', '285': 'Commercial Vehicle Safety and Credentials Information Exchange', '108': 'Response to a Motor Carrier Rate Proposal', '259': 'Residential Mortgage Insurance Explanation of Benefits', '945': 'Warehouse Shipping Advice', '202': 'Secondary Mortgage Market Loan Delivery', '248': 'Account Assignment/Inquiry and Service/Status', '826': 'Tax Information Exchange', '185': 'Royalty Regulatory Report', '860': 'Purchase Order Change Request - Buyer Initiated', '434': 'Railroad Mark Register Update Activity', '219': 'Logistics Service Request', '845': 'Price Authorization Acknowledgment/Status', '834': 'Benefit Enrollment and Maintenance', '106': 'Motor Carrier Rate Proposal', '820': 'Payment Order/Remittance Advice', '252': 'Insurance Producer Administration', '431': 'Railroad Station Master File', '568': 'Contract Payment Management Report', '876': 'Grocery Products Purchase Order Change', '126': 'Vehicle Application Advice', '815': 'Cryptographic Service Message', '490': 'Rate Group Definition', '300': 'Reservation (Booking Request) (Ocean)', '883': 'Market Development Fund Allocation', '286': 'Commercial Vehicle Credentials', '140': 'Product Registration', '878': 'Product Authorization/De-authorization', '864': 'Text Message', '180': 'Return Merchandise Authorization and Notification', '267': 'Individual Life, Annuity and Disability Application', '290': 'Cooperative Advertising Agreements', '943': 'Warehouse Stock Transfer Shipment Advice', '133': 'Educational Institution Record', '823': 'Lockbox', '856': 'Ship Notice/Manifest', '521': 'Income or Asset Offset', '536': 'Logistics Reassignment', '872': 'Residential Mortgage Insurance Application', '309': 'Customs Manifest', '111': 'Individual Insurance Policy and Client Information', '102': 'Associated Data', '753': 'Request for Routing Instructions', '503': 'Pricing History', '463': 'Rail Rate Reply', '278': 'Health Care Services Review Information', '191': 'Student Loan Pre-Claims and Claims', '494': 'Rail Scale Rates', '456': 'Railroad Equipment Inquiry or Advice', '151': 'Electronic Filing of Tax Return Data Acknowledgment', '887': 'Coupon Notification', '819': 'Joint Interest Billing and Operating Expense Statement', '245': 'Real Estate Tax Service Response', '842': 'Nonconformance Report', '625': 'Well Information', '190': 'Student Enrollment Verification', '322': 'Terminal Operations and Intermodal Ramp Activity', '315': 'Status Details (Ocean)', '264': 'Mortgage Loan Default Status', '879': 'Price Information', '225': 'Response to a Cartage Work Assignment', '853': 'Routing and Carrier Instruction', '214': 'Transportation Carrier Shipment Status Message', '203': 'Secondary Mortgage Market Investor Report', '867': 'Product Transfer and Resale Report', '249': 'Animal Toxicological Data', '827': 'Financial Return Notice', '517': 'Material Obligation Validation', '195': 'Federal Communications Commission (FCC) License Application', '275': 'Patient Information', '452': 'Railroad Problem Log Inquiry or Advice', '880': 'Grocery Products Invoice', '109': 'Vessel Content Details', '189': 'Application for Admission to Educational Institutions', '149': 'Notice of Tax Adjustment or Assessment', '354': 'U.S. Customs Automated Manifest Archive Status', '326': 'Consignment Summary List', '357': 'U.S. Customs In-Bond Information', '891': 'Deduction Research Report', '260': 'Application for Mortgage Insurance Benefits', '311': 'Canada Customs Information', '849': 'Response to Product Transfer Account Adjustment', '210': 'Motor Carrier Freight Details and Invoice', '894': 'Delivery/Return Base Record', '266': 'Mortgage or Property Record Change Notification', '810': 'Invoice', '831': 'Application Control Totals', '423': 'Rail Industrial Switch List', '271': 'Eligibility, Coverage or Benefit Information', '304': 'Shipping Instructions', '198': 'Loan Verification Information', '277': 'Health Care Information Status Notification', '283': 'Tax or Fee Exemption Certification', '871': 'Component Parts Content', '998': 'Set Cancellation', '947': 'Warehouse Inventory Adjustment Advice', '160': 'Transportation Automatic Equipment Identification', '187': 'Premium Audit Request and Return', '846': 'Inventory Inquiry/Advice', '835': 'Health Care Claim Payment/Advice', '814': 'General Request, Response or Confirmation', '886': 'Customer Call Reporting', '412': 'Trailer or Container Repair Billing', '125': 'Multilevel Railcar Load Details', '261': 'Real Estate Information Request', '101': 'Name and Address Lists', '319': 'Terminal Information', '194': 'Grant or Assistance Application', '154': 'Secured Interest Filing', '215': 'Motor Carrier Pickup Manifest', '838': 'Trading Partner Profile', '220': 'Logistics Service Response', '857': 'Shipment and Billing Notice', '824': 'Application Advice', '352': 'U.S. Customs Carrier General Order Status', '143': 'Product Service Notification', '863': 'Report of Test Results', '130': 'Student Educational Record (Transcript)', '179': 'Environmental Compliance Reporting', '435': 'Standard Transportation Commodity Code Master', '875': 'Grocery Products Purchase Order', '818': 'Commission Sales Report', '222': 'Cartage Work Assignment', '432': 'Rail Deprescription', '272': 'Property and Casualty Loss Notification', '251': 'Pricing Support', '882': 'Direct Store Delivery Summary Information', '288': 'Wage Determination', '129': 'Vehicle Carrier Rate Update', '485': 'Ratemaking Action', '240': 'Motor Carrier Package Status', '105': 'Business Entity Filings', '468': 'Rate Docket Journal Log', '211': 'Motor Carrier Bill of Lading', '150': 'Tax Rate Notification', '204': 'Motor Carrier Load Tender', '868': 'Electronic Form Structure', '420': 'Car Handling Information', '323': 'Vessel Schedule and Itinerary (Ocean)', '828': 'Debit Authorization', '839': 'Project Cost Reporting', '893': 'Item Information Request', '852': 'Product Activity Data', '841': 'Specifications/Technical Information', '453': 'Railroad Service Commitment Advice', '715': 'Intermodal Group Loading Plan', '451': 'Railroad Event Report', '355': 'U.S. Customs Acceptance/Rejection', '440': 'Shipment Weights', '999': 'Implementation Acknowledgment', '424': 'Rail Carrier Services Settlement', '131': 'Student Educational Record (Transcript) Acknowledgment', '926': 'Claim Status Report and Tracer Reply', '830': 'Planning Schedule with Release Capability', '200': 'Mortgage Credit Report', '301': 'Confirmation (Ocean)', '161': 'Train Sheet', '417': 'Rail Carrier Waybill Interchange', '157': 'Notice of Power of Attorney', '811': 'Consolidated Service Invoice/Statement', '146': 'Request for Student Educational Record (Transcript)', '176': 'Court Submission', '358': 'Customs Consist Information', '312': 'Arrival Notice (Ocean)' }, type: ID, length: 3 }
+  - { id: '329', name: 'Transaction Set Control Number', usage: M, type: AN, minLength: 4, maxLength: 9 }
+  - { id: '1705', name: 'Implementation Convention Reference', usage: O, type: AN, minLength: 1, maxLength: 35 }
+- id: 'SV1_ProfessionalService'
+  name: 'Professional Service'
+  varTag: 'SV1'
+  values: 
+  - id: 'C003'
+    name: 'Composite Medical Procedure Identifier'
+    usage: M
+    values: 
+    - { id: '235', name: 'Product or Service ID Qualifier', usage: M, codeSet: { 'WK': 'Advanced Billing Concepts (ABC) Codes', 'IV': 'Home Infusion EDI Coalition (HIEC) Product/Service Code', 'HC': 'Health Care Financing Administration Common Procedural Coding System (HCPCS)', 'N4': 'National Drug Code in 5-4-2 Format' }, type: ID, length: 2 }
+    - { id: '234', name: 'Procedure Code', usage: M, type: AN, minLength: 1, maxLength: 48 }
+    - { id: '1339', name: 'Procedure Modifier', usage: O, type: AN, length: 2 }
+    - { id: '1339', name: 'Procedure Modifier', usage: O, type: AN, length: 2 }
+    - { id: '1339', name: 'Procedure Modifier', usage: O, type: AN, length: 2 }
+    - { id: '1339', name: 'Procedure Modifier', usage: O, type: AN, length: 2 }
+    - { id: '352', name: 'Procedure Code Description', usage: O, type: AN, minLength: 1, maxLength: 80 }
+    - { id: '234', name: 'Product or Service ID', usage: O, type: AN, minLength: 1, maxLength: 48 }
+  - { id: '782', name: 'Service Line Amount', usage: O, type: R, minLength: 1, maxLength: 18 }
+  - { id: '355', name: 'Unit or Basis for Measurement Code', usage: O, codeSet: { 'UN': 'Unit', 'F2': 'International Unit', 'MJ': 'Minutes' }, type: ID, length: 2 }
+  - { id: '380', name: 'Service Unit Count', usage: O, type: R, minLength: 1, maxLength: 15 }
+  - { id: '1331', name: 'Facility Code Value', usage: U, type: AN, minLength: 1, maxLength: 2 }
+  - { id: '1365', name: 'Service Type Code', usage: U, type: ID, minLength: 1, maxLength: 2 }
+  - id: 'C004'
+    name: 'Composite Diagnosis Code Pointer'
+    usage: U
+    values: 
+    - { id: '1328', name: 'Diagnosis Code Pointer', usage: U, type: N0, minLength: 1, maxLength: 2 }
+    - { id: '1328', name: 'Diagnosis Code Pointer', usage: U, type: N0, minLength: 1, maxLength: 2 }
+    - { id: '1328', name: 'Diagnosis Code Pointer', usage: U, type: N0, minLength: 1, maxLength: 2 }
+    - { id: '1328', name: 'Diagnosis Code Pointer', usage: U, type: N0, minLength: 1, maxLength: 2 }
+  - { id: '782', name: 'Monetary Amount', usage: U, type: R, minLength: 1, maxLength: 18 }
+  - { id: '1073', name: 'Yes/No Condition or Response Code', usage: U, type: ID, length: 1 }
+  - { id: '1340', name: 'Multiple Procedure Code', usage: U, type: ID, minLength: 1, maxLength: 2 }
+  - { id: '1073', name: 'EPSDT Indicator', usage: O, codeSet: { 'N': 'No', 'Y': 'Yes' }, type: ID, length: 1 }
+  - { id: '1073', name: 'Yes/No Condition or Response Code', usage: U, type: ID, length: 1 }
+  - { id: '1364', name: 'Review Code', usage: U, type: ID, minLength: 1, maxLength: 2 }
+  - { id: '1341', name: 'National or Local Assigned Review Value', usage: U, type: AN, minLength: 1, maxLength: 2 }
+  - { id: '1327', name: 'Copay Status Code', usage: U, type: ID, length: 1 }
+  - { id: '1334', name: 'Health Care Professional Shortage Area Code', usage: U, type: ID, length: 1 }
+  - { id: '127', name: 'Reference Identification', usage: U, type: AN, minLength: 1, maxLength: 50 }
+  - { id: '116', name: 'Postal Code', usage: U, type: ID, minLength: 3, maxLength: 15 }
+  - { id: '782', name: 'Monetary Amount', usage: U, type: R, minLength: 1, maxLength: 18 }
+  - { id: '1337', name: 'Level of Care Code', usage: U, type: ID, length: 1 }
+  - { id: '1360', name: 'Provider Agreement Code', usage: U, type: ID, length: 1 }
+  rules: 
+  - { type: P, items: [3, 4] }
+- id: 'SV2_InstitutionalServiceLine'
+  name: 'Institutional Service Line'
+  varTag: 'SV2'
+  values: 
+  - { id: '234', name: 'Service Line Revenue Code', usage: O, type: AN, minLength: 1, maxLength: 48 }
+  - id: 'C003'
+    name: 'Composite Medical Procedure Identifier'
+    usage: O
+    values: 
+    - { id: '235', name: 'Product or Service ID Qualifier', usage: M, codeSet: { 'ID': 'International Classification of Diseases, 9th Revision, Clinical', 'ZZ': 'Mutually Defined', 'WK': 'Advanced Billing Concepts (ABC) Codes', 'IV': 'Home Infusion EDI Coalition (HIEC) Product/Service Code', 'HC': 'Health Care Financing Administration Common Procedural Coding System (HCPCS)', 'N4': 'National Drug Code in 5-4-2 Format' }, type: ID, length: 2 }
+    - { id: '234', name: 'Procedure Code', usage: M, type: AN, minLength: 1, maxLength: 48 }
+    - { id: '1339', name: 'Procedure Modifier', usage: O, type: AN, length: 2 }
+    - { id: '1339', name: 'Procedure Modifier', usage: O, type: AN, length: 2 }
+    - { id: '1339', name: 'Procedure Modifier', usage: O, type: AN, length: 2 }
+    - { id: '1339', name: 'Procedure Modifier', usage: O, type: AN, length: 2 }
+    - { id: '352', name: 'Procedure Code Description', usage: O, type: AN, minLength: 1, maxLength: 80 }
+    - { id: '234', name: 'Product or Service ID', usage: O, type: AN, minLength: 1, maxLength: 48 }
+  - { id: '782', name: 'Service Line Amount', usage: O, type: R, minLength: 1, maxLength: 18 }
+  - { id: '355', name: 'Unit or Basis for Measurement Code', usage: O, codeSet: { 'DA': 'Days', 'UN': 'Unit', 'F2': 'International Unit' }, type: ID, length: 2 }
+  - { id: '380', name: 'Service Unit Count', usage: O, type: R, minLength: 1, maxLength: 15 }
+  - { id: '1371', name: 'Service Line Rate', usage: O, type: R, minLength: 1, maxLength: 10 }
+  - { id: '782', name: 'Monetary Amount', usage: U, type: R, minLength: 1, maxLength: 18 }
+  - { id: '1073', name: 'Yes/No Condition or Response Code', usage: U, type: ID, length: 1 }
+  - { id: '1345', name: 'Nursing Home Residential Status Code', usage: U, type: ID, length: 1 }
+  - { id: '1337', name: 'Level of Care Code', usage: U, type: ID, length: 1 }
+  rules: 
+  - { type: R, items: [1, 2] }
+  - { type: P, items: [4, 5] }
+- id: 'SV3_DentalService'
+  name: 'Dental Service'
+  varTag: 'SV3'
+  values: 
+  - id: 'C003'
+    name: 'Composite Medical Procedure Identifier'
+    usage: M
+    values: 
+    - { id: '235', name: 'Product or Service ID Qualifier', usage: M, codeSet: { 'AD': 'American Dental Association Codes' }, type: ID, length: 2 }
+    - { id: '234', name: 'Procedure Code', usage: M, type: AN, minLength: 1, maxLength: 48 }
+    - { id: '1339', name: 'Procedure Modifier', usage: O, type: AN, length: 2 }
+    - { id: '1339', name: 'Procedure Modifier', usage: O, type: AN, length: 2 }
+    - { id: '1339', name: 'Procedure Modifier', usage: O, type: AN, length: 2 }
+    - { id: '1339', name: 'Procedure Modifier', usage: O, type: AN, length: 2 }
+    - { id: '352', name: 'Procedure Code Description', usage: O, type: AN, minLength: 1, maxLength: 80 }
+    - { id: '234', name: 'Product or Service ID', usage: O, type: AN, minLength: 1, maxLength: 48 }
+  - { id: '782', name: 'Service Line Amount', usage: O, type: R, minLength: 1, maxLength: 18 }
+  - { id: '1331', name: 'Facility Code Value', usage: U, type: AN, minLength: 1, maxLength: 2 }
+  - id: 'C006'
+    name: 'Oral Cavity Designation'
+    usage: O
+    values: 
+    - { id: '1361', name: 'Oral Cavity Designation Code', usage: M, type: ID, minLength: 1, maxLength: 3 }
+    - { id: '1361', name: 'Oral Cavity Designation Code', usage: O, type: ID, minLength: 1, maxLength: 3 }
+    - { id: '1361', name: 'Oral Cavity Designation Code', usage: O, type: ID, minLength: 1, maxLength: 3 }
+    - { id: '1361', name: 'Oral Cavity Designation Code', usage: O, type: ID, minLength: 1, maxLength: 3 }
+    - { id: '1361', name: 'Oral Cavity Designation Code', usage: O, type: ID, minLength: 1, maxLength: 3 }
+  - { id: '1358', name: 'Prosthesis, Crown, or Inlay Code', usage: O, codeSet: { 'I': 'Initial Placement', 'R': 'Replacement' }, type: ID, length: 1 }
+  - { id: '380', name: 'Service Unit Count', usage: M, type: R, minLength: 1, maxLength: 15 }
+  - { id: '352', name: 'Description', usage: U, type: AN, minLength: 1, maxLength: 80 }
+  - { id: '1327', name: 'Copay Status Code', usage: U, type: ID, length: 1 }
+  - { id: '1360', name: 'Provider Agreement Code', usage: U, type: ID, length: 1 }
+  - { id: '1073', name: 'Yes/No Condition or Response Code', usage: U, type: ID, length: 1 }
+  - id: 'C004'
+    name: 'Composite Diagnosis Code Pointer'
+    usage: U
+    values: 
+    - { id: '1328', name: 'Diagnosis Code Pointer', usage: U, type: N0, minLength: 1, maxLength: 2 }
+    - { id: '1328', name: 'Diagnosis Code Pointer', usage: U, type: N0, minLength: 1, maxLength: 2 }
+    - { id: '1328', name: 'Diagnosis Code Pointer', usage: U, type: N0, minLength: 1, maxLength: 2 }
+    - { id: '1328', name: 'Diagnosis Code Pointer', usage: U, type: N0, minLength: 1, maxLength: 2 }
+- id: 'TOO_ToothInformation'
+  name: 'Tooth Information'
+  varTag: 'TOO'
+  values: 
+  - { id: '1270', name: 'Code List Qualifier Code', usage: M, codeSet: { 'JP': 'Universal National Tooth Designation System' }, type: ID, minLength: 1, maxLength: 3 }
+  - { id: '1271', name: 'Tooth Code', usage: M, type: AN, minLength: 1, maxLength: 30 }
+  - id: 'C005'
+    name: 'Tooth Surface'
+    usage: O
+    values: 
+    - { id: '1369', name: 'Tooth Surface Code', usage: M, codeSet: { 'F': 'Facial', 'M': 'Mesial', 'I': 'Incisal', 'L': 'Lingual', 'B': 'Buccal', 'O': 'Occlusal', 'D': 'Distal' }, type: ID, minLength: 1, maxLength: 2 }
+    - { id: '1369', name: 'Tooth Surface Code', usage: O, codeSet: { 'F': 'Facial', 'M': 'Mesial', 'I': 'Incisal', 'L': 'Lingual', 'B': 'Buccal', 'O': 'Occlusal', 'D': 'Distal' }, type: ID, minLength: 1, maxLength: 2 }
+    - { id: '1369', name: 'Tooth Surface Code', usage: O, codeSet: { 'F': 'Facial', 'M': 'Mesial', 'I': 'Incisal', 'L': 'Lingual', 'B': 'Buccal', 'O': 'Occlusal', 'D': 'Distal' }, type: ID, minLength: 1, maxLength: 2 }
+    - { id: '1369', name: 'Tooth Surface Code', usage: O, codeSet: { 'F': 'Facial', 'M': 'Mesial', 'I': 'Incisal', 'L': 'Lingual', 'B': 'Buccal', 'O': 'Occlusal', 'D': 'Distal' }, type: ID, minLength: 1, maxLength: 2 }
+    - { id: '1369', name: 'Tooth Surface Code', usage: O, codeSet: { 'F': 'Facial', 'M': 'Mesial', 'I': 'Incisal', 'L': 'Lingual', 'B': 'Buccal', 'O': 'Occlusal', 'D': 'Distal' }, type: ID, minLength: 1, maxLength: 2 }
+  rules: 
+  - { type: P, items: [1, 2] }
+- id: 'TRN_DependentTraceNumber'
+  name: 'Dependent Trace Number'
+  varTag: 'TRN'
+  values: 
+  - { id: '481', name: 'Trace Type Code', usage: M, codeSet: { '1': 'Current Transaction Trace Numbers', '2': 'Referenced Transaction Trace Numbers' }, type: ID, minLength: 1, maxLength: 2 }
+  - { id: '127', name: 'Dependent Trace Number', usage: M, type: AN, minLength: 1, maxLength: 50 }
+  - { id: '509', name: 'Trace Assigning Entity Identifier', usage: M, type: AN, length: 10 }
+  - { id: '127', name: 'Trace Assigning Entity Additional Identifier', usage: O, type: AN, minLength: 1, maxLength: 50 }
+- id: 'TRN_PatientEventTrackingNumber'
+  name: 'Patient Event Tracking Number'
+  varTag: 'TRN'
+  values: 
+  - { id: '481', name: 'Trace Type Code', usage: M, codeSet: { '1': 'Current Transaction Trace Numbers', '2': 'Referenced Transaction Trace Numbers' }, type: ID, minLength: 1, maxLength: 2 }
+  - { id: '127', name: 'Patient Event Trace Number', usage: M, type: AN, minLength: 1, maxLength: 50 }
+  - { id: '509', name: 'Trace Assigning Entity Identifier', usage: M, type: AN, length: 10 }
+  - { id: '127', name: 'Trace Assigning Entity Additional Identifier', usage: O, type: AN, minLength: 1, maxLength: 50 }
+- id: 'TRN_ServiceTraceNumber'
+  name: 'Service Trace Number'
+  varTag: 'TRN'
+  values: 
+  - { id: '481', name: 'Trace Type Code', usage: M, codeSet: { '1': 'Current Transaction Trace Numbers', '2': 'Referenced Transaction Trace Numbers' }, type: ID, minLength: 1, maxLength: 2 }
+  - { id: '127', name: 'Service Trace Number', usage: M, type: AN, minLength: 1, maxLength: 50 }
+  - { id: '509', name: 'Trace Assigning Entity Identifier', usage: M, type: AN, length: 10 }
+  - { id: '127', name: 'Trace Assigning Entity Additional Identifier', usage: O, type: AN, minLength: 1, maxLength: 50 }
+- id: 'TRN_SubscriberTraceNumber'
+  name: 'Subscriber Trace Number'
+  varTag: 'TRN'
+  values: 
+  - { id: '481', name: 'Trace Type Code', usage: M, codeSet: { '1': 'Current Transaction Trace Numbers', '2': 'Referenced Transaction Trace Numbers' }, type: ID, minLength: 1, maxLength: 2 }
+  - { id: '127', name: 'Subscriber Trace Number', usage: M, type: AN, minLength: 1, maxLength: 50 }
+  - { id: '509', name: 'Trace Assigning Entity Identifier', usage: M, type: AN, length: 10 }
+  - { id: '127', name: 'Trace Assigning Entity Additional Identifier', usage: O, type: AN, minLength: 1, maxLength: 50 }
+- id: 'UM_HealthCareServicesReviewInformation'
+  name: 'Health Care Services Review Information'
+  varTag: 'UM'
+  values: 
+  - { id: '1525', name: 'Request Category Code', usage: M, codeSet: { 'IN': 'Individual', 'AR': 'Admission Review', 'HS': 'Health Services Review', 'SC': 'Specialty Care Review' }, type: ID, minLength: 1, maxLength: 2 }
+  - { id: '1322', name: 'Certification Type Code', usage: O, codeSet: { '4': 'Extension', 'N': 'Reconsideration', '5': 'Notification', 'I': 'Initial', '1': 'Appeal - Immediate', '2': 'Appeal - Standard', 'R': 'Renewal', '3': 'Cancel', 'S': 'Revised' }, type: ID, length: 1 }
+  - { id: '1365', name: 'Service Type Code', usage: O, codeSet: { '45': 'Hospice', 'A9': 'Rehabilitation', '67': 'Smoking Cessation', '93': 'Podiatry', 'BG': 'Cardiac Rehabilitation', 'ON': 'Oncology', '12': 'Durable Medical Equipment Purchase', 'TC': 'Transitional Care', '66': 'Pathology', 'BD': 'Cognitive Therapy', '84': 'Abortion', '8': 'Surgical Assistance', '73': 'Diagnostic Medical', 'MH': 'Mental Health', '78': 'Chemotherapy', 'NI': 'Neonatal Intensive Care', '23': 'Diagnostic Dental', '62': 'MRI/CAT Scan', 'A4': 'Psychiatric', 'BZ': 'Physician Visit - Office: Well', '4': 'Diagnostic X-Ray', '88': 'Pharmacy', '77': 'Otological Exam', '40': 'Oral Surgery', 'TN': 'Transitional Nursery Care', 'BP': 'Endocrine', 'C1': 'Coronary Care', '15': 'Alternate Method Dialysis', '11': 'Used Durable Medical Equipment', 'CQ': 'Case Management', '44': 'Home Health Visits', 'AK': 'Drug Addiction', '33': 'Chiropractic', 'BL': 'Cardiac', '56': 'Medically Related Transportation', '26': 'Endodontics', 'AD': 'Occupational Therapy', '37': 'Dental Accident', '68': 'Well Baby Care', '61': 'In-vitro Fertilization', '46': 'Respite Care', '24': 'Periodontics', 'PU': 'Pulmonary', '83': 'Infertility', '35': 'Dental Care', 'BB': 'Partial Hospitalization (Psychiatric)', '16': 'Chronic Renal Disease (CRD) Equipment', 'BE': 'Massage Therapy', '79': 'Allergy Testing', '5': 'Diagnostic Lab', '72': 'Inhalation Therapy', '87': 'Cancer', 'AF': 'Speech Therapy', '21': 'Third Surgical Opinion', '76': 'Dialysis', '54': 'Long Term Care', 'AJ': 'Alcoholism', '65': 'Newborn Care', '71': 'Audiology Exam', '80': 'Immunizations', '82': 'Family Planning', '6': 'Radiation Therapy', '36': 'Dental Crowns', '1': 'Medical Care', '39': 'Prosthodontics', 'AE': 'Physical Medicine', '17': 'Pre-Admission Testing', 'AR': 'Experimental Drug Therapy', '25': 'Restorative', 'BF': 'Pulmonary Rehabilitation', '14': 'Renal Supplies in the Home', 'BS': 'Invasive Procedures', '69': 'Maternity', 'RN': 'Renal', 'AG': 'Skilled Nursing Care', '64': 'Acupuncture', 'A6': 'Psychotherapy', '42': 'Home Health Care', '75': 'Prosthetic Device', 'BN': 'Gastrointestinal', 'PT': 'Physical Therapy', '20': 'Second Surgical Opinion', '27': 'Maxillofacial Prosthetics', '70': 'Transplants', '2': 'Surgical', '86': 'Emergency Services', '38': 'Orthodontics', 'BC': 'Day Care (Psychiatric)', 'RT': 'Residential Psychiatric Treatment', 'AI': 'Substance Abuse', '18': 'Durable Medical Equipment Rental', 'GY': 'Allergy', 'BY': 'Physician Visit - Office: Sick', '7': 'Anesthesia', 'IC': 'Intensive Care', 'B1': 'Burn Care', '63': 'Donor Procedures', '3': 'Consultation', '74': 'Private Duty Nursing', '85': 'AIDS', 'AL': 'Vision (Optometry)', 'BQ': 'Neurology', '28': 'Adjunctive Dental Services', 'AH': 'Skilled Nursing Care - Room and Board' }, type: ID, minLength: 1, maxLength: 2 }
+  - id: 'C023'
+    name: 'Health Care Service Location Information'
+    usage: O
+    values: 
+    - { id: '1331', name: 'Facility Type Code', usage: M, type: AN, minLength: 1, maxLength: 2 }
+    - { id: '1332', name: 'Facility Code Qualifier', usage: O, codeSet: { 'A': 'Uniform Billing Claim Form Bill Type', 'B': 'Place of Service Codes for Professional or Dental Services' }, type: ID, minLength: 1, maxLength: 2 }
+    - { id: '1325', name: 'Claim Frequency Type Code', usage: O, type: ID, length: 1 }
+  - id: 'C024'
+    name: 'Related Causes Information'
+    usage: U
+    values: 
+    - { id: '1362', name: 'Related-Causes Code', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '1362', name: 'Related-Causes Code', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '1362', name: 'Related-Causes Code', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '156', name: 'State or Province Code', usage: U, type: ID, length: 2 }
+    - { id: '26', name: 'Country Code', usage: U, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '1338', name: 'Level of Service Code', usage: U, type: ID, minLength: 1, maxLength: 3 }
+  - { id: '1213', name: 'Current Health Condition Code', usage: U, type: ID, length: 1 }
+  - { id: '923', name: 'Prognosis Code', usage: U, type: ID, length: 1 }
+  - { id: '1363', name: 'Release of Information Code', usage: U, type: ID, length: 1 }
+  - { id: '1514', name: 'Delay Reason Code', usage: U, type: ID, minLength: 1, maxLength: 2 }
+- id: 'UM_HealthCareServicesReviewInformation1'
+  name: 'Health Care Services Review Information'
+  varTag: 'UM'
+  values: 
+  - { id: '1525', name: 'Request Category Code', usage: M, codeSet: { 'HS': 'Health Services Review', 'SC': 'Specialty Care Review' }, type: ID, minLength: 1, maxLength: 2 }
+  - { id: '1322', name: 'Certification Type Code', usage: O, codeSet: { '4': 'Extension', 'N': 'Reconsideration', 'I': 'Initial', '1': 'Appeal - Immediate', '2': 'Appeal - Standard', 'R': 'Renewal', '3': 'Cancel', 'S': 'Revised' }, type: ID, length: 1 }
+  - { id: '1365', name: 'Service Type Code', usage: O, codeSet: { '45': 'Hospice', 'A9': 'Rehabilitation', '67': 'Smoking Cessation', '93': 'Podiatry', 'BG': 'Cardiac Rehabilitation', 'ON': 'Oncology', '12': 'Durable Medical Equipment Purchase', 'TC': 'Transitional Care', '66': 'Pathology', 'BD': 'Cognitive Therapy', '84': 'Abortion', '8': 'Surgical Assistance', '73': 'Diagnostic Medical', 'MH': 'Mental Health', '78': 'Chemotherapy', 'NI': 'Neonatal Intensive Care', '23': 'Diagnostic Dental', '62': 'MRI/CAT Scan', 'A4': 'Psychiatric', 'BZ': 'Physician Visit - Office: Well', '4': 'Diagnostic X-Ray', '88': 'Pharmacy', '77': 'Otological Exam', '40': 'Oral Surgery', 'TN': 'Transitional Nursery Care', 'BP': 'Endocrine', 'C1': 'Coronary Care', '15': 'Alternate Method Dialysis', '11': 'Used Durable Medical Equipment', '44': 'Home Health Visits', 'AK': 'Drug Addiction', '33': 'Chiropractic', 'BL': 'Cardiac', '56': 'Medically Related Transportation', '26': 'Endodontics', 'AD': 'Occupational Therapy', '37': 'Dental Accident', '68': 'Well Baby Care', '61': 'In-vitro Fertilization', '46': 'Respite Care', '24': 'Periodontics', 'PU': 'Pulmonary', '83': 'Infertility', '35': 'Dental Care', 'BB': 'Partial Hospitalization (Psychiatric)', '16': 'Chronic Renal Disease (CRD) Equipment', 'BE': 'Massage Therapy', '79': 'Allergy Testing', '5': 'Diagnostic Lab', '72': 'Inhalation Therapy', '87': 'Cancer', 'AF': 'Speech Therapy', '21': 'Third Surgical Opinion', '76': 'Dialysis', '54': 'Long Term Care', 'AJ': 'Alcoholism', '65': 'Newborn Care', '71': 'Audiology Exam', '80': 'Immunizations', '82': 'Family Planning', '6': 'Radiation Therapy', '36': 'Dental Crowns', '1': 'Medical Care', '39': 'Prosthodontics', 'AE': 'Physical Medicine', '17': 'Pre-Admission Testing', 'AR': 'Experimental Drug Therapy', '25': 'Restorative', 'BF': 'Pulmonary Rehabilitation', '14': 'Renal Supplies in the Home', 'BS': 'Invasive Procedures', '69': 'Maternity', 'RN': 'Renal', 'AG': 'Skilled Nursing Care', '64': 'Acupuncture', 'A6': 'Psychotherapy', '42': 'Home Health Care', '75': 'Prosthetic Device', 'BN': 'Gastrointestinal', 'PT': 'Physical Therapy', '20': 'Second Surgical Opinion', '27': 'Maxillofacial Prosthetics', '70': 'Transplants', '2': 'Surgical', '86': 'Emergency Services', '38': 'Orthodontics', 'BC': 'Day Care (Psychiatric)', 'RT': 'Residential Psychiatric Treatment', 'AI': 'Substance Abuse', '18': 'Durable Medical Equipment Rental', 'GY': 'Allergy', 'BY': 'Physician Visit - Office: Sick', '7': 'Anesthesia', 'IC': 'Intensive Care', 'B1': 'Burn Care', '63': 'Donor Procedures', '3': 'Consultation', '74': 'Private Duty Nursing', '85': 'AIDS', 'AL': 'Vision (Optometry)', 'BQ': 'Neurology', '28': 'Adjunctive Dental Services' }, type: ID, minLength: 1, maxLength: 2 }
+  - id: 'C023'
+    name: 'Health Care Service Location Information'
+    usage: O
+    values: 
+    - { id: '1331', name: 'Facility Type Code', usage: M, type: AN, minLength: 1, maxLength: 2 }
+    - { id: '1332', name: 'Facility Code Qualifier', usage: O, codeSet: { 'A': 'Uniform Billing Claim Form Bill Type', 'B': 'Place of Service Codes for Professional or Dental Services' }, type: ID, minLength: 1, maxLength: 2 }
+    - { id: '1325', name: 'Claim Frequency Type Code', usage: O, type: ID, length: 1 }
+  - id: 'C024'
+    name: 'Related Causes Information'
+    usage: U
+    values: 
+    - { id: '1362', name: 'Related-Causes Code', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '1362', name: 'Related-Causes Code', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '1362', name: 'Related-Causes Code', usage: U, type: ID, minLength: 2, maxLength: 3 }
+    - { id: '156', name: 'State or Province Code', usage: U, type: ID, length: 2 }
+    - { id: '26', name: 'Country Code', usage: U, type: ID, minLength: 2, maxLength: 3 }
+  - { id: '1338', name: 'Level of Service Code', usage: U, type: ID, minLength: 1, maxLength: 3 }
+  - { id: '1213', name: 'Current Health Condition Code', usage: U, type: ID, length: 1 }
+  - { id: '923', name: 'Prognosis Code', usage: U, type: ID, length: 1 }
+  - { id: '1363', name: 'Release of Information Code', usage: U, type: ID, length: 1 }
+  - { id: '1514', name: 'Delay Reason Code', usage: U, type: ID, minLength: 1, maxLength: 2 }

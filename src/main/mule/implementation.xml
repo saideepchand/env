@@ -349,7 +349,7 @@ output application/java
 "400"]]></ee:set-variable>
 					</ee:variables>
 				</ee:transform>
-				<logger level="INFO" doc:name="Log httpStatus and Error" doc:id="6e53ab7c-b113-4119-b1ab-008ac0639808" message='#[vars.httpStatus ++ " " ++  vars.errorPayload]'/>
+				<logger level="INFO" doc:name="Log httpStatus and Error" doc:id="6e53ab7c-b113-4119-b1ab-008ac0639808" message='#[vars.errorPayload]'/>
 				<flow-ref doc:name="common_generate-error-payload" doc:id="f1d5e529-7298-4799-be25-bb0697a6c467" name="common_generate-error-payload"/>
 			
 </otherwise>
@@ -409,7 +409,7 @@ output application/java
 "400"]]></ee:set-variable>
 					</ee:variables>
 				</ee:transform>
-				<logger level="INFO" doc:name="Log httpStatus and Error" doc:id="7a44ee03-565a-4a46-b989-8ec437b7b78e" message='#[vars.httpStatus ++ " " ++  vars.errorPayload]' />
+				<logger level="INFO" doc:name="Log httpStatus and Error" doc:id="7a44ee03-565a-4a46-b989-8ec437b7b78e" message='#[vars.errorPayload]' />
 				<flow-ref doc:name="common_generate-error-payload" doc:id="174fb427-c42f-47d2-b352-4784145dd553" name="common_generate-error-payload"/>
 			
 </otherwise>

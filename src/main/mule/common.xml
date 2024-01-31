@@ -31,6 +31,11 @@ if(isEmpty(vars.errorPayload)) error.detailedDescription else vars.errorPayload]
 	<sub-flow name="common_createVariables" doc:id="5a588eb5-e361-42f0-910a-35b0e0984fd8" >
 		<logger level="INFO" doc:name="Start createVariables" doc:id="cf82ca15-0627-4fb2-8495-b4edade4440a" message="Start createVariables" />
 		<set-variable value='#[(payload.entry filter($.resource.resourceType == "Claim"))[0].resource]' doc:name="set-claimResource" doc:id="a604054a-7814-4a58-968a-ae00adf4c9b9" variableName="claimResource"/>
+		<set-variable value='#[(payload.entry filter($.resource.resourceType == "Encounter"))[0].resource]' doc:name="set-encounterResource" doc:id="85e8a329-ae03-41b1-9807-dc129e920531" variableName="encounterResource"/>
+		<set-variable value='#[(payload.entry filter($.resource.resourceType == "Location"))[0].resource]' doc:name="set-locationResource" doc:id="5fcce248-a5d3-493c-81a8-de9ef02b8400" variableName="locationResource"/>
+		<set-variable value='#[((vars.encounterResource.period.start ++ "-" ++ vars.encounterResource.period.end) splitBy  "-")]' doc:name="set-timeDuration" doc:id="0d19a2d5-4a14-4b39-ba92-fde39f38aaf8" variableName="timeDuration"/>
+		<set-variable value='#[(payload.entry filter($.resource.resourceType == "Procedure"))[0].resource]' doc:name="set-procedureResource" doc:id="d9a2c3ec-b80d-41d3-9de0-92b9c3a751e0" variableName="procedureResource"/>
+		<set-variable value='#[((payload.entry filter($.resource.resourceType == "Condition"))[0].resource)]' doc:name="set-conditionResource" doc:id="caea23d3-31fc-460a-88de-4dd4bb0f36a6" variableName="conditionResource"/>
 		<ee:transform doc:name="set-insurerOrg" doc:id="1927dd17-33fe-4ee5-9677-c498ff7c6466" >
 			<ee:message >
 			</ee:message>
@@ -58,13 +63,15 @@ getFHIRResource(payload,insurer).resource]]></ee:set-variable>
 output application/json
 import substringAfter from dw::core::Strings
 import getFHIRResource from dwl::x12Util::x12SegmentTools
-var provider=substringAfter(vars.claimResource.provider.reference,"/")
+var provider=substringAfter(vars.claimResource.careTeam[0].provider.reference,"/")
 ---
 getFHIRResource(payload,provider).resource]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<set-variable value='#[(payload.entry filter($.resource.resourceType == "Coverage"))[0].resource]' doc:name="set-coverage" doc:id="5cf3f4f8-aac5-4701-ae04-b713bbec205f" variableName="coverage"/>
+		<set-variable value='#[(payload.entry filter($.resource.resourceType == "Patient"))[0].resource]' doc:name="set-patient" doc:id="33c6ebcb-11d2-4302-9a81-21bec7c383c8" variableName="patient"/>
 		<set-variable value='#[output application/java import substringAfter from dw::core::Strings --- if(! isEmpty(vars.coverage.susbcriber))&#10;							substringAfter(vars.coverage.subscriber.reference,"/")&#10;						else&#10;							substringAfter(vars.coverage.beneficiary.reference,"/")]' doc:name="set-subscriberPatientId" doc:id="25b8139f-5e18-4275-97bb-4611f3be2aa6" variableName="subscriberPatientId"/>
+		<set-variable value='#[output application/java import substringAfter from dw::core::Strings --- if(! isEmpty(vars.patient.identifier))&#10;							substringAfter(payload.entry.resource.patient[0].reference,"/")&#10;						else&#10;							substringAfter(vars.coverage.beneficiary.reference,"/")]' doc:name="Copy_of_set-subscriberPatientId" doc:id="b4ecc632-e63e-432a-a270-763aacdae7bc" variableName="subscriberPatientId" />
 		<ee:transform doc:name="set-subscriberPatient" doc:id="22ad6f0a-3e93-41b0-9f03-f88a1292283c" >
 			<ee:message >
 			</ee:message>
@@ -102,7 +109,8 @@ else
 			</ee:message>
 		</ee:transform>
 		<logger level="INFO" doc:name="End createVariables" doc:id="080b33cb-ae8d-4ff2-ac21-317b9d060103" message="End createVariables" />
-	</sub-flow>
+	
+</sub-flow>
 		
 	
 	

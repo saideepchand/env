@@ -8,7 +8,7 @@
  // Import segment tools.
  
  //Import functions from segment tools
- import createBHT, createNM103Type, createNM1, createN3, createN4, createDTP, createDMG, createPER, createSV1, createUM, createINS, createHI, createDTP, createUM,providerTypeLookup,lookupPERCommType,extensionLookUp,productOrServiceLookUp,fetchSupportingInfo,createSubmit2000ELoop from dwl::x12Util::x12SegmentTools
+ import createNM103Type, createBHT, createNM1, createREF, createN3, createN4, createTRN,createDTP, createDMG, createPER, createSV1, createUM, createINS, createHI, createDTP, createUM,createHSD,providerTypeLookup,lookupPERCommType,extensionLookUp,productOrServiceLookUp,fetchSupportingInfo,createSubmit2000ELoop from dwl::x12Util::x12SegmentTools
  
  // Import segment qualifiers
  import getSegmentQualifiers from dwl::x12Util::x12SegmentQualifiers
@@ -16,7 +16,11 @@
  // Variables
  var segmentQualifiers = (getSegmentQualifiers())."278Submit"
  var fhirConstantsObj = fhirConstants()
+ var locationResource= vars.locationResource
  var claimResource=vars.claimResource
+ var timeDuration = vars.timeDuration
+ var procedureResource = vars.procedureResource
+ var conditionResource = vars.conditionResource
  var requesterOrganization = vars.requesterOrganization
  var insurerOrganization = vars.insurerOrganization
  var coverage = vars.coverage
@@ -24,7 +28,7 @@
  var beneficiaryPatient = vars.beneficiaryPatient
  var inRequest = vars.bundleResources
 
- var subscriberMilitaryStatusCode=extensionLookUp(subscriberPatient.extension,"valueCodeableConcept","http://hl7.org/fhir/us/davinci-pas/StructureDefinition/extension-militaryStatus")
+ var subscriberMilitaryStatusCode= extensionLookUp(subscriberPatient.extension,"valueCodeableConcept","http://hl7.org/fhir/us/davinci-pas/StructureDefinition/extension-militaryStatus")
  
  
  
@@ -71,26 +75,28 @@
                                  "NM1_UtilizationManagementOrganizationUMOName": createNM1("UtilizationManagementOrganization",
                                                                                         insurerOrganization."type"[0].coding[0].code default segmentQualifiers.NM1.NM1_UtlizationManagementOrganziation.nm101, //NM101
                                                                                         segmentQualifiers."NM1"."NM1_UtlizationManagementOrganziation"."nm102", //NM102
-                                                                                        insurerOrganization.name, //NM103
+                                                                                        insurerOrganization.name default "CohereHealth", //NM103
                                                                                         "","","","",
                                                                                         if(insurerOrganization.identifier[0]."type".coding[0].code == "46") "46"
                                                                                         else if(insurerOrganization.identifier[0]."type".coding[0].code == "U") "PI"
                                                                                         else segmentQualifiers."NM1".NM1_UtlizationManagementOrganziation.nm108, //NM108
-                                                                                        insurerOrganization.identifier[0].value //NM109
+                                                                                        insurerOrganization.identifier[0].value default '6191100' //NM109
                                  )                  
-                                 }) if(! isEmpty(insurerOrganization)), //End 2010A_Loop
+                                 }),
                              "2000B_Loop" : {
                                  "2010B_Loop" : {
                                      "NM1_RequesterName" : createNM1("Requester",
                                                              requesterOrganization."type"[0].coding[0].code default segmentQualifiers."NM1"."NM1_RequesterName"."nm101", //NM101
                                                              segmentQualifiers."NM1"."NM1_RequesterName"."nm102" default segmentQualifiers."NM1"."NM1_RequesterName"."nm102",
-                                                             "","","","","", /* Implementation guide specific mapping - See comment below
+                                                             upper(((requesterOrganization.name[0].text) splitBy  (" "))[1]),//NM103//last name not coming 
+                                                             upper(((requesterOrganization.name[0].text) splitBy  (" "))[0]),//NM104      
+                                                             "","","", /* Implementation guide specific mapping - See comment below
                                                               * Required when name information is needed by the UMO to identify the requester. 
                                                               * If not required by this implementation guide, may be provided at the sender's discretion
                                                               *  but cannot be required by the receiver.
                                                               */
                                                              segmentQualifiers."NM1"."NM1_RequesterName"."nm108",
-                                                             requesterOrganization.identifier[0].value),
+                                                             requesterOrganization.identifier[1].value),
                                      "N3_RequesterAddress" : createN3("Requester",requesterOrganization.address[0].line[0],
                                                                       requesterOrganization.address[0].line[1]
                                      ),
@@ -137,7 +143,7 @@
                                                                                    segmentQualifiers.INS.INS_SubscriberRelationship.ins02,
                                                                                    subscriberMilitaryStatusCode)) if(! isEmpty(subscriberMilitaryStatusCode))
                                      }, //End 2010C_Loop
-                                     ("2000E_Loop" : createSubmit2000ELoop(inRequest,claimResource,segmentQualifiers,fhirConstantsObj,patientDates,claimSupportingInfo) ) if(isEmpty(beneficiaryPatient)), //End 2000E_Loop at Subscriber Level
+                                     ("2000E_Loop" : createSubmit2000ELoop(inRequest,claimResource,procedureResource,conditionResource,segmentQualifiers,fhirConstantsObj,patientDates,claimSupportingInfo,timeDuration,locationResource) ) if(isEmpty(beneficiaryPatient)), //End 2000E_Loop at Subscriber Level
                                      ("2000D_Loop" : {
                                              "2010D_Loop" : {
                                                  "NM1_DependentName" : createNM1("Dependent",
@@ -169,7 +175,6 @@
                                                                                          coverage.relationship.coding[0].code,""
                                                  )
                                                  }, //End 2010D_Loop
-                                                 "2000E_Loop" : createSubmit2000ELoop(inRequest,claimResource,segmentQualifiers,fhirConstantsObj,patientDates,claimSupportingInfo)
                                          }) if(! isEmpty(beneficiaryPatient)),//End 2000D_Loop
                                  }, //End 2000C_Loop
                              }, //End 2000B_Loop            

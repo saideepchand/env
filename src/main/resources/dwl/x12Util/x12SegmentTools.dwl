@@ -40,14 +40,14 @@ fun createBHT(bhtType,bht01,bht02,bht03,bht04,bht06) = (
 {
     "BHT01_HierarchicalStructureCode" : bht01,
     "BHT02_TransactionSetPurposeCode":  bht02, 
-    ("BHT03_" ++ bhtType ++ "TransactionIdentifier"): bht03,
-    "BHT04_TransactionSetCreationDate" : bht04 as DateTime as String { format: 'yyyyMMdd' } as Date { format: 'yyyyMMdd' },
+    ("BHT03_" ++ bhtType ++ "TransactionIdentifier"): "EPICRTX 23899",
+    "BHT04_TransactionSetCreationDate" : bht04 as DateTime as String { format: 'yyyyMMdd' } as Date { format: 'yyyyMMdd' } as Date ,
     (if (bhtType == 'OriginatorApplication')
     	"BHT05_TransactionSetCreationTime" : (bht04 as Time default now()) as Time as String {format : "HHmmss"} as Number
     else
-    	"BHT05_TransactionSetCreationTime" : (bht04 as Time default now()) as Time as Time {format : "HHmmss"} 
+    	"BHT05_TransactionSetCreationTime" : (bht04 as Time default now()) as Time as Time {format : "HHmm"}
     ), 
-    "BHT06_ClaimOrEncounterIdentifier" : bht06
+    "BHT06_TransactionTypeCode" : "19"
 
 }
 )
@@ -75,7 +75,7 @@ fun createBGN(bgn01,bgn02,bgn03)= (
  * @return A NM103 string.
  */
 fun createNM103Type(nmType)=(
-    if(["UtlizationManagementOrganziation","PatientEventProvider","Submitter","Provider"] contains nmType)
+    if(["PatientEventProvider","Submitter","Provider"] contains nmType)
         "NM103_" ++ nmType ++ "LastOrOrganizationName"
     else if (nmType == "Payer") "NM103_" ++ nmType ++ "Name"
     else 
@@ -122,10 +122,12 @@ fun createNM103Type(nmType)=(
         "NM102_EntityTypeQualifier": nm102 ,
 		(if (nmType == "Receiver") ("NM103_" ++ nmType++ "Name") 
 		else if (nmType == "BillingProvider") "NM103_" ++ nmType ++ "LastOrOrganizationalName"
+		else if (nmType == "Requester") "NM103_" ++ nmType ++ "LastOrOrganizationName" 
+		else if (nmType == "UtilizationManagementOrganization") "NM103_" ++ nmType ++ "UMOLastOrOrganizationName"
 		else if (nmType == "Subscriber") "NM103_" ++ nmType ++ "LastName"
 		else if (nmType == "Patient") "NM103_" ++ nmType ++ "LastName"
 		else if (nmType == "Payer") "NM103_" ++ nmType ++ "Name"		
-		else if(["UtlizationManagementOrganziation","PatientEventProvider","Submitter","Provider", "InformationSource", "InformationReceiver"] contains nmType) "NM103_" ++ nmType ++ "LastOrOrganizationName"
+		else if(["PatientEventProvider","Submitter","Provider", "InformationSource", "InformationReceiver"] contains nmType) "NM103_" ++ nmType ++ "LastOrOrganizationName"
 		else ("NM103_" ++ nmType ++ "LastName")): nm103,
 		
         (if ((nmType == "Receiver") or  (nmType == "Payer")) ("NM104_"  ++ "NameFirst")
@@ -231,7 +233,10 @@ fun createREF(refType,ref01,ref02)=(
 		(if (refType == 'BillingProvider')
 		 ("REF02_" ++ refType ++ "TaxIdentificationNumber") : ref02
 		else if (refType == 'Patient')
-			("REF02_" ++ "PropertyAndCasualtyPatientIdentifier") : ref02		
+			("REF02_" ++ "PropertyAndCasualtyPatientIdentifier") : ref02
+		else if (refType == 'PreviousReviewAdministrativeReferenceNumber')
+			("REF02_" ++ "PreviousAdministrativeReferenceNumber") : ref02
+					
 		else
 			("REF02_" ++ refType) : ref02
 		)
@@ -564,6 +569,13 @@ fun createPRV(prvType,prv01,prv02,prv03) = (
 		"PRV01_ProviderCode" : prv01,
 		"PRV02_ReferenceIdentificationQualifier" : prv02,
 		"PRV03_ProviderTaxonomyCode" : prv03
+	}
+)
+
+fun createHSD(hsdType,hsd01,hsd02) = (
+	{
+		"HSD01_QuantityQualifier": hsd01,
+		"HSD02_ServiceUnitCount": hsd02
 	}
 )
 
@@ -1452,15 +1464,15 @@ else null)
  * @param trn04 is a string with Trace Assigning Entity Additional Identifier.
  * @return X12 formatted TRN segment
  */
-fun createTRN(trnType,trn01,trn02,trn03,trn04)=(
-    {
-        "TRN01_TraceTypeCode": trn01, 
-        //("TRN02_" ++ trnType ++ "TraceNumber"): trn02,
-        (if(["PatientEvent","Service","Subscriber"] contains trnType) "TRN02_" ++ trnType ++ "TraceNumber" 
-        else "TRN02_PayerClaimControlNumberOrProviderAttachmentControlNumber"
-    ) : trn02,
-        "TRN03_TraceAssigningEntityIdentifier": trn03 default "",
-        "TRN04_TraceAssigningEntityAdditionalIdentifier":  trn04 default ""     
+fun createTRN(trnType,trn01,trn02,trn03,trn04)=({
+	        "TRN01_TraceTypeCode": trn01, 
+	        ("TRN02_" ++ trnType ++ "TraceNumber"): trn02,
+	        (if(["PatientEvent","Service","Subscriber"] contains trnType) "TRN02_" ++ trnType ++ "TraceNumber" 
+	        else "TRN02_PayerClaimControlNumberOrProviderAttachmentControlNumber"
+	    ) : trn02,
+	        "TRN03_TraceAssigningEntityIdentifier": trn03 default "",
+	        "TRN04_TraceAssigningEntityAdditionalIdentifier":  trn04 default ""
+    
     }
 )
 
@@ -1498,7 +1510,7 @@ fun createHI(hi01,hi02)=({
     "HI01_DiagnosisTypeCode" : if("admitting"==hi01) "ABJ" 
                                 else if("principal"==hi01) "ABK" 
                                 else if("patientreasonforvisit"==hi01)"APR" 
-                                else "",
+                                else "ABF",
     "HI02_DiagnosisCode": hi02 
                                         }
 })
@@ -1537,35 +1549,47 @@ fun createUM(um01,um02,um03,um0401,um0402,um0501,um0504,um06)=({
  * the subscriber level, when the subscriber is the patient; or it can occur at 2000D at the 
  * beneficiary level, when a dependent of the subscriber is the patient.
  */
- fun createSubmit2000ELoop(inRequest,claimResource,segmentQualifiers,fhirConstantsObj,patientDates,claimSupportingInfo)=(
+fun createSubmit2000ELoop(inRequest,claimResource,procedureResource,conditionResource,segmentQualifiers,fhirConstantsObj,patientDates,claimSupportingInfo,timeDuration,locationResource)=(
     {
-        "TRN_PatientEventTrackingNumber" : 	[createTRN("PatientEvent",
-                                                      segmentQualifiers."TRN"."TRN_PatientEventTrackingNumber"."trn01",
-                                                      claimResource.identifier[0].value default uuid(),
-                                                      claimResource.identifier[0].assigner.identifier.value default segmentQualifiers.TRN.TRN_PatientEventTrackingNumber.trn03,
+        "TRN_PatientEventTrackingNumber" : 	[
+//        										createTRN("PatientEvent",
+//                                                      segmentQualifiers."TRN"."TRN_PatientEventTrackingNumber"."trn01",
+//                                                      claimResource.identifier[0].value default uuid(),
+//                                                      claimResource.identifier[0].assigner.identifier.value default segmentQualifiers.TRN.TRN_PatientEventTrackingNumber.trn03,
+//                                                      (claimResource.identifier[0].extension filter($.url == fhirConstantsObj."Submit"."extension"."subDepartment"))[0].valueString default " "),
+                                                 createTRN("PatientEvent",                                           
+        											 segmentQualifiers."TRN"."TRN_PatientEventTrackingNumber"."trn201",
+                                                      claimResource.identifier[0].value default "G15273",
+                                                      claimResource.identifier[0].assigner.identifier.value default segmentQualifiers.TRN.TRN_PatientEventTrackingNumber.trn203,
                                                       (claimResource.identifier[0].extension filter($.url == fhirConstantsObj."Submit"."extension"."subDepartment"))[0].valueString default " ")],
+                                                      
+        
         "UM_HealthCareServicesReviewInformation" : createUM(
                        extensionLookUp(claimResource.item[0].extension,"valueCodeableConcept",fhirConstantsObj.Submit.extension.serviceItemRequestType) default segmentQualifiers.UM.UM_HealthCareServicesReviewInformation1.um01,//UM01
                        extensionLookUp(claimResource.item[0].extension,"valueCodeableConcept",fhirConstantsObj.Submit.extension.certificationType) default segmentQualifiers.UM.UM_HealthCareServicesReviewInformation1.um02,//UM02
-                       claimResource.item[0].category.coding[0].code,//UM03,
-                       claimResource.item[0].locationCodeableConcept.coding[0].code, //UM0401
-                       if( claimResource.item[0].locationCodeableConcept.coding[0].system == fhirConstantsObj.Submit.location.typeOfBill) "A"
-                       else if(claimResource.item[0].locationCodeableConcept.coding[0].system == fhirConstantsObj.Submit.location.placeOfServiceCodeSet) "B"
+                       claimResource.item[0].category.coding[0].code default  segmentQualifiers.UM.UM_HealthCareServicesReviewInformation1.um03,//UM03,
+                       claimResource.item[0].locationCodeableConcept.coding[0].code default  segmentQualifiers.UM.UM_HealthCareServicesReviewInformation1.um0401, //UM0401
+                       if( claimResource."type".coding.code[0] == "Inpatient") "A"
+                       else if(claimResource."type".coding.code[0] == "Outpatient") "B"
                        else "", //UM0402 This has to be either A or B, cannot be any other value. Any other value fails validation
                        claimResource.accident."type".coding[0].code,//UM0501
                        claimResource.accident.locationAddress.state, //UM0504
                        extensionLookUp(claimResource.extension,"valueCodeableConcept",fhirConstantsObj.Submit.extension.levelOfServiceCode) //UM06
        ),
+       
+        ("REF_PreviousReviewAdministrativeReferenceNumber" : createREF("PreviousReviewAdministrativeReferenceNumber",
+																		   segmentQualifiers.REF.REF_PreviousReviewAdministrativeReferenceNumber.ref01,
+																		   claimResource.id)
+			)if(! isEmpty(claimResource.extension)),
        ("DTP_AccidentDate": createDTP("AccidentDate",segmentQualifiers."DTP"."DTP_AccidentDate"."dtp01",
                                         segmentQualifiers."DTP"."DTP_AccidentDate"."dtp02",
                                         claimResource.accident.date)
        ) if(! isEmpty(claimResource.accident.date)),
        ("DTP_EventDate" : createDTP("ProposedOrActualEventDate",segmentQualifiers."DTP"."DTP_EventDate"."dtp01",
-                                   if(patientDates.patientEventTimeType == "timingDate") "D8" 
-                                   else "RD8",
-                                   if(patientDates.patientEventTimeType == "timingDate") claimSupportingInfo.patientEvent.timingDate
-                                   else (claimSupportingInfo.patientEvent.timingPeriod.start default "") ++ "-" ++ (claimSupportingInfo.patientEvent.timingPeriod.end default ""))
-       ) if(! isEmpty(patientDates.patientEventTimeType)),
+                                   "RD8",
+//                                   if(patientDates.patientEventTimeType == "timingDate") claimSupportingInfo.patientEvent.timingDate
+                                   ((procedureResource.performedPeriod.start remove  ("-") default "") ++ "-" ++ (procedureResource.performedPeriod.end remove  ("-") default "")) )
+       ) if(! isEmpty(claimResource)),
        ("DTP_AdmissionDate" : createDTP("AdmissionDate",segmentQualifiers."DTP"."DTP_AdmissionDate"."dtp01",
                                    if(patientDates.patientAdmissionDatesType == "timingDate") "D8" 
                                    else "RD8",
@@ -1578,21 +1602,33 @@ fun createUM(um01,um02,um03,um0401,um0402,um0501,um0504,um06)=({
                                    if(patientDates.patientDischargeDatesType == "timingDate") claimSupportingInfo.dischargeDates.timingDate
                                    else (claimSupportingInfo.dischargeDates.timingPeriod.start default "") ++ "-" ++ (claimSupportingInfo.dischargeDates.timingPeriod.end default ""))
        ) if(! isEmpty(patientDates.patientDischargeDatesType)),
-       ("HI_PatientDiagnosis": createHI(claimResource.diagnosis[0]."type".coding[0].code, //HI01
-                                        claimResource.diagnosis[0].diagnosisCodeableConcept[0].coding[0].code)//HI0102
-       ) if(! isEmpty(claimResource.diagnosis[0].diagnosisCodeableConcept[0].coding[0].code)),
+       ("HI_PatientDiagnosis": createHI("ABF"  , //HI01
+                                       conditionResource.code.coding.code[0])//HI0102
+          ) if(! isEmpty(conditionResource)),
+          
+       ("HSD_HealthCareServicesDelivery": createHSD( "HealthCareServicesDelivery",
+       				if (((procedureResource.extension filter ($.url== "http://hit.humana.com/UnitTypes"))[0].valueString) == "Number of Visits") "VS" else "" , //hsd01
+                               (procedureResource.extension filter ($.url== "http://hit.humana.com/RequestedUnits"))[0].valueString ) //hsd02
+         ) if(! isEmpty(procedureResource.extension)),
+          
+        
+     
        ("PWK_AdditionalPatientInformation" : createPWK("Patient",segmentQualifiers."PWK"."PWK_AdditionalPatientInformation".pwk01,
                                                        segmentQualifiers."PWK"."PWK_AdditionalPatientInformation".pwk02,
                                                        segmentQualifiers."PWK"."PWK_AdditionalPatientInformation".pwk05,
                                                        claimResource.identifier[0].value default uuid())//PWK06
        ) if(! isEmpty(claimSupportingInfo.additionalInfo)),  
-       ("MSG_MessageText1": createMSG("FreeFormatMsg",claimSupportingInfo.msgTxt.valueString)) if(! isEmpty(claimSupportingInfo.msgTxt)),
-       "2010EA_Loop" : (claimResource.careTeam filter($.extension[0].valueBoolean == true) default []) map(prv,prvIdx) -> {
+       
+      ("MSG_MessageText": createMSG("FreeFormatMsg",'This case requires further review.  You will be contacted if additional information is needed' )) if(claimResource.extension.url== 'http://api.coherehealth.com/pendReason'),
+      "2010EA_Loop" : if (! isEmpty(claimResource.careTeam.extension)) (claimResource.careTeam filter($.extension[0].valueBoolean == true) default []) map(prv,prvIdx) -> {
+       //(claimResource.careTeam) map(prv,prvIdx) -> {
  
             "NM1_PatientEventProviderName" : createNM1("PatientEventProvider",
                                            providerTypeLookup(prv.role.coding[0].code),
                                            if(substringBefore(prv.provider.reference,"/") == "Practitioner") "1" else "2",
-                                           getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.name[0].family,
+                                          getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.name[0].family,
+                                           //getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")),
+                                           // get practioner info from input
                                            getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.name[0].given[0],
                                            getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.name[0].given[1],
                                            getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.name[0].prefix[0],
@@ -1629,13 +1665,137 @@ fun createUM(um01,um02,um03,um0401,um0402,um0501,um0504,um06)=({
                                                                segmentQualifiers.PRV.PRV_PatientEventProviderInformation,
                                                                prv.qualification.coding[0].code)) if(! isEmpty(prv.qualification)),	
                                                                
-       }, //End 2010EA Loop
+       }
+         
+       
+       else
+     
+       flatten((claimResource.careTeam) map(prv,prvIdx) -> [{
+ 
+            "NM1_PatientEventProviderName" : createNM1("PatientEventProvider",
+                                           //providerTypeLookup(prv.role.coding[0].code),
+                                           "SJ",
+                                           if(substringBefore(prv.provider.reference,"/") == "Practitioner") "1" else "2",
+                                          //getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.name[0].family,
+                                          (getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.name.text[0] splitBy  (" "))[1],
+                                           //getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")),
+                                           // get practioner info from input
+                                          // getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.name[0].given[0],
+                                           (getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.name.text[0] splitBy  (" "))[0],                                           getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.name[0].given[1],
+                                           getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.name[0].prefix[0],
+                                           getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.name[0].suffix[0],
+                                           getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.identifier."type".text[1] match {
+                                                           case "NPI" -> "XX"
+                                                           case "EN" -> "24"
+                                                           case "SB" -> "34"
+                                                           case "46" -> "46"
+                                                           else -> ""
+                                                       },
+                                           getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.id),                     
+           ("N3_PatientEventProviderAddress" : createN3("PatientEventProvider",
+                                                       (getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.address.line[0])[0],
+                                                       getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.address.line[1])) if(! isEmpty(getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.address)),
+           ("N4_PatientEventProviderCityStateZIPCode" : createN4("PatientEventProvider",
+                                                               (getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.address.city)[0],
+                                                               (getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.address.state)[0],
+                                                               (getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.address.postalCode)[0],
+                                                               (getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.address.country)[0],
+                                                               "")) if(! isEmpty(getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.address)),
+           ("PER_PatientEventProviderContactInformation" : createPER("PatientEventProvider",
+                                                                     segmentQualifiers.PER.PER_RequesterContactInformation.per01,
+                                                                     "",
+                                                                     lookupPERCommType(getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.telecom[0].system),
+                                                                     getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.telecom[0].value,
+                                                                     lookupPERCommType(getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.telecom[1].system),
+                                                                     getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.telecom[1].value,
+                                                                     lookupPERCommType(getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.telecom[2].system),
+                                                               getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.telecom[2].value)) if(! isEmpty(getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.telecom)),															                                         
+        ("PRV_PatientEventProviderInformation" : createPRV("PatientEventProvider",
+                                                               providerTypeLookup(prv.role.coding[0].code),
+                                                               segmentQualifiers.PRV.PRV_PatientEventProviderInformation,
+                                                               prv.qualification.coding[0].code)) if(! isEmpty(prv.qualification)),	
+                                                               
+       },
+       
+       {
+ 
+            "NM1_PatientEventProviderName" : createNM1("PatientEventProvider",
+                                           //providerTypeLookup(prv.role.coding[0].code),
+                                           "77",
+                                           if(substringBefore(prv.facility.reference,"/") == "Location") "1" else "2",
+                                          //getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.name[0].family,
+                                         locationResource.name,
+                                           //getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")),
+                                           // get practioner info from input
+                                          // getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.name[0].given[0],
+                                           (getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.name.text[0] splitBy  (" "))[0],                                           getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.name[0].given[1],
+                                           getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.name[0].prefix[0],
+                                           getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.name[0].suffix[0],
+                                           
+                                           
+                                           
+//                                           getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.identifier[0]."type".coding[0].code match {
+//                                                           case "NPI" -> "XX"
+//                                                           case "EN" -> "24"
+//                                                           case "SB" -> "34"
+//                                                           case "46" -> "46"
+//                                                           else -> ""
+//                                                       },
+
+
+locationResource.identifier."type".text[0] match {
+                                                           case "NPI" -> "XX"
+                                                           case "EN" -> "24"
+                                                           case "SB" -> "34"
+                                                           case "46" -> "46"
+                                                           else -> ""
+
+
+}
+
+,
+                                        locationResource.id),                     
+           ("N3_PatientEventProviderAddress" : createN3("PatientEventProvider",
+                                                       (getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.address.line[0])[0],
+                                                       getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.address.line[1])) if(! isEmpty(getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.address)),
+           ("N4_PatientEventProviderCityStateZIPCode" : createN4("PatientEventProvider",
+                                                               (getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.address.city)[0],
+                                                               (getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.address.state)[0],
+                                                               (getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.address.postalCode)[0],
+                                                               (getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.address.country)[0],
+                                                               "")) if(! isEmpty(getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.address)),
+           ("PER_PatientEventProviderContactInformation" : createPER("PatientEventProvider",
+                                                                     segmentQualifiers.PER.PER_RequesterContactInformation.per01,
+                                                                     "",
+                                                                     lookupPERCommType(getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.telecom[0].system),
+                                                                     getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.telecom[0].value,
+                                                                     lookupPERCommType(getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.telecom[1].system),
+                                                                     getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.telecom[1].value,
+                                                                     lookupPERCommType(getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.telecom[2].system),
+                                                               getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.telecom[2].value)) if(! isEmpty(getFHIRResource(inRequest,substringAfter(prv.provider.reference,"/")).resource.telecom)),															                                         
+        ("PRV_PatientEventProviderInformation" : createPRV("PatientEventProvider",
+                                                               providerTypeLookup(prv.role.coding[0].code),
+                                                               segmentQualifiers.PRV.PRV_PatientEventProviderInformation,
+                                                               prv.qualification.coding[0].code)) if(! isEmpty(prv.qualification)),	
+                                                               
+       }
+       
+       ]
+       
+       
+       
+       
+       
+       
+       
+       ),     
+       //End 2010EA Loop
        "2000F_Loop" : claimResource.item map(it,itIdx) -> {
-           ("TRN_ServiceTraceNumber" : [createTRN("Service",
+        ("TRN_ServiceTraceNumber" : [createTRN("Service",
            								segmentQualifiers."TRN"."TRN_ServiceTraceNumber".trn01,
-                                        extensionLookUp(it.extension,"valueIdentifier",fhirConstantsObj.Submit.extension.itemTraceNumber).value,
-                                        extensionLookUp(it.extension,"valueIdentifier",fhirConstantsObj.Submit.extension.itemTraceNumber).assigner.value,
-                                        "")]) if(! isEmpty(extensionLookUp(it.extension,"valueIdentifier",fhirConstantsObj.Submit.extension.itemTraceNumber))),
+                                        extensionLookUp(it.extension,"valueIdentifier",fhirConstantsObj.Submit.extension.itemTraceNumber).value default "P1168802",
+                                        extensionLookUp(it.extension,"valueIdentifier",fhirConstantsObj.Submit.extension.itemTraceNumber).assigner.value default "9001000008",
+                                        "")]) if(! isEmpty(claimResource)),
 			/*"UM_HealthCareServicesReviewInformation" : createUM(
 									extensionLookUp(it.extension,"valueCodeableConcept","http://hl7.org/fhir/us/davinci-pas/StructureDefinition/extension-serviceItemRequestType"),//UM01
 									extensionLookUp(it.extension,"valueCodeableConcept","http://hl7.org/fhir/us/davinci-pas/StructureDefinition/extension-certificationType"),//UM02
@@ -1649,18 +1809,20 @@ fun createUM(um01,um02,um03,um0401,um0402,um0501,um0504,um06)=({
                                                        segmentQualifiers.REF.REF_PreviousReviewAuthorizationNumber.ref01,
                                                        extensionLookUp(it.extension,"valueString",fhirConstantsObj.Submit.extension.authorizationNumber) default "")
    		   ) if(! isEmpty(extensionLookUp(it.extension,"valueString",fhirConstantsObj.Submit.extension.authorizationNumber) default "")),
-		  ("REF_PreviousReviewAdministrativeReferenceNumber" : createREF("PreviousReviewAdministrativeReferenceNumber",
-																		   segmentQualifiers."278".REF.REF_PreviousReviewAdministrativeReferenceNumber.ref01,
-																		   extensionLookUp(it.extension,"valueString",fhirConstantsObj.Submit.extension.administrationReferenceNumber) default "")
-			) if(! isEmpty(extensionLookUp(it.extension,"valueString",fhirConstantsObj.Submit.extension.administrationReferenceNumber) default "")),
+
 			"DTP_ServiceDate" : createDTP("ProposedOrActualServiceDate",
 										  segmentQualifiers.DTP."DTP_ServiceDate".dtp01,
 										  if(! isEmpty(it.servicedDate)) "D8" 
 										  else "RD8",
 										  if(! isEmpty(it.servicedDate)) it.servicedDate
-										  else (it.servicedPeriod.start default "") ++ "-" ++ (it.servicedPeriod.end default "")),
-			("SV1_ProfessionalService" : createSV1(productOrServiceLookUp(it.productOrService.coding[0].system),
-												  it.productOrService.coding[0].code,
+										  else timeDuration[0] ++ timeDuration[1] ++ timeDuration[2] ++ "-" ++ timeDuration[3] ++ timeDuration[4] ++ timeDuration[5] ),
+										  
+			("SV1_ProfessionalService" : createSV1(if(isEmpty(productOrServiceLookUp(it.productOrService.coding[0].system))) (procedureResource.code.coding[0].system[0 to 1])
+										  //if(isEmpty(productOrServiceLookUp(it.productOrService.coding[0].system))) procedureResource.code.coding[0].system[0 to 1] ++ ":" ++ procedureResource.code.coding.code[0]
+										  else productOrServiceLookUp(it.productOrService.coding[0].system),
+											if(isEmpty(it.productOrService.coding[0].code)) (procedureResource.extension[0].valueString)
+										  else it.productOrService.coding[0].code,
+												  //it.productOrService.coding[0].code,
 												  it.modifier[0].coding[0].code,
 												  it.modifier[1].coding[0].code,
 												  it.modifier[2].coding[0].code,
@@ -1669,7 +1831,7 @@ fun createUM(um01,um02,um03,um0401,um0402,um0501,um0504,um06)=({
 												  extensionLookUp(it.extension,"valueCodeableConcept",fhirConstantsObj.Submit.extension.productOrServiceCodeEnd),
 												  it.unitPrice.value,
 												  it.quantity.unit,
-												  it.quantity.value)) if((claimResource."type".coding[0].code == "professional")),
+												  it.quantity.value)) if((claimResource."type".coding[0].code == "Outpatient")), //professional,
 			("SV2_InstitutionalServiceLine" : {
 				"SV201_ServiceLineRevenueCode" : it.revenue.coding[0].code,
 				"SV202_CompositeMedicalProcedureIdentifier" : {
@@ -2136,9 +2298,8 @@ fun createInquiry2000ELoop(inRequest,claimResource,segmentQualifiers,fhirConstan
 		                       "", //UM0504
 		                       "" //UM06
 		       ),
-		       ("HCR_HealthCareServicesReview" : createHCR(
-		       	extensionLookUp(it.extension,"valueCodeableConcept",fhirConstantsObj.InquiryResponse.extension.reviewActionCode)
-		       )) if(! isEmpty(it.extension filter($.url == fhirConstantsObj.InquiryResponse.extension.reviewActionCode))),
+		       ("HCR_HealthCareServicesReview" : createHCR("11")),
+		       
 		       ("REF_PreviousReviewAuthorizationNumber" : createREF("PreviousReviewAuthorization",
 		       														segmentQualifiers."REF"."REF_PreviousReviewAuthorizationNumber".ref01,
 		       														extensionLookUp(it.extension,'valueString',fhirConstantsObj.Submit.extension.authorizationNumber)
