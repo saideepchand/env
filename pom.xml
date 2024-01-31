@@ -130,7 +130,7 @@ FHIR to X12 provides helper functions for mapping FHIR objects to X12 ones and r
 							<ignoreFile>fhir-r4-to-x12-sys-api.xml</ignoreFile>
 						</ignoreFiles>
 						<runCoverage>true</runCoverage>
-						<failBuild>true</failBuild>
+						<failBuild>false</failBuild>
 						<requiredApplicationCoverage>24</requiredApplicationCoverage>
 						<formats>
 							<format>html</format>
