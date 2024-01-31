@@ -17,7 +17,6 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 			</tls:context>
 		</http:listener-connection>
     </http:listener-config>
-    <accelerator-healthcare:config name="Accelerator_Healthcare_Config" doc:name="Accelerator Healthcare Config" doc:id="d3dfa400-8dec-4a2e-af49-be6d9825ba32" apiName="${api.name}" apiVersion="${api.version}" />
     <x12:config name="X12_EDI_Config" doc:name="X12 EDI Config" doc:id="e07e57d7-b460-4bb8-9dc6-8f6af603101a" interchangeIdQualifierSelf="${transaction.identifiers.sourceQualifier}" interchangeIdSelf="${transaction.identifiers.sourceId}" groupIdSelf="${transaction.identifiers.sourceAppCode}" interchangeIdQualifierPartner="${transaction.identifiers.receiverQualifier}" interchangeIdPartner="${transaction.identifiers.receiverId}" groupIdPartner="${transaction.identifiers.receiverAppCode}" formValidation="#[p('hipaa.validationLevel')]" requireUniqueInterchanges="false">
         <x12:schemas>
 			<x12:schema value="/schemas/278RQ.esl" />
